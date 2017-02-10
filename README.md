@@ -4,10 +4,11 @@ Code Clones are pieces of source code that are similar. These pieces can be defi
 Technologies Used:
 
 References:
+Web Design with HTML, CSS, JavaScript and jQuery Set by Jon Duckett
 
 Team Members:
-Charles Rouse
-Tyler Reid
-Zachary Allison
-Jason Kimko
+Charles Rouse,
+Tyler Reid,
+Zachary Allison,
+Jason Kimko,
 Colin Lightfoot
