@@ -2,16 +2,15 @@
 <body>
 
 <?php
-$con = mysqli_connect('localhost', 'root', 'MYSQL2013Mac', 'bookstore');
+$con = mysqli_connect('localhost', 'root', '*XMmysq$', 'UserInfo');
 if (!$con)
 	{
 	die('could not connect: ' . mysqli_connect_error());
 	}
 
-/* mysql_select_db("bookstore", $con); */
-$sql="INSERT INTO nametable (fname, lname)
+$sql="INSERT INTO RegistrationInfo (firstname, lastname, email, username, password)
 VALUES
-('$_POST[fname]', '$_POST[lname]')";
+('$_POST[firstname]', '$_POST[lastname]', '$_POST[email]', '$_POST[username]', '$_POST[password]')";
 
 if (!mysqli_query($con, $sql))
 	{
