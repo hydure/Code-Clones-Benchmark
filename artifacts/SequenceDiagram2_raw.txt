@@ -1,0 +1,86 @@
+title Code Clones Benchmark
+
+User->+Website: Register
+Website->Account Database: Add entry if valid
+Account Database-->Website:
+Website-->-User:
+
+User->+Website: Log in
+Website->Account Database: Username and password
+Account Database-->Website: Authenticate login
+Website-->-User: Show home page
+
+opt Projects Tab
+    User->+Website: Click "Projects" tab
+    Website->Project Database: Retrieve list of projects
+    Project Database-->Website:
+    Website-->-User: Show list of projects
+    
+    opt Upload Project
+        User->+Website: Submit Project information
+        Website->Website: Download project
+        Website->Project Database: Add new project entry
+        Project Database-->Website:
+        Website-->-User: Show updated list of projects
+    end
+    
+    opt Remove Project
+        User->+Website: Select and remove project(s)
+        Website->Project Database: Remove entry if account-private
+        Project Database-->Website:
+        Website-->-User: Show updated list of projects
+    end
+end
+
+opt Datasets Tab
+    User->+Website: Click "Datasets" tab
+    Website->Dataset Database: Retrieve list of datasets
+    Dataset Database-->Website: 
+    Website-->-User: Show list of datasets
+    
+    opt Create/Modify Dataset
+        alt Create
+            User->+Website: Click "Create" dataset
+            Website->Dataset Database: Add new dataset entry
+            Dataset Database-->Website:
+            Website-->-User: Show empty modification page
+        else Modify
+            User->+Website: Click "Modify" dataset
+            Website->Dataset Database: Retrieve list of projects in dataset
+            Dataset Database-->Website:
+            Website-->-User: Show projects in dataset
+        end
+
+        opt Add Project
+            User->+Website: Select and add project(s) to dataset
+            Website->Dataset Database: Append project(s) to entry
+            Dataset Database-->Website:
+            Website-->-User: Show updated dataset
+        end
+    
+        opt Remove Project
+            User->+Website: Select and remove project(s) to dataset
+            Website->Dataset Database: Remove project(s) from entry
+            Dataset Database-->Website:
+            Website-->-User: Show updated dataset
+        end
+    end
+    
+    opt Remove Dataset
+        User->+Website: Select and click "Remove" dataset
+        Website->Dataset Database: Remove entry
+        Dataset Database-->Website:
+        Website-->-User: Show updated list of datasets
+    end
+end
+
+User->+Website: Select code clones detectors
+Website-->-User:
+    
+User->+Website: Select dataset
+Website-->-User:
+    
+User->Website: Click "Submit Job"
+Website->Website: Run code clones detector
+Website-->User: Show Evaluation page
+
