@@ -7,7 +7,7 @@ if(!$con) {
         die('coult not connect: ' . mysqli_connect_error());
 }
 
-$sql="INSERT INTO Account (username, password)
+$sql="INSERT INTO s (username, password)
         VALUES('$_POST[username]', '$_POST[password]')";
 
 if (!mysqli_query($con, $sql)) {
