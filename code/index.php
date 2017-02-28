@@ -1,14 +1,73 @@
-<html>
-<body>
-<h1>small page to insert some mysql data from php</h1>
-<form action="insert.php" method="post">
-firstname: <input type="text" name="firstname" /><br><br>
-lastname: <input type="text" name="lastname" /><br><br>
-email: <input type="text" name="email" /><br><br>
-username: <input type="text" name="username" /><br><br>
-password: <input type="text" name="password" /><br><br>
+<?php
+session_start();
+require_once 'class.user.php';
+$user_login = new USER();
 
-<input type="submit" />
-</form>
-</body>
+if($user_login->is_logged_in()!="")
+{
+ $user_login->redirect('CCBHome1.1.html');
+}
+
+if(isset($_POST['btn-login']))
+{
+ $uname = trim($_POST['txtuname']);
+ $upass = trim($_POST['txtupass']);
+ echo "$uname $upass entered";
+ if($user_login->login($uname,$upass))
+ {
+  $user_login->redirect('CCBHome1.1.html');
+ }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login | Coding Cage</title>
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link href="assets/styles.css" rel="stylesheet" media="screen">
+     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+  </head>
+  <body id="login">
+    <div class="container">
+  <?php 
+  if(isset($_GET['inactive']))
+  {
+	$user_login->redirect('CCBHome1.1.html');
+   ?>
+            
+            <?php
+  }
+  ?>
+        <form class="form-signin" method="post">
+        <?php
+        if(isset($_GET['error']))
+  {
+   ?>
+            <div class='alert alert-success'>
+    <button class='close' data-dismiss='alert'>&times;</button>
+    <strong>Wrong Details!</strong> 
+   </div>
+            <?php
+  }
+  ?>
+        <h2 class="form-signin-heading">Sign In.</h2><hr />
+        <input type="text" class="input-block-level" placeholder="Username" name="txtuname" required />
+        <input type="password" class="input-block-level" placeholder="Password" name="txtupass" required />
+      <hr />
+        <button class="btn btn-large btn-primary" type="submit" name="btn-login">Sign in</button>
+        <a href="signup.php" style="float:right;" class="btn btn-large">Sign Up</a><hr />
+        <a href="fpass.php">Lost your Password ? </a>
+      </form>
+
+    </div> <!-- /container -->
+    <script src="bootstrap/js/jquery-1.9.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
 </html>
