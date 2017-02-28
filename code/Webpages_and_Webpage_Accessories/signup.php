@@ -18,12 +18,13 @@ if(isset($_POST['btn-signup']))
  $email = trim($_POST['txtemail']);
  $upass = trim($_POST['txtpass']);
  $code = md5(uniqid(rand()));
+ $vercode = $reg_user->createcode();
  
- $stmt = $reg_user->runQuery("SELECT * FROM RegistrationInfo WHERE UserEmail=:email_id");
+ $stmt = $reg_user->runQuery("SELECT * FROM Accounts WHERE email=:email_id");
  $stmt->execute(array(":email_id"=>$email));
  $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
- $stmt1 = $reg_user->runQuery("SELECT * FROM RegistrationInfo WHERE username=:user_id");
+ $stmt1 = $reg_user->runQuery("SELECT * FROM Accounts WHERE username=:user_id");
  $stmt1->execute(array(":user_id"=>$uname));
  $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
@@ -47,25 +48,24 @@ if(isset($_POST['btn-signup']))
  }
  else
  {
-  if($reg_user->register($fname,$lname,$email,$uname,$upass,$code))
+  if($reg_user->register($fname,$lname,$email,$uname,$upass,$code,$vercode))
   {   
    $id = $reg_user->lasdID();  
    $key = base64_encode($id);
    $id = $key;
    
 
-   #need to change link to local location of verify.php
 
    $message = "     
       Hello $uname,
       <br /><br />
       Welcome to Code Clones Benchmark!<br/>
-      To complete your registration  please , just click following link<br/>
+      To complete your registration  please use the following 4 character code: $vercode<br/>
       <br /><br />
 
-      <a href='http://localhost/softwareEngineering/codeclones/code/verify.php?id=$id&code=$code'>Click HERE to Activate :)</a>
+      
       <br /><br />
-      Thanks,";
+      Thanks, <br/> Code Clones Benchmark";
       
    $subject = "Confirm Registration";
       
@@ -74,9 +74,10 @@ if(isset($_POST['btn-signup']))
      <div class='alert alert-success'>
       <button class='close' data-dismiss='alert'>&times;</button>
       <strong>Success!</strong>  We've sent an email to $email.
-                    Please click on the confirmation link in the email to create your account. 
+                    Please use the verification code therein to complete your account. 
        </div>
      ";
+	header("refresh:5;verify.php");
   }
   else
   {
