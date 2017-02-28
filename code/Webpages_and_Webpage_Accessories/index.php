@@ -39,11 +39,9 @@ if(isset($_POST['btn-login']))
   <?php 
   if(isset($_GET['inactive']))
   {
+	$user_login->redirect('CCBHome1.1.html');
    ?>
-            <div class='alert alert-error'>
-    <button class='close' data-dismiss='alert'>&times;</button>
-    <strong>Sorry!</strong> This Account is not Activated Go to your Inbox and Activate it. 
-   </div>
+            
             <?php
   }
   ?>
