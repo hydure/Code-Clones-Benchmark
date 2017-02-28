@@ -22,25 +22,36 @@ if(isset($_GET['id']) && isset($_GET['code']))
   {
    $pass = $_POST['pass'];
    $cpass = $_POST['confirm-pass'];
-   
-   if($cpass!==$pass)
+   $vercode = $_POST['txtvercode'];
+   $confirmcode = $rows['vercode'];
+   if($confirmcode !== $vercode)
    {
-    $msg = "<div class='alert alert-block'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      <strong>Sorry!</strong>  Password Doesn't match. 
-      </div>";
+	$msg = "<div class='alert alert-block'>
+       <button class='close' data-dismiss='alert'>&times;</button>
+       <strong>Invalid Code!</strong> 
+       </div>";
    }
    else
    {
-    $newpass = md5($cpass);
-    $stmt = $user->runQuery("UPDATE Accounts SET Password=:upass WHERE userID=:uid");
-    $stmt->execute(array(":upass"=>$newpass,":uid"=>$rows['userID']));
-    
-    $msg = "<div class='alert alert-success'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      Password Changed.
-      </div>";
-    header("refresh:5;index.php");
+     if($cpass!==$pass)
+     {
+      $msg = "<div class='alert alert-block'>
+       <button class='close' data-dismiss='alert'>&times;</button>
+       <strong>Sorry!</strong>  Password Doesn't match. 
+       </div>";
+    }
+    else
+    {
+     $newpass = md5($cpass);
+     $stmt = $user->runQuery("UPDATE Accounts SET Password=:upass WHERE userID=:uid");
+     $stmt->execute(array(":upass"=>$newpass,":uid"=>$rows['userID']));
+     
+     $msg = "<div class='alert alert-success'>
+       <button class='close' data-dismiss='alert'>&times;</button>
+       Password Changed.
+       </div>";
+     header("refresh:5;index.php");
+    }
    }
   } 
  }
