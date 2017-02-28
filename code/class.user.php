@@ -64,24 +64,24 @@ class USER
      if($userRow['password']==md5($upass))
      {
       $_SESSION['userSession'] = $userRow['userID'];
-      header("Location: index.php?passsuccess");
+      header("Location: index.html?passsuccess");
       return true;
      }
      else
      {
-      header("Location: index.php?passerror");
+      header("Location: index.html?passerror");
       exit;
      }
     }
     else
     {
-     header("Location: index.php?inactive");
+     header("Location: index.html?inactive");
      exit;
     } 
    }
    else
    {
-    header("Location: index.php?error");
+    header("Location: index.html?error");
     exit;
    }  
   }
