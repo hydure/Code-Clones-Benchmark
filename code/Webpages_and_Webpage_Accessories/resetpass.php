@@ -4,7 +4,7 @@ $user = new USER();
 
 if(empty($_GET['id']) && empty($_GET['code']))
 {
- $user->redirect('index.php');
+ #$user->redirect('index.php');
 }
 
 if(isset($_GET['id']) && isset($_GET['code']))
@@ -12,7 +12,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
  $id = base64_decode($_GET['id']);
  $code = $_GET['code'];
  
- $stmt = $user->runQuery("SELECT * FROM RegistrationInfo WHERE userID=:uid AND tokenCode=:token");
+ $stmt = $user->runQuery("SELECT * FROM Accounts WHERE userID=:uid AND tokenCode=:token");
  $stmt->execute(array(":uid"=>$id,":token"=>$code));
  $rows = $stmt->fetch(PDO::FETCH_ASSOC);
  
@@ -33,8 +33,8 @@ if(isset($_GET['id']) && isset($_GET['code']))
    else
    {
     $newpass = md5($cpass);
-    $stmt = $user->runQuery("UPDATE Registrationinfo SET Password=:upass WHERE userID=:uid");
-    $stmt->execute(array(":upass"=>$newpass,":uid"=>$rows['userId']));
+    $stmt = $user->runQuery("UPDATE Accounts SET Password=:upass WHERE userID=:uid");
+    $stmt->execute(array(":upass"=>$newpass,":uid"=>$rows['userID']));
     
     $msg = "<div class='alert alert-success'>
       <button class='close' data-dismiss='alert'>&times;</button>
@@ -79,6 +79,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
    echo $msg;
   }
   ?>
+	<input type="text" class="input-block-level" placeholder="Verification code" name="txtvercode" required />
         <input type="password" class="input-block-level" placeholder="New Password" name="pass" required />
         <input type="password" class="input-block-level" placeholder="Confirm New Password" name="confirm-pass" required />
       <hr />
