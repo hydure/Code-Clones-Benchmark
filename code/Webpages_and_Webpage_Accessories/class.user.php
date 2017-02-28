@@ -26,19 +26,20 @@ class USER
   return $stmt;
  }
  
- public function register($fname,$lname,$email,$uname,$upass,$code)
+ public function register($fname,$lname,$email,$uname,$upass,$code, $vercode)
  {
   try
   {       
    $password = md5($upass);
-   $stmt = $this->conn->prepare("INSERT INTO RegistrationInfo(FirstName, LastName, UserEmail, UserName, Password,tokenCode) 
-                                                VALUES(:fname, :lname, :user_mail, :user_name, :user_pass, :active_code)");
+   $stmt = $this->conn->prepare("INSERT INTO Accounts(FirstName, LastName, Email, UserName, Password,tokenCode, vercode) 
+                                                VALUES(:fname, :lname, :user_mail, :user_name, :user_pass, :active_code, :ver_code)");
    $stmt->bindparam(":user_name",$uname);
    $stmt->bindparam(":fname",$fname);
    $stmt->bindparam(":lname",$lname);
    $stmt->bindparam(":user_mail",$email);
    $stmt->bindparam(":user_pass",$password);
    $stmt->bindparam(":active_code",$code);
+   $stmt->bindparam(":ver_code",$vercode);
    $stmt->execute(); 
    return $stmt;
   }
@@ -52,7 +53,7 @@ class USER
  {
   try
   {
-   $stmt = $this->conn->prepare("SELECT * FROM RegistrationInfo WHERE username=:us_id");
+   $stmt = $this->conn->prepare("SELECT * FROM Accounts WHERE username=:us_id");
    $stmt->execute(array(":us_id"=>$uname));
    $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
    
@@ -62,7 +63,7 @@ class USER
     {
      if($userRow['password']==md5($upass))
      {
-      $_SESSION['userSession'] = $userRow['userId'];
+      $_SESSION['userSession'] = $userRow['userID'];
       header("Location: index.php?passsuccess");
       return true;
      }
@@ -108,6 +109,17 @@ class USER
  {
   session_destroy();
   $_SESSION['userSession'] = false;
+ }
+
+ public function createcode()
+ {
+ $char = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ $charlength = strlen($char);
+ $vercode = '';
+ for($i = 0; $i < 4; $i++){
+	$vercode .= $char[rand(0, $charlength - 1)];
+ }
+ return $vercode;
  }
  
  function send_mail($email,$message,$subject)
