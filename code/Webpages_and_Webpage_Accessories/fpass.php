@@ -12,16 +12,17 @@ if(isset($_POST['btn-submit']))
 {
  $email = $_POST['txtemail'];
  
- $stmt = $user->runQuery("SELECT * FROM RegistrationInfo WHERE UserEmail=:email LIMIT 1");
+ $stmt = $user->runQuery("SELECT * FROM Accounts WHERE email=:email LIMIT 1");
  $stmt->execute(array(":email"=>$email));
  $row = $stmt->fetch(PDO::FETCH_ASSOC); 
  if($stmt->rowCount() == 1)
  {
-  $id = base64_encode($row['userId']);
+  $id = base64_encode($row['userID']);
   $code = md5(uniqid(rand()));
   $uname = $row['username'];
+  $vercode = $row['vercode'];
   
-  $stmt = $user->runQuery("UPDATE RegistrationInfo SET tokenCode=:token WHERE UserEmail=:email");
+  $stmt = $user->runQuery("UPDATE Accounts SET tokenCode=:token WHERE email=:email");
   $stmt->execute(array(":token"=>$code,"email"=>$email));
   
 #need to reset link for the local location of resetpass.php
@@ -30,9 +31,7 @@ if(isset($_POST['btn-submit']))
        <br /><br />
        If you requested a new password please follow the link below. Otherwise, please disregard this email.
        <br /><br />
-       Click Following Link To Reset Your Password 
-       <br /><br />
-       <a href='http://localhost/softwareEngineering/codeclones/code/resetpass.php?id=$id&code=$code'>click here to reset your password</a>
+       Use the following code to reset your password: $vercode 
        <br /><br />
        thank you,
        Code Clones Benchmark
@@ -44,8 +43,9 @@ if(isset($_POST['btn-submit']))
   $msg = "<div class='alert alert-success'>
      <button class='close' data-dismiss='alert'>&times;</button>
      We've sent an email to $email.
-                    Please click on the password reset link in the email to generate new password. 
+                    Please use the verification code to change your password. 
       </div>";
+	header("refresh:5;resetpass.php?id=$id&code=$code");
  }
  else
  {
