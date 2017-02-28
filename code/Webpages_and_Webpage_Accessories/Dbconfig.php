@@ -3,7 +3,7 @@ class Database
 {
      
     private $host = "localhost";
-    private $db_name = "UserInfo";
+    private $db_name = "cc_bench";
     private $username = "root";
     private $password = "*XMmysq$";
     public $conn;
