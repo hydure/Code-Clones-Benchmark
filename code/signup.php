@@ -6,7 +6,7 @@ $reg_user = new USER();
 
 if($reg_user->is_logged_in()!="")
 {
- $reg_user->redirect('CCBHome1.1.html');
+ $reg_user->redirect('CCBHome1.1.php');
 }
 
 
@@ -77,7 +77,7 @@ if(isset($_POST['btn-signup']))
                     Please use the verification code therein to complete your account. 
        </div>
      ";
-	header("refresh:5;verify.php");
+	header("refresh:5;verify.php?id=$id&code=$code");
   }
   else
   {
