@@ -42,7 +42,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
     }
     else
     {
-     $newpass = md5($cpass);
+     $newpass = $cpass;
      $stmt = $user->runQuery("UPDATE Accounts SET Password=:upass WHERE userID=:uid");
      $stmt->execute(array(":upass"=>$newpass,":uid"=>$rows['userID']));
      
