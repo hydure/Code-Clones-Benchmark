@@ -1,5 +1,4 @@
 <?php
-
 require_once 'dbconfig.php';
 
 class USER
@@ -30,7 +29,7 @@ class USER
  {
   try
   {       
-   $password = md5($upass);
+   $password = $upass;
    $stmt = $this->conn->prepare("INSERT INTO Accounts(FirstName, LastName, Email, UserName, Password,tokenCode, vercode) 
                                                 VALUES(:fname, :lname, :user_mail, :user_name, :user_pass, :active_code, :ver_code)");
    $stmt->bindparam(":user_name",$uname);
@@ -59,9 +58,9 @@ class USER
    
    if($stmt->rowCount() == 1)
    {
-    if($userRow['userStatus']=="Y")
+    if($userRow['password']==$upass)
     {
-     if($userRow['password']==md5($upass))
+     if($userRow['userStatus']=="Y")
      {
       $_SESSION['userSession'] = $userRow['userID'];
       header("Location: index.php?passsuccess");
@@ -69,14 +68,18 @@ class USER
      }
      else
      {
-      header("Location: index.php?passerror");
-      exit;
+      $id = $userRow->lasdID();  
+     $key = base64_encode($id);
+     $id = $key;
+     $code = $userRow['tokencode'];
+     header("Location: verify.php?id=$id&code=$code");
+     exit;
      }
     }
     else
     {
-     header("Location: index.php?inactive");
-     exit;
+      header("Location: index.php?passerror");
+      exit;
     } 
    }
    else
