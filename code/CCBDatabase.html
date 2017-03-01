@@ -1,3 +1,21 @@
+<?php
+session_start();
+require_once 'class.user.php';
+$user_home = new USER();
+
+if(!$user_home->is_logged_in())
+{
+ $user_home->redirect('index.php');
+}
+
+$stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userID=:uid");
+$stmt->execute(array(":uid"=>$_SESSION['userSession']));
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+?>
+
+
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -14,6 +32,7 @@ $(document).ready(function() {
   });
 });
 </script>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +55,7 @@ $(document).ready(function() {
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <input type="button" onclick="location.href='logout.php';" value="Logout" />
+            <input type="button" onclick="location.href='logout.php';" value="Logout" />
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
     	</div>
        </div>
@@ -48,8 +67,8 @@ $(document).ready(function() {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome1.1.html">Home</a></li>
-              <li><a href="CCBTools.html">Tools</a></li>
+              <li><a href="CCBHome1.1.php">Home</a></li>
+              <li><a href="CCBTools.php">Tools</a></li>
               <li class="active"><a href="#">Database</a></li>
               <li><a href="#">About</a></li> 
               <li><a href="#">Contact</a></li>              
@@ -64,6 +83,7 @@ $(document).ready(function() {
             <p style="font-size: 160%">Upload Dataset</p>
          	  <input type = "text" placeholder="URL for Code" required=""> 
             <input type = "submit" name = "upload" value = "Upload" />
+
           </form>
           <br />
           <form action="#">
