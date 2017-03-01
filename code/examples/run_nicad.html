@@ -2,18 +2,23 @@
 <html>
 <body>
 <h3>Example dataset</h3>
-<p>
-<a href="https://github.com/geekcomputers/Python">My Python Examples</a>
-and
+<p>Suppose we are submitting datasetID=1 with the first project
+<a href="https://github.com/geekcomputers/Python">My Python Examples</a> 
+as projectID=1<br>
+and the second project
 <a href="https://github.com/TheAlgorithms/Python">Algorithms in Python</a>
+as projectID=2.
 </p>
 
 <form action="run_nicad.php" method="post">
+	Python:<br>
+	<input type="checkbox" name="python" value="py">
+	<br>
         CSusername:<br>
         <input type="text" name="username">
         <br>
         CSpassword:<br>
-        <input type="text" name="password">
+        <input type="password" name="password">
         <br>
         <input type="submit" value="Submit"/>
 </form>

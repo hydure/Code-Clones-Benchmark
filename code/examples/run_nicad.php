@@ -2,8 +2,8 @@
 <body>
 
 <?php
-$cmd="./script.sh $_POST[username] $_POST[password]";
-exec("$cmd");
+$cmd="/home/pi/Code-Clones-Benchmark/code/examples/script.sh $_POST[username] $_POST[password] $_POST[python]";
+echo shell_exec("$cmd");
 ?>
 
 </body>
