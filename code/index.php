@@ -5,7 +5,7 @@ $user_login = new USER();
 
 if($user_login->is_logged_in()!="")
 {
- $user_login->redirect('CCBHome1.1.php');
+ $user_login->redirect('CCBHome1.1.html');
 }
 
 if(isset($_POST['btn-login']))
@@ -15,7 +15,7 @@ if(isset($_POST['btn-login']))
  echo "$uname $upass entered";
  if($user_login->login($uname,$upass))
  {
-  $user_login->redirect('CCBHome1.1.php');
+  $user_login->redirect('CCBHome1.1.html');
  }
 }
 ?>
@@ -39,7 +39,7 @@ if(isset($_POST['btn-login']))
 #  <?php 
 #  if(isset($_GET['inactive']))
 #  {
-#	$user_login->redirect('CCBHome1.1.php');
+#	$user_login->redirect('CCBHome1.1.html');
 
 #  }
 #  ?>
