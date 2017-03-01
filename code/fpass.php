@@ -5,7 +5,7 @@ $user = new USER();
 
 if($user->is_logged_in()!="")
 {
- $user->redirect('CCBHome1.1.html');
+ $user->redirect('CCBHome1.1.php');
 }
 
 if(isset($_POST['btn-submit']))
