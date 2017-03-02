@@ -88,7 +88,14 @@ $(document).ready(function() {
           <br />
           <br />
           <form action="#">
-            <p align="center-block">Choose a Dataset</p>
+            <p align="center-block">Choose First Dataset</p>
+            <select name = "dataset">
+              <!--Create a code that lists all the datasets available, but for now an example -->
+              <option value = "dataset1">Dataset 1</option>
+            </select>
+          </form>
+          <form action="#">
+            <p align="center-block">Choose Second Dataset</p>
             <select name = "dataset">
               <!--Create a code that lists all the datasets available, but for now an example -->
               <option value = "dataset1">Dataset 1</option>
