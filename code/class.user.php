@@ -1,5 +1,5 @@
 <?php
-require_once 'dbconfig.php';
+require_once 'Dbconfig.php';
 
 class USER
 { 
@@ -30,7 +30,7 @@ class USER
   try
   {       
    $password = $upass;
-   $stmt = $this->conn->prepare("INSERT INTO Accounts(FirstName, LastName, Email, UserName, Password,tokenCode, vercode) 
+   $stmt = $this->conn->prepare("INSERT INTO Accounts(firstname, lastname, email, username, password,tokencode, vercode) 
                                                 VALUES(:fname, :lname, :user_mail, :user_name, :user_pass, :active_code, :ver_code)");
    $stmt->bindparam(":user_name",$uname);
    $stmt->bindparam(":fname",$fname);
