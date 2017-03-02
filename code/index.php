@@ -36,13 +36,7 @@ if(isset($_POST['btn-login']))
   </head>
   <body id="login">
     <div class="container">
-#  <?php 
-#  if(isset($_GET['inactive']))
-#  {
-#	$user_login->redirect('CCBHome1.1.php');
 
-#  }
-#  ?>
         <form class="form-signin" method="post">
         <?php
         if(isset($_GET['error']))
