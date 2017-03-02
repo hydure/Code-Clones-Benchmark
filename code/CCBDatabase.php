@@ -83,7 +83,22 @@ $(document).ready(function() {
             <p style="font-size: 160%">Upload Dataset</p>
          	  <input type = "text" placeholder="URL for Code" required=""> 
             <input type = "submit" name = "upload" value = "Upload" />
-
+          </form>
+          <br />
+          <form action="#">
+            <p align="center-block" style="font-size: 160%">Modify Dataset</p>
+            <select name = "dataset">
+              <!--Create a code that lists all the datasets available, but for now an example -->
+              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
+            </select>
+          </form>
+          <br />
+          <form action="#">
+            <p align="center-block" style="font-size: 160%">Delete Dataset</p>
+            <select name = "dataset">
+              <!--Create a code that lists all the datasets available, but for now an example -->
+              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
+            </select>
           </form>
           <br />
           <form action="#">
