@@ -101,10 +101,10 @@ $(document).ready(function() {
               <option value = "dataset1">Dataset 1</option>
             </select>
           </form>
-          <form action="#">
+          <form action="upload.php" method="post" enctype="multipart/form-data">
             <p align="center-block">Choose a Project</p>
-            <input type = "file" name = "project" /><br />
-            <input type = "submit" value = "Upload" />
+            <input type = "file" name = "file" /><br />
+            <input type = "submit" value = "Upload" name="btn-upload" />
           </form>
          	
          	<div class="col-md-4 text-center"> 
