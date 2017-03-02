@@ -7,7 +7,7 @@ if(isset($_POST['btn-upload']))
     $file_loc = $_FILES['file']['tmp_name'];
  $file_size = $_FILES['file']['size'];
  $file_type = $_FILES['file']['type'];
- $folder="uploads/";
+ $folder="/home/pi/file_uploads/";
  
  // new file size in KB
  $new_size = $file_size/1024;  
