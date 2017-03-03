@@ -71,7 +71,7 @@ $(document).ready(function() {
               <li><a href="CCBDatabase.php">Projects</a></li>
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="#">About</a></li> 
-              <li><a href="#">Contact</a></li>              
+              <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
   	
