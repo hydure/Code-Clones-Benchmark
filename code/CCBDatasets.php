@@ -28,7 +28,7 @@ $(document).ready(function() {
   });
 });
 </script>
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
 <head>
@@ -67,7 +67,7 @@ $(document).ready(function() {
               <li><a href="CCBDatabase.php">Projects</a></li>
               <li class="active"><a href="#">Datasets</a></li>
               <li><a href="#">About</a></li> 
-              <li><a href="#">Contact</a></li>              
+              <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
         <div class="col-xs-12 col-sm-9">
