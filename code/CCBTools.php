@@ -14,8 +14,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
-
-
 c<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -54,8 +52,9 @@ $(document).ready(function() {
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-            <input type="button" onclick="location.href='logout.php';" value="Logout" />
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
+           <input type="button" onclick="location.href='logout.php';" value="Logout" 
+            class="btn btn-primary center-block" />
     	</div>
        </div>
     </div>
@@ -68,7 +67,8 @@ $(document).ready(function() {
             <ul class="nav">
               <li><a href="CCBHome1.1.php">Home</a></li>
               <li class="active"><a href="#">Tools</a></li>
-              <li><a href="CCBDatabase.php">Database</a></li>
+              <li><a href="CCBDatabase.php">Projects</a></li>
+              <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="#">About</a></li> 
               <li><a href="#">Contact</a></li>              
             </ul>
