@@ -7,15 +7,24 @@ if(!$con) {
         die('coult not connect: ' . mysqli_connect_error());
 }
 
-$title = exec('
+$title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::'");
 
-$sql="INSERT INTO Projects (username, password)
-        VALUES('$_POST[username]', '$_POST[password]')";
+date_default_timezone_set('America/New_York');
+$date = date('Y-m-d H:i:s');
+
+if ("$_POST[private]" == "1") {
+	$ownership = 0;
+} else {
+	$ownership = 0;
+}
+
+$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership)
+        VALUES('$title', '$_POST[url]', '$_POST[commit]', '$date', $ownership)";
 
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
 }
-echo "1 account added.";
+echo "1 project added.";
 
 mysqli_close($con)
 ?>
