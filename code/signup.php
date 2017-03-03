@@ -89,7 +89,7 @@ if(isset($_POST['btn-signup']))
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Signup | Coding Cage</title>
+    <title>Signup | Code Clones Benchmark</title>
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
