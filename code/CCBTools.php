@@ -77,32 +77,26 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Tools</h1>
-          <form action="#">
+          <form action="detector.php" method="post">
             <p>Please select your code cloner(s):
               <br />
-              <label><input type="checkbox" name="codeCloner">Nicad (+ Description)?</label><br />
-              <label><input type="checkbox" name="codeCloner">CCFinderX</label><br />
-              <label><input type="checkbox" name="codeCloner">Deckard</label><br />
+              <label><input type="checkbox" name="detector[]" value="Nicad">Nicad</label><br />
+              <label><input type="checkbox" name="detector[]" value="CCFinderX">CCFinderX</label><br />
+              <label><input type="checkbox" name="detector[]" value="Deckard">Deckard</label><br />
+	      <input type="submit" value="Test">
             </p>
           </form>
           <br />
           <br />
           <form action="#">
-            <p align="center-block">Choose First Dataset</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1">Dataset 1</option>
-            </select>
-          </form>
-          <form action="#">
-            <p align="center-block">Choose Second Dataset</p>
+            <p align="center-block">Choose a Dataset</p>
             <select name = "dataset">
               <!--Create a code that lists all the datasets available, but for now an example -->
               <option value = "dataset1">Dataset 1</option>
             </select>
           </form>
           <form action="upload.php" method="post" enctype="multipart/form-data">
-            <p align="center-block">Choose a Project</p>
+            <p align="center-block">Submit Compressed Source Directory</p>
             <input type = "file" name = "file" /><br />
             <input type = "submit" value = "Upload" name="btn-upload" />
           </form>

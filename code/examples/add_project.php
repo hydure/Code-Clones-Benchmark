@@ -11,6 +11,9 @@ if(!$con) {
 # get title from url
 $title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::'");
 
+# get repo host username
+$user = exec("echo $_POST[url] | sed 's:.*\.com/\([^/]*\)/:\1:'");
+
 # get head commit number
 if ("$_POST[commit]" == "head") {
 	$commit = exec("/home/pi/Code-Clones-Benchmark/code/examples/get_head_commit.sh $_POST[url]");
@@ -30,8 +33,8 @@ if ("$_POST[private]" == "1") {
 }
 
 # add entry to Projects table
-$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership)
-        VALUES('$title', '$_POST[url]', '$commit', '$date', $ownership)";
+$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, user)
+        VALUES('$title', '$_POST[url]', '$commit', '$date', $ownership, '$user')";
 
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
