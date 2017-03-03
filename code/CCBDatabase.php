@@ -14,8 +14,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
-
-
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -55,8 +53,9 @@ $(document).ready(function() {
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-            <input type="button" onclick="location.href='logout.php';" value="Logout" />
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
+           <input type="button" onclick="location.href='logout.php';" value="Logout" 
+            class="btn btn-primary center-block" />
     	</div>
        </div>
     </div>
@@ -69,7 +68,8 @@ $(document).ready(function() {
             <ul class="nav">
               <li><a href="CCBHome1.1.php">Home</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
-              <li class="active"><a href="#">Database</a></li>
+              <li class="active"><a href="#">Projects</a></li>
+              <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="#">About</a></li> 
               <li><a href="#">Contact</a></li>              
             </ul>
@@ -77,35 +77,27 @@ $(document).ready(function() {
   	
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
-          <h1>Code Cloning Database</h1>
+          <h1>Code Cloning Projects</h1>
           <br />
           <form action="#">
-            <p style="font-size: 160%">Upload Dataset</p>
+            <p style="font-size: 160%">Upload Project</p>
          	  <input type = "text" placeholder="URL for Code" required=""> 
             <input type = "submit" name = "upload" value = "Upload" />
           </form>
           <br />
           <form action="#">
-            <p align="center-block" style="font-size: 160%">Modify Dataset</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
+            <p align="center-block" style="font-size: 160%">Delete Project</p>
+            <select name = "project">
+              <!--Create a code that lists all the projects available, but for now an example -->
+              <option value = "project1" style="font-size: 160%">Project 1</option>
             </select>
           </form>
           <br />
           <form action="#">
-            <p align="center-block" style="font-size: 160%">Delete Dataset</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
-            </select>
-          </form>
-          <br />
-          <form action="#">
-            <p align="center-block" style="font-size: 160%">Browse Datasets</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
+            <p align="center-block" style="font-size: 160%">Browse projects</p>
+            <select name = "project">
+              <!--Create a code that lists all the projects available, but for now an example -->
+              <option value = "project1" style="font-size: 160%">Project 1</option>
             </select>
           </form>
         </div><!-- /.col-xs-12 main -->
