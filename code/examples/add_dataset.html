@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form action="add_dataset.php" method="post">
+<?php
+$con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
+if(!$con) {
+        die('coult not connect: ' . mysqli_connect_error());
+}
+
+$result = mysqli_query($con,"SELECT projectID, title, commit, last_accessed, uploaded FROM Projects");
+
+echo "<table border='1' cellpadding='10'>
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Commit #</th>
+<th>Last accessed</th>
+<th>Date uploaded</th>
+</tr>";
+
+$i=0;
+while($row = mysqli_fetch_array($result))
+{
+echo "<tr>";
+echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'>"
+	. $row['projectID'] . "</td>";
+echo "<td>" . $row['title'] . "</td>";
+echo "<td>" . $row['commit'] . "</td>";
+echo "<td>" . $row['last_accessed'] . "</td>";
+echo "<td>" . $row['uploaded'] . "</td>";
+echo "</tr>";
+$i++;
+}
+echo "</table>";
+
+mysqli_close($con);
+?>
+
+<br>
+	<input type="submit" value="Create">
+</form>
+
+</body>
+</html>
