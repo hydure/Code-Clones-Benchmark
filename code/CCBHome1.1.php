@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require_once 'class.user.php';
@@ -54,8 +53,10 @@ $(document).ready(function() {
              <span class="icon-bar"></span>
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
-           <input type="button" onclick="location.href='logout.php';" value="Logout" 
+           <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
+              <input type="button" onclick="location.href='logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
+           </div>
     	</div>
        </div>
     </div>
