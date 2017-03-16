@@ -17,7 +17,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
  $statusN = "N";
  $vercode = trim($_POST['txtvercode']);
 
- $stmt = $user->runQuery("SELECT * FROM Accounts WHERE userID=:uID AND tokenCode=:code LIMIT 1");
+ $stmt = $user->runQuery("SELECT * FROM Accounts WHERE userId=:uID AND tokenCode=:code LIMIT 1");
  $stmt->execute(array(":uID"=>$id,":code"=>$code));
  $row=$stmt->fetch(PDO::FETCH_ASSOC);
  if($stmt->rowCount() > 0)
@@ -27,7 +27,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
    {
     if($row['userStatus']==$statusN)
     {
-     $stmt = $user->runQuery("UPDATE Accounts SET userStatus=:status WHERE userID=:uID");
+     $stmt = $user->runQuery("UPDATE Accounts SET userStatus=:status WHERE userId=:uID");
      $stmt->bindparam(":status",$statusY);
      $stmt->bindparam(":uID",$id);
      $stmt->execute(); 
