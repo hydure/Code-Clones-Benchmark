@@ -17,7 +17,7 @@ if(isset($_POST['btn-submit']))
  $row = $stmt->fetch(PDO::FETCH_ASSOC); 
  if($stmt->rowCount() == 1)
  {
-  $id = base64_encode($row['userID']);
+  $id = base64_encode($row['userId']);
   $code = md5(uniqid(rand()));
   $uname = $row['username'];
   $vercode = $row['vercode'];
