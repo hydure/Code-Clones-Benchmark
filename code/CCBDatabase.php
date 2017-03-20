@@ -130,7 +130,7 @@ tr:nth-child(even) {
             $result = $con->query("SELECT projectID, title, userId FROM Projects");
             echo "<html>";
             echo "<body>";
-            echo "<select name='projectSelect' id ='projectSelect'>" ;
+            echo "<select name='projectSelect' id = 'projectSelect' >" ;
 
             while ($row = $result->fetch_assoc()) {
 
@@ -148,8 +148,8 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type = 'submit' value = 'Evaluate Project'  id='evaluate_project' />
-            <input type = 'submit' value = 'Delete Project'  id='delete_project' />
+            <input type = 'submit' name= 'project_action' value = 'Evaluate Project'  id='evaluate_project' />
+            <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' />
             
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example

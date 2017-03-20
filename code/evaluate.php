@@ -1,5 +1,23 @@
 <!-- This page handles file deletion and evaluation! -->
 <?php
+
+if ($_POST['project_action'] == 'Delete Project') {
+	$con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+	if(mysqli_connect_errno()) {
+		die("MySQL connection failed: ". mysqli_connect_error());
+	}
+	$project_val = $_POST['projectSelect'];
+	$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'";
+	if ($con->query($sql) == TRUE) {
+		echo "Record delted sucessfully";
+
+	} else {
+		echo "Error Deleting Record: " . $con->error;
+	}
+	$con->close();
+	header('Location:CCBDatabase.php');
+}
+
 session_start();
 require_once 'class.user.php';
 $user_home = new USER();
@@ -14,6 +32,8 @@ $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
+
+
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
