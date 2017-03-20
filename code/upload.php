@@ -1,4 +1,5 @@
  <?php
+ session_start();
 // Check if a file has been uploaded
 if(isset($_FILES['uploaded_file'])) {
     // Make sure the file was sent without errors
@@ -20,14 +21,17 @@ if(isset($_FILES['uploaded_file'])) {
         } else {
             $ownership = -1;
         }
+
+        $userId = intval($_SESSION['userSession']);
+        //echo 'userID' . $userId;
  
         // Create the SQL query
         $query = "
             INSERT INTO `Projects` (
-                `title`, `ownership`, `size`, `content`, `uploaded`
+                `title`, `ownership`, `size`, `content`, `uploaded`, `userId`
             )
             VALUES (
-                '{$name}', '{$ownership}', {$size}, '{$data}', NOW()
+                '{$name}', '{$ownership}', {$size}, '{$data}', NOW(), '{$userId}'
             )";
  
         // Execute the query
