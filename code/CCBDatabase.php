@@ -31,6 +31,23 @@ $(document).ready(function() {
 });
 </script>
 
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,8 +119,8 @@ $(document).ready(function() {
             </select>
           </form>
           <br />
-          <form action="#">
-            <p align="center-block" style="font-size: 160%">Browse Projects</p>
+          <form id='evaluate_button' action='evaluate.php' method='post' enctype='multipart/form-data'>
+            <p align='center-block' style='font-size: 160%''>Browse Projects</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
             if(mysqli_connect_errno()) {
@@ -130,11 +147,68 @@ $(document).ready(function() {
             echo "</html>";
             $con->close();
             ?>
+            <input type = 'submit' value = 'Evaluate Project'  id='evaluate_project' />
+            
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example
               <option value = "project1" style="font-size: 160%">Project 1</option>
             </select> -->
           </form>
+
+          <?php
+          $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+          if(mysqli_connect_errno()) {
+              die("MySQL connection failed: ". mysqli_connect_error());
+          }
+          $result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId FROM Projects");
+          echo "<html>";
+          echo "<body>";
+          echo "<table>";
+          echo "<tr>";
+          echo "<th>Project ID</th>";
+          echo "<th>Name</th>";
+          echo "<th>commit</th>";
+          echo "<th>Last Accessed</th>";
+          echo "<th>Date Uploaded</th>";
+          echo "<th>Ownership</th>";
+          echo "<th>URL</th>";
+          echo "<th>Size (bytes)</th>";
+          echo "</tr>";
+          while ($row = $result->fetch_assoc()) {
+
+                  unset($projectID, $title, $userId);
+                  $projectID = $row['projectID'];
+                  $title = $row['title'];
+                  $commit = $row['commit'];
+                  $last_accessed = $row['last_accessed'];
+                  $uploaded = $row['uploaded'];
+                  $ownership = $row['ownership'];
+                  $url = $row['url'];
+                  $size = $row['size'];
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId) {
+                    echo "<tr>";
+                    echo '<th>'.$projectID.'</th>';
+                    echo '<th>'.$title.'</th>';
+                    echo '<th>'.$commit.'</th>';
+                    echo '<th>'.$last_accessed.'</th>';
+                    echo '<th>'.$uploaded.'</th>';
+                    if (intval($ownership) == -1) { 
+                      echo '<th>Private</th>';
+                    }
+                    else {
+                      echo '<th>Public</th>';
+                    }
+                    echo '<th>'.$url.'</th>';
+                    echo '<th>'.$size.'</th>';
+                    echo "</tr>";
+                  }
+          }    
+          echo "</table";
+          echo "</body>";
+          echo "</html>";
+          $con->close();
+          ?>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->

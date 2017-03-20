@@ -108,13 +108,15 @@ $(document).ready(function() {
           </form>
           <form id="project_button" action="upload.php" method="post" enctype="multipart/form-data">
             <p align="center-block">Submit Compressed Source Directory</p>
-            <input type = "file" name = "uploaded_file" /><br />
-            <input type = "button" value = "Upload File"  id="submit_project" onclick="submitFunc()" />
-                    <br>
             Private:
             <input type="checkbox" name="ownership_type" value="1" checked>
             Public:
             <input type="checkbox" name="ownership_type" value="2">
+             <br>
+            <input type = "file" name = "uploaded_file" /><br />
+            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
+                   
+
 
 
           </form>
