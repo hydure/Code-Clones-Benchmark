@@ -8,7 +8,7 @@ if(!$user_home->is_logged_in())
  $user_home->redirect('index.php');
 }
 
-$stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
+$stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userID=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -53,10 +53,8 @@ $(document).ready(function() {
              <span class="icon-bar"></span>
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
-           <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+           <input type="button" onclick="location.href='logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
-           </div>
     	</div>
        </div>
     </div>
@@ -99,8 +97,15 @@ $(document).ready(function() {
           </form>
           <form action="upload.php" method="post" enctype="multipart/form-data">
             <p align="center-block">Submit Compressed Source Directory</p>
-            <input type = "file" name = "file" /><br />
-            <input type = "submit" value = "Upload" name="btn-upload" />
+            <input type = "file" name = "uploaded_file" /><br />
+            <input type = "submit" value = "Upload file" />
+                    <br>
+            Private:
+            <input type="checkbox" name="private" value="1">
+            Public:
+            <input type="checkbox" name="public" value="2">
+
+
           </form>
          	
          	<div class="col-md-4 text-center"> 
