@@ -111,14 +111,15 @@ tr:nth-child(even) {
 	          <input type="submit" value="Upload"/>
           </form>
           <br />
-          <form action="#">
+          <!--<form action="#">
             <p align="center-block" style="font-size: 160%">Delete Project</p>
             <select name = "project">
-              <!--Create a code that lists all the projects available, but for now an example -->
+
               <option value = "project1" style="font-size: 160%">Project 1</option>
             </select>
           </form>
           <br />
+          -->
           <form id='evaluate_button' action='evaluate.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Browse Projects</p>
             <?php
@@ -129,7 +130,7 @@ tr:nth-child(even) {
             $result = $con->query("SELECT projectID, title, userId FROM Projects");
             echo "<html>";
             echo "<body>";
-            echo "<select name='projectSelect'>";
+            echo "<select name='projectSelect' id ='projectSelect'>" ;
 
             while ($row = $result->fetch_assoc()) {
 
@@ -138,7 +139,7 @@ tr:nth-child(even) {
                   $title = $row['title'];
                   $userId = $row['userId'];
                   if ($_SESSION['userSession'] == $userId) {
-                    echo '<option value="'.$projectID.'">'.$title.'</option>';
+                    echo '<option value='.$projectID.'>'.$title.'</option>';
                   }
                  
             }
@@ -148,6 +149,7 @@ tr:nth-child(even) {
             $con->close();
             ?>
             <input type = 'submit' value = 'Evaluate Project'  id='evaluate_project' />
+            <input type = 'submit' value = 'Delete Project'  id='delete_project' />
             
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example

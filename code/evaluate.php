@@ -1,3 +1,4 @@
+<!-- This page handles file deletion and evaluation! -->
 <?php
 session_start();
 require_once 'class.user.php';
@@ -30,6 +31,29 @@ $(document).ready(function() {
   });
 });
 </script>
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+div.round {
+	border: = 2px solid grey;
+	border-radius: = 8px;
+}
+</style>
 
 
 <!DOCTYPE html>
@@ -80,7 +104,78 @@ $(document).ready(function() {
           <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Projects</h1>
           <br />
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+          	$result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId, content FROM Projects");
 
+			echo "<html>";
+			echo "<body>";
+			echo "<table>";
+			echo "<tr>";
+			echo "<th>Project ID</th>";
+			echo "<th>Name</th>";
+			echo "<th>commit</th>";
+			echo "<th>Last Accessed</th>";
+			echo "<th>Date Uploaded</th>";
+			echo "<th>Ownership</th>";
+			echo "<th>URL</th>";
+			echo "<th>Size (bytes)</th>";
+			echo "</tr>";
+
+			$project_val = $_POST['projectSelect'];
+			//$project_val = $_POST['ProjectSelect'];
+			//echo $project_val;
+
+			while ($row = $result->fetch_assoc()) {
+			
+				unset($projectID, $title, $userId);
+				$projectID = $row['projectID'];
+				$userId = $row['userId'];
+				if ($_SESSION['userSession'] == $userId && $projectID == $project_val) {
+					$title = $row['title'];
+					$commit = $row['commit'];
+					$last_accessed = $row['last_accessed'];
+					$uploaded = $row['uploaded'];
+					$ownership = $row['ownership'];
+					$url = $row['url'];
+					$size = $row['size'];
+					$content = $row['content'];
+
+					echo "<tr>";
+					echo '<th>'.$projectID.'</th>';
+					echo '<th>'.$title.'</th>';
+					echo '<th>'.$commit.'</th>';
+					echo '<th>'.$last_accessed.'</th>';
+					echo '<th>'.$uploaded.'</th>';
+					if (intval($ownership) == -1) { 
+					  echo '<th>Private</th>';
+					}
+					else {
+					  echo '<th>Public</th>';
+					}
+					echo '<th>'.$url.'</th>';
+					echo '<th>'.$size.'</th>';
+					echo "</tr>";
+					//echo '<tr>';
+					//echo '<th>'.$content.'</th>';
+					//echo '<\tr>';
+					break;
+				}
+			}   
+			echo "</table";
+			echo "<br/>";
+			//echo "<div class='code'>";
+			echo "Content: ";
+			echo '<div class="round">'.$content.'</div>';
+			//echo "</div>";
+			echo "<br/>";
+			echo "</body>";
+			echo "</html>";
+            $con->close();
+            ?>
 
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
