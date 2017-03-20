@@ -109,17 +109,20 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT projectID, title FROM Projects");
+            $result = $con->query("SELECT projectID, title, userId FROM Projects");
             echo "<html>";
             echo "<body>";
             echo "<select name='projectSelect'>";
 
             while ($row = $result->fetch_assoc()) {
-                  
-                  unset($projectID, $title);
+
+                  unset($projectID, $title, $userId);
                   $projectID = $row['projectID'];
                   $title = $row['title'];
-                  echo '<option value="'.$projectID.'">'.$title.'</option>';
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId) {
+                    echo '<option value="'.$projectID.'">'.$title.'</option>';
+                  }
                  
             }
             echo "</select>";
