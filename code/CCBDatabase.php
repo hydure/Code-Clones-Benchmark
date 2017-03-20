@@ -103,28 +103,29 @@ $(document).ready(function() {
           </form>
           <br />
           <form action="#">
-            <p align="center-block" style="font-size: 160%">Browse projects</p>
+            <p align="center-block" style="font-size: 160%">Browse Projects</p>
             <?php
-            $con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
-            if(!$con) {
-              die('coult not connect: ' . mysqli_connect_error());
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $query = $con->query("SELECT projectID, projectTitle FROM Projects");
+            $result = $con->query("SELECT projectID, title FROM Projects");
             echo "<html>";
             echo "<body>";
-            echo "<select id='projectSelect' name='projectSelect>";
+            echo "<select name='projectSelect'>";
 
             while ($row = $result->fetch_assoc()) {
-
-                  unset($projectID, $projectTitle);
+                  
+                  unset($projectID, $title);
                   $projectID = $row['projectID'];
-                  $projectTitle = $row['projectTitle'];
-                  echo '<option value="'.$projectID.'">'.$projectTitle.'</option>';
+                  $title = $row['title'];
+                  echo '<option value="'.$projectID.'">'.$title.'</option>';
                  
             }
             echo "</select>";
             echo "</body>";
             echo "</html>";
+            $con->close();
             ?>
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example
