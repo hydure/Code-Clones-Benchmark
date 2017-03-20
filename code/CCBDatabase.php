@@ -81,10 +81,17 @@ $(document).ready(function() {
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Projects</h1>
           <br />
-          <form action="#">
-            <p style="font-size: 160%">Upload Project</p>
-         	  <input type = "text" placeholder="URL for Code" required=""> 
-            <input type = "submit" name = "upload" value = "Upload" />
+          <form action="add_project.php" method="post">
+            URL:<br>
+            <input type="text" name="url">
+            <br>
+	          Commit:<br>
+            <input type="text" name="commit" value="head">
+            <br>
+	          Private:<br>
+	          <input type="checkbox" name="private" value="1">
+	          <br>        
+	          <input type="submit" value="Upload"/>
           </form>
           <br />
           <form action="#">
@@ -97,10 +104,32 @@ $(document).ready(function() {
           <br />
           <form action="#">
             <p align="center-block" style="font-size: 160%">Browse projects</p>
-            <select name = "project">
-              <!--Create a code that lists all the projects available, but for now an example -->
+            <?php
+            $con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
+            if(!$con) {
+              die('coult not connect: ' . mysqli_connect_error());
+            }
+            $query = $con->query("SELECT projectID, projectTitle FROM Projects");
+            echo "<html>";
+            echo "<body>";
+            echo "<select id='projectSelect' name='projectSelect>";
+
+            while ($row = $result->fetch_assoc()) {
+
+                  unset($projectID, $projectTitle);
+                  $projectID = $row['projectID'];
+                  $projectTitle = $row['projectTitle'];
+                  echo '<option value="'.$projectID.'">'.$projectTitle.'</option>';
+                 
+            }
+            echo "</select>";
+            echo "</body>";
+            echo "</html>";
+            ?>
+            <!--<select name = "project">
+              Create a code that lists all the projects available, but for now an example
               <option value = "project1" style="font-size: 160%">Project 1</option>
-            </select>
+            </select> -->
           </form>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
