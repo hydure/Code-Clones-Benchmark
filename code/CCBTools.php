@@ -39,6 +39,17 @@ $(document).ready(function() {
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    function submitFunc() {
+
+      var number_of_checked_checkbox= $("input[name=ownership_type]:checked").length;
+      if(number_of_checked_checkbox != 1){
+          alert("You must select a single ownership type.");
+      } else {
+          document.getElementById("project_button").submit();
+      }
+    }
+  </script>
 </head>
 
 <div class="page-container">
@@ -95,15 +106,15 @@ $(document).ready(function() {
               <option value = "dataset1">Dataset 1</option>
             </select>
           </form>
-          <form action="upload.php" method="post" enctype="multipart/form-data">
+          <form id="project_button" action="upload.php" method="post" enctype="multipart/form-data">
             <p align="center-block">Submit Compressed Source Directory</p>
             <input type = "file" name = "uploaded_file" /><br />
-            <input type = "submit" value = "Upload file" />
+            <input type = "button" value = "Upload File"  id="submit_project" onclick="submitFunc()" />
                     <br>
             Private:
-            <input type="checkbox" name="private" value="1">
+            <input type="checkbox" name="ownership_type" value="1" checked>
             Public:
-            <input type="checkbox" name="public" value="2">
+            <input type="checkbox" name="ownership_type" value="2">
 
 
           </form>
