@@ -139,8 +139,7 @@ tr:nth-child(even) {
                     echo '<th>'.$uploaded.'</th>';
                     if (intval($ownership) == -1) { 
                       echo '<th>Private</th>';
-                    }
-                    else {
+                    } else {
                       echo '<th>Public</th>';
                     }
                     echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'>". $row['projectID'] . "</td>";
@@ -154,6 +153,56 @@ tr:nth-child(even) {
             ?>
             <input type="submit" value="Initialize Dataset">
             <br />
+
+          <form action="#">
+            
+
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, running_flag FROM Datasets");
+            //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
+            echo "<html>";
+            echo "<body>";
+            echo "<table>";
+            echo "<tr>";
+            echo "<th>Dataset ID</th>";
+            echo "<th>Project ID(s)</th>";
+            echo "<th>Submit Date</th>";
+            echo "<th>Status</th>";
+            echo "</tr>";
+
+            while ($row = $result->fetch_assoc()) {
+
+              unset($datasetID, $projectID, $userId, $submit_date, $running_flag);
+              $datasetID = $row['datasetID'];
+              $projectID = $row['projectID'];
+              $submit_date= $row['submit_date'];
+              $running_flag = $row['running_flag'];
+              $userId = $row['userId'];
+              if ($_SESSION['userSession'] == $userId) {
+                echo "<tr>";
+                echo '<th>'.$datasetID.'</th>';
+                echo '<th>'.$projectID.'</th>';
+                echo '<th>'.$submit_date.'</th>';
+                if (intval($running_flag) == 0) { 
+                  echo '<th>Inactive</th>';
+                } else {
+                  echo '<th>Active</th>';
+                }
+                echo "</tr>";
+              }
+
+            }
+
+            echo "</table";
+            echo "</body>";
+            echo "</html>";
+            $con->close();
+            ?>
+
           </form>
           <br />
 

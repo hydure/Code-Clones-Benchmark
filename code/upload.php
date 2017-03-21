@@ -59,10 +59,6 @@ else {
 }
  
 // Echo a link back to the main page
-<<<<<<< HEAD
-echo '<p>Click <a href="CCBDatabase.php">here</a> to go back</p>';
-=======
 echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
->>>>>>> 99fcf29c92f8ce23bbd1c9fb0db54aaa11dfc69e
 ?>
 
