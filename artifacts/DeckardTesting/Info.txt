@@ -1,0 +1,15 @@
+These are likely the best attributes that we will be able to parameterize for a later sprint. 
+
+Similarity - Represented by 0.95 or 1.0 in the file names in this case. Essentially a
+		   	 threshold for how similar you want the clones to be.
+
+Min Tokens - Represented by the 30 or 50 in the file names in this case.
+		   	 Used to avoid reporting small clones.
+
+Stride	   - Represented by the second integer (0 or 2 in this case) in the file name
+		   	 "Users can choose the width of the sliding window and how far it moves in each step.
+		   	 (i.e. stride) Larger widths allow larger code fragments to be encoded together, and
+			 may help detect larger clones, while larger strides reduce the amount of overlapping
+			 among tree fragments and may reduce the number of spurious clones."
+
+The "easiest" one of these to read is the sample-clone-report_100_0_allg_1.0_50.
