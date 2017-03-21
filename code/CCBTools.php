@@ -108,21 +108,6 @@ $(document).ready(function() {
               <option value = "dataset1">Dataset 1</option>
             </select>
           </form>
-          <form id="project_button" action="upload.php" method="post" enctype="multipart/form-data">
-            <p align="center-block">Submit Compressed Source Directory</p>
-            Private:
-            <input type="checkbox" name="ownership_type" value="1" checked>
-            Public:
-            <input type="checkbox" name="ownership_type" value="2">
-             <br>
-            <input type = "file" name = "uploaded_file" /><br />
-            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
-                   
-
-
-
-          </form>
-         	
          	<div class="col-md-4 text-center"> 
     			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block">Run</button> 
 			</div>
