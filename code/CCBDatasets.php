@@ -244,7 +244,7 @@ tr:nth-child(even) {
           </form>
           <br />
 
-          <form id='deleteDataset' action='deleteDataset.php' method='post' enctype='multipart/form-data'>
+          <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Delete Dataset</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
@@ -255,7 +255,7 @@ tr:nth-child(even) {
 
             echo "<html>";
             echo "<body>";
-            echo "<select name='dataSelect' id = 'dataSelect' >" ;
+            echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
             $dataset_dropdown = array();
             while ($row = $result->fetch_assoc()) {
 
@@ -274,10 +274,6 @@ tr:nth-child(even) {
             ?>
             <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' />
           </form>
-
-
-
-
 
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
