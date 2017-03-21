@@ -15,7 +15,7 @@ if ($_POST['project_action'] == 'Delete Project') {
 		echo "Error Deleting Record: " . $con->error;
 	}
 	$con->close();
-	header('Location:CCBDatabase.php');
+	header('Location:CCBProjects.php');
 }
 
 session_start();
@@ -112,11 +112,10 @@ div.round {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome1.1.php">Home</a></li>
-              <li><a href="CCBTools.php">Tools</a></li>
-              <li class="active"><a href="#">Projects</a></li>
+              <li><a href="CCBHome.php">Home</a></li>
+              <li><a href="CCBProjects.php">Projects</a></li>
               <li><a href="CCBDatasets.php">Datasets</a></li>
-              <li><a href="#">About</a></li> 
+              <li><a href="CCBTools.php">Tools</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
