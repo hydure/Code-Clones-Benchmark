@@ -174,7 +174,8 @@ tr:nth-child(even) {
             echo "<th>Status</th>";
             echo "</tr>";
 
-            $tempDID = -1; $curr_flag = false; 
+            $tempDID = -1;
+            $curr_flag = false; 
 
             while ($row = $result->fetch_assoc()) {
 
@@ -189,7 +190,7 @@ tr:nth-child(even) {
                     array_push($row_data, $copied_PID);
                     $project_string = implode(', ', $row_data);
                     echo "<tr>";
-                    echo '<th>'.$datasetID.'</th>';
+                    echo '<th>'.$tempDID.'</th>';
                     echo '<th>'.$project_string.'</th>';
                     echo '<th>'.$copied_Submit_Date.'</th>';
                     if (intval($copied_Running_Flag) == 0) { 
@@ -219,7 +220,7 @@ tr:nth-child(even) {
 
 
             }
-            if ($curr_flag) {
+            if ($curr_flag) { //print last dataset if it was currently being appended
               array_push($row_data, $copied_PID);
               $project_string = implode(', ', $row_data);
               echo "<tr>";
@@ -242,6 +243,41 @@ tr:nth-child(even) {
 
           </form>
           <br />
+
+          <form id='deleteDataset' action='deleteDataset.php' method='post' enctype='multipart/form-data'>
+            <p align='center-block' style='font-size: 160%''>Delete Dataset</p>
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+            $result = $con->query("SELECT datasetID, userId FROM Datasets");
+
+            echo "<html>";
+            echo "<body>";
+            echo "<select name='dataSelect' id = 'dataSelect' >" ;
+            $dataset_dropdown = array();
+            while ($row = $result->fetch_assoc()) {
+
+                  unset($datasetID, $userId);
+                  $datasetID = $row['datasetID'];
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
+                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
+                    array_push($dataset_dropdown, $datasetID);
+                  }
+            }
+            echo "</select>";
+            echo "</body>";
+            echo "</html>";
+            $con->close();
+            ?>
+            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' />
+          </form>
+
+
+
+
 
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
