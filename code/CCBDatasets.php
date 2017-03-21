@@ -142,7 +142,7 @@ tr:nth-child(even) {
                     } else {
                       echo '<th>Public</th>';
                     }
-                    echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'>". $row['projectID'] . "</td>";
+                    echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'></td>";
                     echo "</tr>";
                   }
             }
