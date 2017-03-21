@@ -167,8 +167,8 @@ tr:nth-child(even) {
           echo "<body>";
           echo "<table>";
           echo "<tr>";
-          echo "<th>Project ID</th>";
-          echo "<th>Name</th>";
+          echo "<th>ID</th>";
+          echo "<th>Project</th>";
           echo "<th>commit</th>";
           echo "<th>Last Accessed</th>";
           echo "<th>Date Uploaded</th>";

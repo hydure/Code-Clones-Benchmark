@@ -28,6 +28,28 @@ $(document).ready(function() {
   });
 });
 </script>
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font size ="3";
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+</style>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
@@ -81,21 +103,60 @@ $(document).ready(function() {
             <input type = "submit" name = "upload" value = "Upload" />
           </form>
           <br />
-          <form action="#">
-            <p align="center-block" style="font-size: 160%">Delete Dataset</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
-            </select>
+          <form action="add_dataset.php", method="post">
+            <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
+
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+            $result = $con->query("SELECT projectID, title, last_accessed, uploaded, ownership, userId FROM Projects");
+            echo "<html>";
+            echo "<body>";
+            echo "<table>";
+            echo "<tr>";
+            echo "<th>ID</th>";
+            echo "<th>Project</th>";
+            echo "<th>Last Accessed</th>";
+            echo "<th>Date Uploaded</th>";
+            echo "<th>Ownership</th>";
+            echo "<th>Add</th>";
+            echo "</tr>";
+            while ($row = $result->fetch_assoc()) {
+
+                  unset($projectID, $title, $last_accessed, $uploaded, $ownership, $userId);
+                  $projectID = $row['projectID'];
+                  $title = $row['title'];
+                  $last_accessed = $row['last_accessed'];
+                  $uploaded = $row['uploaded'];
+                  $ownership = $row['ownership'];
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId) {
+                    echo "<tr>";
+                    echo '<th>'.$projectID.'</th>';
+                    echo '<th>'.$title.'</th>';
+                    echo '<th>'.$last_accessed.'</th>';
+                    echo '<th>'.$uploaded.'</th>';
+                    if (intval($ownership) == -1) { 
+                      echo '<th>Private</th>';
+                    }
+                    else {
+                      echo '<th>Public</th>';
+                    }
+                    echo "<td><input type='checkbox' name='add_checkbox' value='" . $projectID . "'></td>";
+                    echo "</tr>";
+                  }
+            }
+            echo "</table";
+            echo "</body>";
+            echo "</html>";
+            $con->close();
+            ?>
+            <input type="submit" value="Initialize Dataset">
           </form>
           <br />
-          <form action="#">
-            <p align="center-block" style="font-size: 160%">Browse Datasets</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1" style="font-size: 160%">Dataset 1</option>
-            </select>
-          </form>
+
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
