@@ -84,9 +84,6 @@ $(document).ready(function() {
 
 			<p>	The system will allow users to select and parameterize a set of clone detectors on an uploaded dataset (or upload a new one). Additionally, there should be basic functionality to support uploading a new clone detection approach. The web interface should also be deployed as a web-app where a user can explore the database and see the actual source code of the clone pairs. Then, it should offer the possibility for any user to evaluate clone pairs (either on their own private results or the public benchmark).</p>
          	
-         	<div class="col-md-4 text-center"> 
-    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block">Click Here to Try it Out!</button> 
-			</div>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
