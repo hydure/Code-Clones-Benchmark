@@ -154,6 +154,7 @@ tr:nth-child(even) {
             $con->close();
             ?>
             <input type="submit" value="Initialize Dataset">
+            <br />
           </form>
           <br />
 
