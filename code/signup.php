@@ -6,7 +6,7 @@ $reg_user = new USER();
 
 if($reg_user->is_logged_in()!="")
 {
- $reg_user->redirect('CCBHome1.1.php');
+ $reg_user->redirect('CCBHome.php');
 }
 
 
