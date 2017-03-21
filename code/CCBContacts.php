@@ -64,7 +64,7 @@ $(document).ready(function() {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome1.1.php">Home</a></li>
+              <li><a href="CCBHome.php">Home</a></li>
               <li><a href="CCBDatabase.php">Projects</a></li>
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
