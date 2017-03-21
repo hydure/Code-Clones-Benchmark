@@ -39,17 +39,6 @@ $(document).ready(function() {
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>
-    function submitFunc() {
-
-      var number_of_checked_checkbox= $("input[name=ownership_type]:checked").length;
-      if(number_of_checked_checkbox != 1){
-          alert("You must select a single ownership type.");
-      } else {
-          document.getElementById("project_button").submit();
-      }
-    }
-  </script>
 </head>
 
 <div class="page-container">
