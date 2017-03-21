@@ -174,30 +174,67 @@ tr:nth-child(even) {
             echo "<th>Status</th>";
             echo "</tr>";
 
+            $tempDID = -1; $curr_flag = false; 
+
             while ($row = $result->fetch_assoc()) {
 
               unset($datasetID, $projectID, $userId, $submit_date, $running_flag);
               $datasetID = $row['datasetID'];
-              $projectID = $row['projectID'];
-              $submit_date= $row['submit_date'];
-              $running_flag = $row['running_flag'];
               $userId = $row['userId'];
-              if ($_SESSION['userSession'] == $userId) {
-                echo "<tr>";
-                echo '<th>'.$datasetID.'</th>';
-                echo '<th>'.$projectID.'</th>';
-                echo '<th>'.$submit_date.'</th>';
-                if (intval($running_flag) == 0) { 
-                  echo '<th>Inactive</th>';
-                } else {
-                  echo '<th>Active</th>';
-                }
-                echo "</tr>";
+
+              if ($tempDID == $datasetID && $_SESSION['userSession'] == $userId) { //scenario 3: we are appending projects array
+                array_push($row_data, $copied_PID);
+              } else {
+                  if ($curr_flag) { //scenarion 2: we encounter a new dataset of anyone, must print output
+                    array_push($row_data, $copied_PID);
+                    $project_string = implode(', ', $row_data);
+                    echo "<tr>";
+                    echo '<th>'.$datasetID.'</th>';
+                    echo '<th>'.$project_string.'</th>';
+                    echo '<th>'.$copied_Submit_Date.'</th>';
+                    if (intval($copied_Running_Flag) == 0) { 
+                      echo '<th>Inactive</th>';
+                    } else {
+                      echo '<th>Active</th>';
+                    }
+                    echo "</tr>";
+
+
+                    $curr_flag = false;
+                  } //scenario 1: we encounter a new dataset of the user, but nothings initialized
+                  if ($_SESSION['userSession'] == $userId) {
+                    $projectID = $row['projectID'];
+                    $row_data = array();
+                    $curr_flag = true;
+                  }
               }
+              $tempDID = $datasetID;
+              $projectID = $row['projectID'];
+              $copied_PID = $projectID;
+              $submit_date= $row['submit_date'];
+              $copied_Submit_Date = $submit_date;
+              $running_flag = $row['running_flag'];
+              $copied_Running_Flag = $running_flag;
+              
+
 
             }
+            if ($curr_flag) {
+              array_push($row_data, $copied_PID);
+              $project_string = implode(', ', $row_data);
+              echo "<tr>";
+              echo '<th>'.$datasetID.'</th>';
+              echo '<th>'.$project_string.'</th>';
+              echo '<th>'.$copied_Submit_Date.'</th>';
+              if (intval($copied_Running_Flag) == 0) { 
+                echo '<th>Inactive</th>';
+              } else {
+                echo '<th>Active</th>';
+              }
+              echo "</tr>";
+            }
 
-            echo "</table";
+            echo "</table"; 
             echo "</body>";
             echo "</html>";
             $con->close();
