@@ -84,7 +84,10 @@ $(document).ready(function() {
               <label><input type="checkbox" name="detector[]" value="Nicad">Nicad</label><br />
               <label><input type="checkbox" name="detector[]" value="CCFinderX">CCFinderX</label><br />
               <label><input type="checkbox" name="detector[]" value="Deckard">Deckard</label><br />
-	      <input type="submit" value="Test">
+              <div class="col-md-4 text-center"> 
+    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
+			  </div>
+	      <!-- <input type="submit" value="Test"> Commenting this out and moved button up-->
             </p>
           </form>
           <br />
@@ -97,7 +100,7 @@ $(document).ready(function() {
             </select>
           </form>
          	<div class="col-md-4 text-center"> 
-    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block">Run</button> 
+    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
 			</div>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
