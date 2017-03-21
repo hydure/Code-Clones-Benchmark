@@ -80,10 +80,34 @@ $(document).ready(function() {
           <h1>Code Cloning Tools</h1>
           <form action="#">
             <p align="center-block">Choose a Dataset:</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1">Dataset 1</option>
-            </select>
+
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+            $result = $con->query("SELECT datasetID, userId FROM Datasets");
+
+            echo "<html>";
+            echo "<body>";
+            echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
+            $dataset_dropdown = array();
+            while ($row = $result->fetch_assoc()) {
+
+                  unset($datasetID, $userId);
+                  $datasetID = $row['datasetID'];
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
+                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
+                    array_push($dataset_dropdown, $datasetID);
+                  }
+            }
+            echo "</select>";
+            echo "</body>";
+            echo "</html>";
+            $con->close();
+            ?>
+            
           </form>
           <form action="detector.php" method="post">
             <p>Please select your code cloner(s):
