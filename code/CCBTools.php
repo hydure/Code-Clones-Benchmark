@@ -78,27 +78,27 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Tools</h1>
+          <form action="#">
+            <p align="center-block">Choose a Dataset:</p>
+            <select name = "dataset">
+              <!--Create a code that lists all the datasets available, but for now an example -->
+              <option value = "dataset1">Dataset 1</option>
+            </select>
+          </form>
           <form action="detector.php" method="post">
             <p>Please select your code cloner(s):
               <br />
               <label><input type="checkbox" name="detector[]" value="Nicad">Nicad</label><br />
               <label><input type="checkbox" name="detector[]" value="CCFinderX">CCFinderX</label><br />
               <label><input type="checkbox" name="detector[]" value="Deckard">Deckard</label><br />
-	      <input type="submit" value="Test">
+              <div class="col-md-4 text-center"> 
+    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
+			  </div>
+	      <!-- <input type="submit" value="Test"> Commenting this out and moved button up-->
             </p>
           </form>
           <br />
           <br />
-          <form action="#">
-            <p align="center-block">Choose a Dataset</p>
-            <select name = "dataset">
-              <!--Create a code that lists all the datasets available, but for now an example -->
-              <option value = "dataset1">Dataset 1</option>
-            </select>
-          </form>
-         	<div class="col-md-4 text-center"> 
-    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block">Run</button> 
-			</div>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
