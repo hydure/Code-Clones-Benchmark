@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 //write code to select a project, probably merge with browsing feature...
 
 // sql to delete a record
-$sql = "DELETE FROM Projects WHERE id=$selectedProjec";
+$sql = "DELETE FROM Projects WHERE projectTitle=$selectedProject";
 
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
