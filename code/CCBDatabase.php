@@ -111,6 +111,16 @@ tr:nth-child(even) {
 	          <input type="submit" value="Upload"/>
           </form>
           <br />
+          <form id="project_button" action="upload.php" method="post" enctype="multipart/form-data">
+            <p align="center-block">Submit Compressed Source Directory</p>
+            Private:
+            <input type="checkbox" name="ownership_type" value="1" checked>
+            Public:
+            <input type="checkbox" name="ownership_type" value="2">
+             <br>
+            <input type = "file" name = "uploaded_file" /><br />
+            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
+          </form>
           <!--<form action="#">
             <p align="center-block" style="font-size: 160%">Delete Project</p>
             <select name = "project">
