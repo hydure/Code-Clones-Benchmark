@@ -218,7 +218,7 @@ tr:nth-child(even) {
           <br />
 
           <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
-            <p align='center-block' style='font-size: 160%''>Delete Dataset</p>
+            <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
             if(mysqli_connect_errno()) {
