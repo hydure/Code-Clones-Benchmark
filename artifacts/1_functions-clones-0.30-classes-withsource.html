@@ -1,0 +1,182 @@
+<html>
+<head>
+<style type="text/css">
+body {font-family:Arial}
+table {background-color:white; border:0px solid white; width:95%; margin-left:auto; margin-right: auto}
+td {background-color:#b0c4de; padding:16px; border:4px solid white}
+pre {background-color:white; padding:4px}
+</style>
+<title>
+NiCad Clone Report
+</title>
+</head>
+<body>
+<h2>
+NiCad Clone Report
+</h2>
+System: 1
+<br>
+<br>Granularity: functions
+<br>Max difference threshold: 30%
+<br>Clone size: 10 - 2500 lines
+<br>
+<br>Total functions: 146
+<br>Clone pairs found: 5
+<br>
+<br>LCS compares: 2414 &nbsp;&nbsp;&nbsp; CPU time: 0 min 0.11 sec
+<br>
+<br>Number of  classes: 4
+<br>
+<h3>Clone class 1, 3 fragments, nominal size 16 lines, similarity 76%
+</h3>
+<table cellpadding=12 border=2 frame="box" width="90%">
+<tr><td>
+Lines 25 - 38 of /home/f85/jskimko/cc_temp/1/1/powerdown_startup.py.pyindent
+<pre>
+def linux():
+        f = open('server_startup_'+strftime("%Y-%m-%d")+'.log', 'a')                                                 # Open the logfile
+        for server in open('startup_list.txt'):                                                                                                                         # Read the list of servers from the list
+                ret = subprocess.call("ping -c 3 %s" % server, shell=True,stdout=open('/dev/null', ''w'),stderr=subprocess.STDOUT)        # Ping the servers in turn
+                if ret == 0:                                                                                                                                                                                         # If you get a response.
+                        f.write ("%s: is alive" % server.strip() + "\n")                                                                                 # Print a message
+                        subprocess.Popen(['ssh', server.strip()])
+                else:             
+                        f.write ("%s: did not respond" % server.strip() + "\n")
+
+# End of the functions			
+
+# Start of the Main Program
+
+</pre>
+</td></tr>
+<tr><td>
+Lines 46 - 54 of /home/f85/jskimko/cc_temp/1/1/powerup_checks.py.pyindent
+<pre>
+                                                     # This is the function to run if it detects thee OS is nix.
+    f = open('server_startup_'+strftime("%Y-%m-%d")+'.log', 'a')                                                                                                                                                 # Open the logfile
+                # Read the list of servers from the list
+        ret = subprocess.call("ping -c 3 %s" % server, shell=True,stdout=open('/dev/null', 'w'),stdeerr=subprocess.STDOUT)        # Ping the servers in turn
+                                             # Depending on the response
+ server is up
+        else:
+            f.write ("%s: did not respond" % server.strip().ljust(15) + "\n")                                                                                                                         # Write to the logfile if the server is down
+
+</pre>
+</td></tr>
+<tr><td>
+Lines 35 - 45 of /home/f85/jskimko/cc_temp/1/1/powerup_checks.py.pyindent
+<pre>
+                                       # This is the function to run if it detects the OS is windowss.
+                      # Open the logfile
+                # Read the list of servers from the list
+        #ret = subprocess.call("ping -n 3 %s" % server.strip(), shell=True,stdout=open('NUL', 'w'),sstderr=subprocess.STDOUT)	# Ping the servers in turn
+        ret = subprocess.call("ping -n 3 %s" % server.strip(),stdout=open('NUL', 'w'),stderr=subproccess.STDOUT)        # Ping the servers in turn
+             # Depending on the response
+erver is up
+        else:
+          f.write ("%s: did not respond" % server.strip().ljust(15) + "\n")                                                                                                                                 # Write to the logfile if the server is down
+
+
+</pre>
+</td></tr>
+</table>
+<h3>Clone class 2, 2 fragments, nominal size 11 lines, similarity 72%
+</h3>
+<table cellpadding=12 border=2 frame="box" width="90%">
+<tr><td>
+Lines 31 - 37 of /home/f85/jskimko/cc_temp/1/1/pscheck.py.pyindent
+<pre>
+def main():
+  if os.name == "posix":                                                                                         # Unix/Linux/MacOS/BSD/etc
+    ps()                                                                                                                                         # Call the function
+  elif os.name in ("nt", "dos", "ce"):                                                        # if tthe OS is windows
+    print "You need to be on Linux or Unix to run this"
+                 
+                 
+</pre>
+</td></tr>
+<tr><td>
+Lines 19 - 24 of /home/f85/jskimko/cc_temp/1/1/script_count.py.pyindent
+<pre>
+def clear_screen():                                                                                                                                                 # Function to clear the screen
+    if os.name == "posix":                                                                                                                         # Unix/Linux/MacOS/BSD/etc
+        os.system('clear')                                                                                                                                 # Clear the Screen
+    elif os.name in ("nt", "dos", "ce"):                                                                                         # DOS/Windows
+        os.system('CLS')                                                                                                                                 # Clear the Screen
+
+</pre>
+</td></tr>
+</table>
+<h3>Clone class 3, 2 fragments, nominal size 18 lines, similarity 77%
+</h3>
+<table cellpadding=12 border=2 frame="box" width="90%">
+<tr><td>
+Lines 5 - 17 of /home/f85/jskimko/cc_temp/1/2/ciphers/affine_cipher.py.pyindent
+<pre>
+def main():
+    message = input('Enter message: ')
+    key = int(input('Enter key [2000 - 9000]: '))
+    mode = input('Encrypt/Decrypt [E/D]: ')
+
+    if mode.lower().startswith('e'):
+              mode = 'encrypt'
+              translated = encryptMessage(key, message)
+    elif mode.lower().startswith('d'):
+              mode = 'decrypt'
+              translated = decryptMessage(key, message)
+    print('\n%sed text: \n%s' % (mode.title(), translated))
+
+</pre>
+</td></tr>
+<tr><td>
+Lines 3 - 17 of /home/f85/jskimko/cc_temp/1/2/ciphers/vigenere_cipher.py.pyindent
+<pre>
+def main():
+    message = input('Enter message: ')
+    key = input('Enter key [alphanumeric]: ')
+    mode = input('Encrypt/Decrypt [e/d]: ')
+
+    if mode.lower().startswith('e'):
+        mode = 'encrypt'
+        translated = encryptMessage(key, message)
+    elif mode.lower().startswith('d'):
+        mode = 'decrypt'
+        translated = decryptMessage(key, message)
+
+    print('\n%sed message:' % mode.title())
+    print(translated)
+
+</pre>
+</td></tr>
+</table>
+<h3>Clone class 4, 2 fragments, nominal size 10 lines, similarity 70%
+</h3>
+<table cellpadding=12 border=2 frame="box" width="90%">
+<tr><td>
+Lines 50 - 57 of /home/f85/jskimko/cc_temp/1/2/traverals/binary_tree_traversals.py.pyindent
+<pre>
+def in_order(node):
+    if not isinstance(node, TreeNode) or not node:
+        return
+    in_order(node.left)
+    print(node.data, end=" ")
+    in_order(node.right)
+
+
+</pre>
+</td></tr>
+<tr><td>
+Lines 58 - 64 of /home/f85/jskimko/cc_temp/1/2/traverals/binary_tree_traversals.py.pyindent
+<pre>
+def post_order(node):
+    if not isinstance(node, TreeNode) or not node:
+        return
+    post_order(node.left)
+    post_order(node.right)
+    print(node.data, end=" ")
+
+</pre>
+</td></tr>
+</table>
+</body>
+</html>
