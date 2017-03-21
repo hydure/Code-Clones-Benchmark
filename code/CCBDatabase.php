@@ -100,7 +100,6 @@ tr:nth-child(even) {
               <li class="active"><a href="#">Projects</a></li>
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
-              <li><a href="#">About</a></li> 
               <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
