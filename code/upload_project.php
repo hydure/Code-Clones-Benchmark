@@ -16,8 +16,8 @@ if(isset($_FILES['uploaded_file'])) {
         //$data = $dbLink->real_escape_string(file_get_contents($_FILES  ['uploaded_file']['tmp_name']));
         $size = intval($_FILES['uploaded_file']['size']);
         $userId = intval($_SESSION['userSession']);
-        //$author = ($_SESSION['userName']);
-        $author = 'pig';
+        $author = ($_SESSION['userName']);
+        //$author = 'pig';
 
         if ("$_POST[ownership_type]" == "1") {
             $ownership = $userId;
