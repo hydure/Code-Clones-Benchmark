@@ -32,8 +32,9 @@ $date = date('Y-m-d H:i:s');
 
 #get userId
 $uid = $_SESSION['userSession'];
+
 # set ownership
-if ("$_POST[private]" == "1") {
+if ("$_POST[private]" != "1") {
 	$ownership = -1;
 } else {
 	$ownership = (int) $uid;

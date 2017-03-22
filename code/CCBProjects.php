@@ -210,7 +210,7 @@ tr:nth-child(even) {
                   $url = $row['url'];
                   $size = $row['size'];
                   $userId = $row['userId'];
-                  if ($_SESSION['userSession'] == $userId) {
+                  if ($_SESSION['userSession'] == $userId || $ownership == -1) {
                     echo "<tr>";
                     echo '<th>'.$projectID.'</th>';
                     echo '<th>'.$title.'</th>';
@@ -218,7 +218,7 @@ tr:nth-child(even) {
                     echo '<th>'.$commit.'</th>';
                     echo '<th>'.$last_accessed.'</th>';
                     echo '<th>'.$uploaded.'</th>';
-                    if (intval($ownership) == -1) { 
+                    if (intval($ownership) != -1) { 
                       echo '<th>Private</th>';
                     }
                     else {
