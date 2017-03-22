@@ -24,27 +24,51 @@ if(isset($_FILES['uploaded_file'])) {
 
         $userId = intval($_SESSION['userSession']);
         //echo 'userID' . $userId;
- 
         // Create the SQL query
         $query = "
             INSERT INTO `Projects` (
-                `title`, `ownership`, `size`, `content`, `uploaded`, `userId`
+                `title`, `ownership`, `size`, `uploaded`, `userId`
             )
             VALUES (
-                '{$name}', '{$ownership}', {$size}, '{$data}', NOW(), '{$userId}'
+                '{$name}', '{$ownership}', {$size}, NOW(), '{$userId}'
             )";
  
         // Execute the query
         $result = $dbLink->query($query);
- 
-        // Check if it was successfull
-        if($result) {
-            echo 'Success! Your file was successfully added!';
-        }
-        else {
-            echo 'Error! Failed to insert the file'
-               . "<pre>{$dbLink->error}</pre>";
-        }
+ 	//get the project id of uploaded file
+	if($result){
+	$query2 = "Select projectID from Projects where userId='{$userId}' AND title='{$name}' AND ownership='{$ownership}'";
+
+	$return = $dbLink->query($query2);
+	$row = $return->fetch_assoc();
+	$drname = $row['projectID'];
+	$path = "/home/pi/MyNAS/files/p$drname";
+	$file = $_FILES['uploaded_file']['tmp_name'];
+	if(!mkdir($path, 0700, true)){
+		echo 'An error accured while the file was being uploaded. '
+ 		. 'Could not create directory';
+		//Delete from database if failed to create directory
+		$delete = "DELETE FROM Projects where projectID=$drname";
+		$dbLink->query($delete);
+	}
+	else{
+			
+		if(!move_uploaded_file($file, "$path/$name")){
+			$delete = "DELETE FROM Projects where projectID=$drname";
+			$dbLink->query($delete);
+			echo 'An error accured while the file was being uploaded. '
+ 			. 'Could not save file';
+		}
+
+     		else{
+           		 echo 'Success! Your file was successfully added!';
+      		}
+	}
+	}
+	else{
+	echo "An error occured while the file was being uploaded.";
+	}
+
     }
     else {
         echo 'An error accured while the file was being uploaded. '
