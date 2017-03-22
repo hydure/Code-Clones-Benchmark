@@ -13,8 +13,12 @@ if(!$con) {
         die('coult not connect: ' . mysqli_connect_error());
 }
 
+# normalize url
+#$url = exec("echo $_POST[url] | sed 's:\(.*com\)/\([^/]*\)/\([^/]*\)/.*:\1/\2/\3:'");
+#echo "$url<br>";
+
 # get title from url
-$title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::'");
+$title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::' | sed 's:/.*::'");
 
 # get repo host username
 $user = exec("echo $_POST[url] | sed 's:.*com/::' | sed 's:/.*::'");
