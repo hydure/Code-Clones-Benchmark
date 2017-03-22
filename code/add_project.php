@@ -16,13 +16,12 @@ if(!$con) {
 # get title from url
 $title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::'");
 
-
 # get repo host username
-$user = exec("echo $_POST[url] | sed 's:.*\.com/\([^/]*\)/:\1:'");
+$user = exec("echo $_POST[url] | sed 's:.*com/::' | sed 's:/.*::'");
 
 # get head commit number
 if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/examples/get_head_commit.sh $_POST[url]");
+	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $_POST[url]");
 } else {
 	$commit = $_POST[commit];
 }
@@ -56,8 +55,8 @@ if($stmt = mysqli_prepare($con, "Select commit FROM Projects where title=? AND o
 
 # add entry to Projects table if no matching commit number
 if($check){
-$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId)
-        VALUES('$title', '$_POST[url]', '$commit', '$date', '$ownership', '$uid')";
+$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId, author)
+        VALUES('$title', '$_POST[url]', '$commit', '$date', '$ownership', '$uid', '$user')";
 
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
