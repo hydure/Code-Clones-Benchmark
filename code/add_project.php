@@ -21,9 +21,9 @@ $user = exec("echo $_POST[url] | sed 's:.*com/::' | sed 's:/.*::'");
 
 # get head commit number
 if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $_POST[url]");
+	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $_POST[url] | head -c 12");
 } else {
-	$commit = $_POST[commit];
+	$commit = exec("echo $_POST[commit] | head -c 12");
 }
 
 # get date
