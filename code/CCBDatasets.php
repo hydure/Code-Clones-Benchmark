@@ -131,7 +131,7 @@ tr:nth-child(even) {
                   $uploaded = $row['uploaded'];
                   $ownership = $row['ownership'];
                   $userId = $row['userId'];
-                  if ($_SESSION['userSession'] == $userId) {
+                  if ($_SESSION['userSession'] == $userId || $ownership == -1)  {
                     echo "<tr>";
                     echo '<th>'.$projectID.'</th>';
                     echo '<th>'.$title.'</th>';

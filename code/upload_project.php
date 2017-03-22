@@ -67,7 +67,7 @@ if(isset($_FILES['uploaded_file'])) {
      		else{
            		 echo 'Success! Your file was successfully added!';
       		}
-	}
+	} //**/
 	}
 	else{
 	echo "An error occured while the file was being uploaded.";
