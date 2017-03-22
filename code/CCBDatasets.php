@@ -99,12 +99,14 @@ tr:nth-child(even) {
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Datasets</h1>
           <br />
+          <!--
           <form action="#">
             <p style="font-size: 160%">Upload Dataset</p>
          	  <input type = "text" placeholder="URL for Code" required=""> 
             <input type = "submit" name = "upload" value = "Upload" />
           </form>
           <br />
+          -->
           <form action="add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
 
