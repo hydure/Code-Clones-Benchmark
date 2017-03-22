@@ -6,7 +6,30 @@ if ($_POST['project_action'] == 'Delete Project') {
 	if(mysqli_connect_errno()) {
 		die("MySQL connection failed: ". mysqli_connect_error());
 	}
+	$size = NULL;
 	$project_val = $_POST['projectSelect'];
+	//delete folder if applicable
+	$query = "Select title, size from Projects where projectID='".$project_val."'";
+	if(!$return = $con->query($query)){
+		echo "Failed to query database";
+	}
+	else{
+		$value = $return->fetch_assoc();
+		//url is being used to determine if a project is a url upload or not
+		$size = $value['size'];
+	}
+	//if there is a url
+	if($size){
+		//remove the file
+		$path = "/home/pi/MyNAS/files/p$project_val";
+		$title = $value['title'];
+		if(!unlink("$path/$title")){
+			echo "Failed to delete file";
+		}
+		if(!rmdir($path)){
+			echo "Failed to delete server file!";
+		}
+	}
 	$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'";
 	if ($con->query($sql) == TRUE) {
 		echo "Record delted sucessfully";
