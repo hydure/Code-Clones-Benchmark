@@ -17,7 +17,6 @@ if(isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['size'] != 0) {
         $size = intval($_FILES['uploaded_file']['size']);
         $userId = intval($_SESSION['userSession']);
         $author = ($_SESSION['userName']);
-        //$author = 'pig';
         if ("$_POST[ownership_type]" == "1") {
             $ownership = $userId;
         } else {
@@ -45,7 +44,7 @@ if(isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['size'] != 0) {
             $path = "/home/pi/MyNAS/files/p$drname";
             //$path = "/home/reid/MyNAS/files/p$drname";
             $file = $_FILES['uploaded_file']['tmp_name'];
-            if(!mkdir($path, 0700, true)){
+        /**    if(!mkdir($path, 0700, true)){
                 echo 'An error accured while the file was being uploaded. '
                 . 'Could not create directory';
                 //Delete from database if failed to create directory
@@ -60,7 +59,7 @@ if(isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['size'] != 0) {
                 } else{
                     echo 'Success! Your file was successfully added!';
                 }
-            }
+            } **/
         } else{
             echo "An error occured while the file was being uploaded.";
         }

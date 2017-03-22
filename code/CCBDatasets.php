@@ -76,6 +76,9 @@ tr:nth-child(even) {
               <input type="button" onclick="location.href='logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
+           <div style="position: absolute; top: 15; right: 170;">
+            <?php echo "Hello, " . ($_SESSION['userName']); ?>
+           </div>
     	</div>
        </div>
     </div>

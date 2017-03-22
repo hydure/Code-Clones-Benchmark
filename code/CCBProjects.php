@@ -86,6 +86,9 @@ tr:nth-child(even) {
               <input type="button" onclick="location.href='logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
+           <div style="position: absolute; top: 15; right: 170;">
+            <?php echo "Hello, " . ($_SESSION['userName']); ?>
+           </div>
     	</div>
        </div>
     </div>
@@ -202,7 +205,7 @@ tr:nth-child(even) {
                   unset($projectID, $title, $userId);
                   $projectID = $row['projectID'];
                   $title = $row['title'];
-		  $author = $row['author'];
+		              $author = $row['author'];
                   $commit = $row['commit'];
                   $last_accessed = $row['last_accessed'];
                   $uploaded = $row['uploaded'];

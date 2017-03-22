@@ -31,6 +31,8 @@ $(document).ready(function() {
 });
 </script>
 
+<div 
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
@@ -41,7 +43,8 @@ $(document).ready(function() {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<div class="page-container">
+
+
   
 	<!-- top navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,6 +60,9 @@ $(document).ready(function() {
               <input type="button" onclick="location.href='logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
+           <div style="position: absolute; top: 15; right: 170;">
+            <?php echo "Hello, " . ($_SESSION['userName']); ?>
+            </div>
     	</div>
        </div>
     </div>
