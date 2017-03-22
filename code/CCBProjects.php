@@ -182,14 +182,15 @@ tr:nth-child(even) {
           if(mysqli_connect_errno()) {
               die("MySQL connection failed: ". mysqli_connect_error());
           }
-          $result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId FROM Projects");
+          $result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId, author FROM Projects");
           echo "<html>";
           echo "<body>";
           echo "<table>";
           echo "<tr>";
           echo "<th>ID</th>";
           echo "<th>Project</th>";
-          echo "<th>commit</th>";
+          echo "<th>Author</th>";
+          echo "<th>Commit</th>";
           echo "<th>Last Accessed</th>";
           echo "<th>Date Uploaded</th>";
           echo "<th>Ownership</th>";
@@ -201,6 +202,7 @@ tr:nth-child(even) {
                   unset($projectID, $title, $userId);
                   $projectID = $row['projectID'];
                   $title = $row['title'];
+		  $author = $row['author'];
                   $commit = $row['commit'];
                   $last_accessed = $row['last_accessed'];
                   $uploaded = $row['uploaded'];
@@ -212,6 +214,7 @@ tr:nth-child(even) {
                     echo "<tr>";
                     echo '<th>'.$projectID.'</th>';
                     echo '<th>'.$title.'</th>';
+                    echo '<th>'.$author.'</th>';
                     echo '<th>'.$commit.'</th>';
                     echo '<th>'.$last_accessed.'</th>';
                     echo '<th>'.$uploaded.'</th>';
