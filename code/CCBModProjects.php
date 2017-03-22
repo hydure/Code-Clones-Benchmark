@@ -60,7 +60,7 @@ if ($_POST['project_action'] == 'Switch Ownership') {
 		if ($ownership_val == -1 && $curr_user = $userId) { //switch to private if its public & the user is the owner of the file
 			$sql = "UPDATE Projects SET ownership = " . $userId . " WHERE projectID='".$project_val."'";
 		}
-		if ($ownership_val != -1 && $curr_user = $userId) { //switch to private if its public & the user is the owner of the file
+		if ($ownership_val != -1 && $curr_user = $userId) { //switch to public if its private & the user is the owner of the file
 			$sql = "UPDATE Projects SET ownership = -1 WHERE projectID='".$project_val."'";
 		}
 		echo $query;

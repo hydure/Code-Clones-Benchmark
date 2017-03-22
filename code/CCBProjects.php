@@ -143,7 +143,7 @@ tr:nth-child(even) {
           </form>
           <br />
           -->
-          <form id='evaluate_button' action='evaluate.php' method='post' enctype='multipart/form-data'>
+          <form id='evaluate_button' action='CCBModProjects.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Browse Projects</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
@@ -171,8 +171,9 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type = 'submit' name= 'project_action' value = 'Evaluate Project'  id='evaluate_project' />
+            <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' />
             <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' />
+            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' />
             
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example
