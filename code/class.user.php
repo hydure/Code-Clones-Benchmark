@@ -63,6 +63,7 @@ class USER
      if($userRow['userStatus']=="Y")
      {
       $_SESSION['userSession'] = $userRow['userId'];
+      $_SESSION['userName'] = $userRow['username'];
       header("Location: index.php?passsuccess");
       return true;
      }

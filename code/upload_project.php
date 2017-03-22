@@ -13,24 +13,27 @@ if(isset($_FILES['uploaded_file'])) {
         // Gather all required data
         $name = $dbLink->real_escape_string($_FILES['uploaded_file']['name']);
         $mime = $dbLink->real_escape_string($_FILES['uploaded_file']['type']);
-        $data = $dbLink->real_escape_string(file_get_contents($_FILES  ['uploaded_file']['tmp_name']));
+        //$data = $dbLink->real_escape_string(file_get_contents($_FILES  ['uploaded_file']['tmp_name']));
         $size = intval($_FILES['uploaded_file']['size']);
+        $userId = intval($_SESSION['userSession']);
+        //$author = ($_SESSION['userName']);
+        $author = 'pig';
 
         if ("$_POST[ownership_type]" == "1") {
-            $ownership = -1;
+            $ownership = $userId;
         } else {
             $ownership = -1;
         }
 
-        $userId = intval($_SESSION['userSession']);
+        
         //echo 'userID' . $userId;
         // Create the SQL query
         $query = "
             INSERT INTO `Projects` (
-                `title`, `ownership`, `size`, `uploaded`, `userId`
+                `title`, `ownership`, `size`, `uploaded`, `userId`, `author`
             )
             VALUES (
-                '{$name}', '{$ownership}', {$size}, NOW(), '{$userId}'
+                '{$name}', '{$ownership}', {$size}, NOW(), '{$userId}', '{$author}'
             )";
  
         // Execute the query
@@ -43,6 +46,7 @@ if(isset($_FILES['uploaded_file'])) {
 	$row = $return->fetch_assoc();
 	$drname = $row['projectID'];
 	$path = "/home/pi/MyNAS/files/p$drname";
+    //$path = "/home/reid/MyNAS/files/p$drname";
 	$file = $_FILES['uploaded_file']['tmp_name'];
 	if(!mkdir($path, 0700, true)){
 		echo 'An error accured while the file was being uploaded. '

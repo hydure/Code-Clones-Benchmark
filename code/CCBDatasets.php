@@ -137,7 +137,7 @@ tr:nth-child(even) {
                     echo '<th>'.$title.'</th>';
                     echo '<th>'.$last_accessed.'</th>';
                     echo '<th>'.$uploaded.'</th>';
-                    if (intval($ownership) == -1) { 
+                    if (intval($ownership) != -1) { 
                       echo '<th>Private</th>';
                     } else {
                       echo '<th>Public</th>';
