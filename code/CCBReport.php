@@ -80,8 +80,15 @@ $(document).ready(function() {
             <!--frames for adding results. each iframe should contain one set-->
             <!--add inside of quotes after iframe src=" "-->
             <div align="center">
+             <select>
+                <option>Dataset</option>
+                </select>
+                &nbsp
+            <select>
+                <option>Dataset1</option>
+                </select>
                 <iframe src="" width=40% height=70%></iframe>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp
                 <iframe src="" width=40% height=7n0%></iframe>
             </div>
             <!--frames for adding results above-->
