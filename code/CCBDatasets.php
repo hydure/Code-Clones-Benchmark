@@ -167,7 +167,7 @@ tr:nth-child(even) {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, running_flag FROM Datasets");
+            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets");
             //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
             echo "<html>";
             echo "<body>";
@@ -195,10 +195,10 @@ tr:nth-child(even) {
               $result = mysqli_query($con, $sql);
               $tempArray = array();
               while ($row = $result->fetch_assoc()) {
-                unset($projectID, $submit_date, $running_flag);
+                unset($projectID, $submit_date, $status);
                 array_push($tempArray, $row['projectID']);
                 $submit_date = $row['submit_date'];
-                $running_flag = $row['running_flag'];
+                $status = $row['status'];
               }
               //$project_string = implode(', ', $tempArray);
               echo "<tr>";
@@ -209,19 +209,25 @@ tr:nth-child(even) {
               echo '<th>'; //begin with opening table
               $valid = true; //flag to set status as broken if anything is red
               $last_element = end($tempArray);
-              foreach ($tempArray as $project_string) {
-                $sql2="SELECT projectID FROM Projects WHERE projectID = '$project_string'"; //print project # as red if !exists
-                $query = mysqli_query($con, $sql2);  
+              foreach ($tempArray as $project_string) { //print project # as red if !exists or is no longer public
+                $sql2="SELECT projectID, userID, ownership FROM Projects WHERE projectID = '$project_string'"; 
+                $query = mysqli_query($con, $sql2);
+                $row2 = $query->fetch_assoc();
+                unset($projectID, $userID, $ownership);
+                $projectID = $row2['projectID'];
+                $userID = $row2['userID'];
+                $ownership = $row2['ownership'];
+
 
                 if (!$query) {
                   die('Query failed to execute');
                 }
 
-                if (mysqli_num_rows($query) == 0) {
+                if ((mysqli_num_rows($query) > 0 && $userID == $_SESSION['userSession']) || (mysqli_num_rows($query) > 0 && $ownership == -1)) {
+                  echo $project_string;
+                } else {
                   echo '<i style="color:red;font-family:arial; ">' . $project_string . '</i>';
                   $valid = false;
-                } else {
-                  echo $project_string;
                 }
                 if ($last_element != $project_string) { //print a comma if this is not the last element in array for printing
                   echo ', ';
@@ -231,7 +237,7 @@ tr:nth-child(even) {
 
               echo '<th>'.$submit_date.'</th>';
               if ($valid) {
-                if (intval($running_flag) == 0) { 
+                if (intval($status) == 0) { 
                   echo '<th>Inactive</th>';
                 } else {
                   echo '<th>Active</th>';

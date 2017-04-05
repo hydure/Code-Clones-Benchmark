@@ -41,8 +41,8 @@ if(isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['size'] != 0) {
             $return = $dbLink->query($query2);
             $row = $return->fetch_assoc();
             $drname = $row['projectID'];
-            $path = "/home/pi/MyNAS/files/p$drname";
-            //$path = "/home/reid/MyNAS/files/p$drname";
+            //$path = "/home//MyNAS/files/p$drname";
+            $path = "/home/reid/Desktop/MyNAS/files/p$drname";
             $file = $_FILES['uploaded_file']['tmp_name'];
             if(!mkdir($path, 0700, true)){
                 echo 'An error accured while the file was being uploaded. '
