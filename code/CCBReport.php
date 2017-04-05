@@ -71,13 +71,20 @@ $(document).ready(function() {
               <li><a href="CCBProjects.php">Projects</a></li>
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
-              <li><a href="evaluate.php">Evaluations</a></li>
+              <li class"active"><a href="#">Reports</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>
             </ul>
         </div>
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
-        <h1>This is where we'll display a report(s) based on which Clone Detectors are chosen!</h1>
+            <!--frames for adding results. each iframe should contain one set-->
+            <!--add inside of quotes after iframe src=" "-->
+            <div align="center">
+                <iframe src="" width=40% height=70%></iframe>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <iframe src="" width=40% height=7n0%></iframe>
+            </div>
+            <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
