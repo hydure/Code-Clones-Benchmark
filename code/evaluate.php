@@ -260,8 +260,7 @@ div.round {
     
 <!--frames for adding results. each iframe should contain one set-->
 <!--add inside of quotes after iframe src=" "-->
-<div>
-    <div align="center">
+<div align="center">
   <iframe src="" width=40% height=70%></iframe>
   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
   <iframe src="" width=40% height=7n0%></iframe>
