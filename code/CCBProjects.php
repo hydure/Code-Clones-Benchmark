@@ -97,7 +97,7 @@ tr:nth-child(even) {
       <div class="row row-offcanvas row-offcanvas-left">
         
         <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
               <li><a href="CCBHome.php">Home</a></li>
               <li class="active"><a href="#">Projects</a></li>
