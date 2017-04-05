@@ -200,15 +200,44 @@ tr:nth-child(even) {
                 $submit_date = $row['submit_date'];
                 $running_flag = $row['running_flag'];
               }
-              $project_string = implode(', ', $tempArray);         
+              //$project_string = implode(', ', $tempArray);
               echo "<tr>";
               echo '<th>'.$dID.'</th>';
-              echo '<th>'.$project_string.'</th>';
+
+              /** This part prints the project number normally if it is queried in the database, otherwise it is printed red
+              **/
+              echo '<th>'; //begin with opening table
+              $valid = true; //flag to set status as broken if anything is red
+              $last_element = end($tempArray);
+              foreach ($tempArray as $project_string) {
+                $sql2="SELECT projectID FROM Projects WHERE projectID = '$project_string'"; //print project # as red if !exists
+                $query = mysqli_query($con, $sql2);  
+
+                if (!$query) {
+                  die('Query failed to execute');
+                }
+
+                if (mysqli_num_rows($query) == 0) {
+                  echo '<i style="color:red;font-family:arial; ">' . $project_string . '</i>';
+                  $valid = false;
+                } else {
+                  echo $project_string;
+                }
+                if ($last_element != $project_string) { //print a comma if this is not the last element in array for printing
+                  echo ', ';
+                }
+              }
+              echo '</th>'; //close the table value
+
               echo '<th>'.$submit_date.'</th>';
-              if (intval($running_flag) == 0) { 
-                echo '<th>Inactive</th>';
+              if ($valid) {
+                if (intval($running_flag) == 0) { 
+                  echo '<th>Inactive</th>';
+                } else {
+                  echo '<th>Active</th>';
+                }
               } else {
-                echo '<th>Active</th>';
+                echo '<th>Broken</th>';
               }
               echo "</tr>";              
             }

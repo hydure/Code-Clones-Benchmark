@@ -30,13 +30,21 @@ if ($_POST['project_action'] == 'Delete Project') {
 			echo "Failed to delete server file!";
 		}
 	}
-	$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'";
+	$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'"; //delete project from database
 	if ($con->query($sql) == TRUE) {
 		echo "Record delted sucessfully";
 
 	} else {
 		echo "Error Deleting Record: " . $con->error;
 	}
+	/**$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'"; //update status in datasets
+	if ($con->query($sql) == TRUE) {
+		echo "Record delted sucessfully";
+
+	} else {
+		echo "Error Deleting Record: " . $con->error;
+	} **/
+
 	$con->close();
 	header('Location:CCBProjects.php');
 }
