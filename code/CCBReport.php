@@ -14,7 +14,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
-!-- Latest compiled and minified CSS -->
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -22,13 +22,13 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
+
 $(document).ready(function() {
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
   });
 });
 </script>
-!DOCTYPE html>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
 <head>
@@ -65,7 +65,7 @@ $(document).ready(function() {
       <div class="row row-offcanvas row-offcanvas-left">
         
         <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="col-xs-6 col-sm-1 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
               <li><a href="CCBHome.php">Home</a></li>
               <li><a href="CCBProjects.php">Projects</a></li>
@@ -76,13 +76,22 @@ $(document).ready(function() {
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-9">
+        <div class="col-xs-12 col-sm-11">
+
             <!--frames for adding results. each iframe should contain one set-->
             <!--add inside of quotes after iframe src=" "-->
+            
+            <div class="excontainer">
+              <button id="loadbasic">basic load</button>
+              <div id="result"></div>
+           
+            </div>
+
             <div align="center">
-                <iframe src="" width=40% height=70%></iframe>
+                <iframe id="frame_one" src="/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java" width=40% height=70%></iframe>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <iframe src="" width=40% height=7n0%></iframe>
+                <iframe id="frame_two" src="" width=40% height=70%></iframe>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             </div>
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
