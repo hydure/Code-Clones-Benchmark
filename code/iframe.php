@@ -11,6 +11,28 @@
 
 
 </body>
+	
+	<?php
+	$code_array = array();
+	$arr = array('<code>', 'j', 'o', 'k', 'e', '</code>');
+	array_push($code_array, '<pre>');
+	$handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
+	if ($handle) {
+		while (($line = fgets($handle)) != false) {
+			$line = '<code>' . substr($line, 0, -1) . '</code><br>';
+			array_push($code_array, $line);
+			//echo $line;
+		}
+		fclose($handle);
+	}
+	array_push($code_array, '</pre>');
+	$code_string = implode("", $code_array);
+	$d = implode("", $arr);
+	//$d = json_encode($d, JSON_HEX_TAG);
+	echo $d;
+	$code_string = json_encode($code_string, JSON_HEX_TAG);
+	//echo $code_string;
+	?>
 
 <script language="javascript">
 function injectHTML(){
@@ -18,17 +40,42 @@ function injectHTML(){
 	//step 1: get the DOM object of the iframe.
 	var iframe = document.getElementById('test_iframe');
 
-	<?php 
+
+
+	<?php
+
 	$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
 	$code_file = nl2br($code_file);
 	$code_file = json_encode($code_file, JSON_HEX_TAG);
+
+	$code_array = array();
+	$arr = array('j', 'o', 'k', 'e');
+	array_push($code_array, '<pre>');
+	$handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
+	if ($handle) {
+		while (($line = fgets($handle)) != false) {
+			$line = '<code>' . substr($line, 0, -1) . '</code><br>';
+			array_push($code_array, $line);
+			//echo $line;
+		}
+		fclose($handle);
+	}
+	array_push($code_array, '</pre>');
+	$code_string = implode("", $code_array);
+	$d = implode("", $arr);
+	$d = json_encode($d, JSON_HEX_TAG);
+	echo $d;
+	$code_string = json_encode($code_string, JSON_HEX_TAG);
+	//echo $code_string;
 	?>
 
-	var client = <?php echo $code_file; ?>;
+	//var client = <?php echo $code_file; ?>;
 	var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; }</style>';
-	var test = '<pre><code>line 1\n</code><code>line 2\n</code><code>line 3\n</code><code>line 4\n</code><code>line 5</code></pre>';
+	//var test = '<pre><code>line 1\n</code><code>line 2\n</code><code>line 3\n</code><code>line 4\n</code><code>line 5</code></pre>';
+	var code = <?php echo $code_string; ?>;
+	//var code = <?php echo $code_file; ?>;
 
-	var html_string = css + '<html><head></head><body><p>' + test + '</p></body></html>';
+	var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
 
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
