@@ -6,6 +6,12 @@
     <iframe id="test_iframe" src="about:blank" width=400 height=400></iframe>
 
 	<button onClick="javascript:injectHTML();">Inject HTML</button>
+
+<?php 
+$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
+$code_file = nl2br($code_file);
+$code_file = json_encode($code_file, JSON_HEX_TAG);
+?>
 </body>
 
 <script language="javascript">
@@ -14,14 +20,9 @@ function injectHTML(){
 	//step 1: get the DOM object of the iframe.
 	var iframe = document.getElementById('test_iframe');
 
-	var client = new XMLHttpRequest();
-	client.open('GET', '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
-	client.onreadystatechange = function() {
-	  alert(client.responseText);
-	}
-	client.send();
+	var client = <?php echo $code_file; ?>;
 
-	var html_string = '<html><head></head><body><p>+' + client + '</p></body></html>';
+	var html_string = '<html><head></head><body><p>' + client + '</p></body></html>';
 
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
