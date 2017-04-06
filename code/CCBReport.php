@@ -88,10 +88,17 @@ $(document).ready(function() {
             </div>
 
             <div align="center">
-                <iframe id="frame_one" src="/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java" width=40% height=70%></iframe>
+             <select>
+                <option>Dataset</option>
+                </select>
+                &nbsp
+            <select>
+                <option>Dataset1</option>
+                </select>
+                <iframe src="" width=40% height=70%></iframe>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <iframe id="frame_two" src="" width=40% height=70%></iframe>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp
+                <iframe src="" width=40% height=7n0%></iframe>
             </div>
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
