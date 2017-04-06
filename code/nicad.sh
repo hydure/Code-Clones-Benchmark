@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -x
 #script file to be placed on the machine hosting NiCad
 
 if [ "$#" -lt 3 ]; then
@@ -9,9 +9,9 @@ fi
 lang=$1; shift
 datasetID=$1; shift
 
-CC_BENCH=/home/f85/jskimko/cc_bench
-NICAD_PATH=/home/f85/jskimko/NiCad-4.0
-DATASET_PATH=/home/f85/jskimko/cc_bench/$datasetID
+CC_BENCH=/home/clone/cc_bench
+NICAD_PATH=/home/clone/NiCad-4.0
+DATASET_PATH=$CC_BENCH/$datasetID
 
 i=0
 while [ "$#" -gt 1 ]; do

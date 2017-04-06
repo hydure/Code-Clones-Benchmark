@@ -48,8 +48,8 @@ foreach($_POST['detector'] as $detector) {
         mysqli_close($con);
 
         # run nicad
-        $nicad_path="/home/f85/jskimko/nicad.sh";
-        $cmd="ssh -o StrictHostKeyChecking=no jskimko@homer.cs.wm.edu '$nicad_path $args' | grep -v 'known hosts'";
+        $nicad_path="/home/clone/nicad.sh";
+        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
         echo shell_exec($cmd);
     }
 }
