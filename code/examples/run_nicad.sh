@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ssh jskimko@pepe.cs.wm.edu "/home/f85/jskimko/nicad.sh $1"
+ssh -o StrictHostKeyChecking=no jskimko@homer.cs.wm.edu "/home/f85/jskimko/nicad.sh $1" | grep -v "known hosts"
