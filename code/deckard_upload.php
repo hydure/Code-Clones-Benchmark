@@ -10,8 +10,10 @@ $query = mysqli_query($con, $sql);
 $cloneID = mysqli_fetch_assoc($query)['cloneID'] + 1;
 $datasetID = 1;
 $detector = 'Deckard';
+$file = "/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/clusters/post_cluster_vdb_30_0_allg_0.95_30"
+$projectID = 123;
 
-$handle = fopen("/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/clusters/post_cluster_vdb_30_0_allg_0.95_30", "r");
+$handle = fopen($file, "r");
 if ($handle) {
 	while (($line = fgets($handle)) != false) {
 		if ($line != "\n") {
@@ -21,8 +23,8 @@ if ($handle) {
 			$start = $index[1];
 			$end = intval(($index[2])) + intval($start);
 
-			$sql = "INSERT INTO Clones (cloneID, datasetID, file, start, end, detector )
-			VALUES ( '{$cloneID}', '{$datasetID}', '{$file}', '{$start}', '{$end}', '{$detector}')";
+			$sql = "INSERT INTO Clones (cloneID, datasetID, projectID, file, start, end, detector )
+			VALUES ( '{$cloneID}', '{$datasetID}', '{$projectID}', '{$file}', '{$start}', '{$end}', '{$detector}')";
 			if (!mysqli_query($con, $sql)) {
         		die("Error: " . mysqli_error($con));
 			}

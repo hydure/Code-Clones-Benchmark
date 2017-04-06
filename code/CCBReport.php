@@ -85,6 +85,11 @@ function injectHTML(){
 }
 
 $(document).ready(function() {
+  //$('#highlight').click(function() {
+    //var will_highlight = $("#highlight");
+      //$('.')
+  //}
+
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
   });
@@ -143,7 +148,7 @@ $(document).ready(function() {
             <!--add inside of quotes after iframe src=" "-->
             
             <button onClick="javascript:injectHTML();">Inject HTML</button>
-            </div>
+            <button id="highlight">Highlight</button>
 
             <div align="center">
                 <iframe id="iframe_one" width=60% height=70%></iframe>
