@@ -23,6 +23,47 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <script type="text/javascript">
 
+<?php 
+$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
+$code_file = nl2br($code_file);
+$code_file = json_encode($code_file, JSON_HEX_TAG);
+?>
+
+function injectHTML(){
+
+  //step 1: get the DOM object of the iframe.
+  var iframe = document.getElementById('iframe_one');
+
+  var code_file = <?php echo $code_file; ?>;
+
+  var html_string = '<html><head></head><body><p>' + code_file + '</p></body></html>';
+
+  /* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
+  var iframe = $('iframe#target_iframe_id').get(0);
+  */
+
+  //step 2: obtain the document associated with the iframe tag
+  //most of the browser supports .document. Some supports (such as the NetScape series) .contentDocumet, while some (e.g. IE5/6) supports .contentWindow.document
+  //we try to read whatever that exists.
+  var iframedoc = iframe.document;
+    if (iframe.contentDocument)
+      iframedoc = iframe.contentDocument;
+    else if (iframe.contentWindow)
+      iframedoc = iframe.contentWindow.document;
+
+   if (iframedoc){
+     // Put the content in the iframe
+     iframedoc.open();
+     iframedoc.writeln(html_string);
+     iframedoc.close();
+   } else {
+    //just in case of browsers that don't support the above 3 properties.
+    //fortunately we don't come across such case so far.
+    alert('Cannot inject dynamic contents into iframe.');
+   }
+
+}
+
 $(document).ready(function() {
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
@@ -81,17 +122,12 @@ $(document).ready(function() {
             <!--frames for adding results. each iframe should contain one set-->
             <!--add inside of quotes after iframe src=" "-->
             
-            <div class="excontainer">
-              <button id="loadbasic">basic load</button>
-              <div id="result"></div>
-           
+            <button onClick="javascript:injectHTML();">Inject HTML</button>
             </div>
 
             <div align="center">
-                <iframe src="" width=40% height=70%></iframe>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp
-                <iframe src="" width=40% height=70%></iframe>
+                <iframe id="iframe_one" width=60% height=70%></iframe>
+               <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
             </div>
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
