@@ -31,10 +31,31 @@ $(document).ready(function() {
 });
 </script>
 
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font size ="3";
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
 <head>
+	<meta http-equiv="refresh" content="4">
 	<title>Code Clones Benchmark</title>
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
@@ -86,7 +107,38 @@ $(document).ready(function() {
           	<p><strong>Code Clones</strong> are pieces of source code that are similar. These pieces can be defined as clones if they are <strong>textually, structurally or functionally similar.</strong> While there are several code clone detection techniques, an open crowd-sourced benchmark of true clones to evaluate these clones effectively is missing. <strong>The goal of this project is to create a web solution for running and evaluating clone detectors.</strong> </p>
 
 			<p>	The system will allow users to select and parameterize a set of clone detectors on an uploaded dataset (or upload a new one). Additionally, there should be basic functionality to support uploading a new clone detection approach. The web interface should also be deployed as a web-app where a user can explore the database and see the actual source code of the clone pairs. Then, it should offer the possibility for any user to evaluate clone pairs (either on their own private results or the public benchmark).</p>
-         	
+<br>
+<br>
+
+<h3>Status of Running Code Detectors</h3>
+<?php
+$con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+if(mysqli_connect_errno()) {
+    die("MySQL connection failed: ". mysqli_connect_error());
+}
+$ID_array = array();
+$uid = $_SESSION['userSession'];
+$result = $con->query("SELECT datasetID, percent FROM Datasets WHERE userId='$uid' && status=1");
+echo "<html>";
+echo "<body>";
+echo "<table>";
+echo "<tr>";
+echo "<th>Dataset ID</th>";
+echo "<th>Percent Done</th>";
+
+echo "</tr>";
+while ($row = $result->fetch_assoc()) {
+	$data = $row['datasetID'];
+	$percent = $row['percent'];
+	echo "<tr>";
+	echo "<th>$data</th>";
+	echo "<th>$percent%</th>";
+	echo "</tr>";
+}
+echo "</table>"; 
+echo "</body>";
+echo "</html>";
+?>
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
