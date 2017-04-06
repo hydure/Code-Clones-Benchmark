@@ -2,7 +2,8 @@
 <body>
 
 <?php
-$cmd="/home/pi/Code-Clones-Benchmark/code/examples/run_nicad.sh $_POST[python]";
+$cmd="ssh -o StrictHostKeyChecking=no jskimko@homer.cs.wm.edu '/home/f85/jskimko/nicad.sh ".$_POST[python]."' | grep -v 'known hosts'"
+#$cmd="/home/pi/Code-Clones-Benchmark/code/examples/run_nicad.sh $_POST[python]";
 $nicad_raw = shell_exec("$cmd");
 echo $nicad_raw;
 
