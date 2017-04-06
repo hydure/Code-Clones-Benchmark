@@ -1,4 +1,6 @@
 <html>
+
+
     <head>
     </head>
 <body>
@@ -7,12 +9,9 @@
 
 	<button onClick="javascript:injectHTML();">Inject HTML</button>
 
-<?php 
-$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
-$code_file = nl2br($code_file);
-$code_file = json_encode($code_file, JSON_HEX_TAG);
-?>
+
 </body>
+	
 
 <script language="javascript">
 function injectHTML(){
@@ -20,9 +19,35 @@ function injectHTML(){
 	//step 1: get the DOM object of the iframe.
 	var iframe = document.getElementById('test_iframe');
 
-	var client = <?php echo $code_file; ?>;
 
-	var html_string = '<html><head></head><body><p>' + client + '</p></body></html>';
+
+	<?php
+
+
+	$code_array = array();
+	array_push($code_array, '<pre>');
+	$handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
+	if ($handle) {
+		while (($line = fgets($handle)) != false) {
+			$line = '<code>' . substr($line, 0, -1) . '</code><br>';
+			array_push($code_array, $line);
+			//echo $line;
+		}
+		fclose($handle);
+	}
+	array_push($code_array, '</pre>');
+	$code_string = implode("", $code_array);
+	$code_string = json_encode($code_string, JSON_HEX_TAG);
+
+	?>
+
+
+	var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
+
+	var code = <?php echo $code_string; ?>;
+
+
+	var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
 
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
