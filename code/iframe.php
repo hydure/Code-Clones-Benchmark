@@ -1,4 +1,6 @@
 <html>
+
+
     <head>
     </head>
 <body>
@@ -7,11 +9,7 @@
 
 	<button onClick="javascript:injectHTML();">Inject HTML</button>
 
-<?php 
-$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
-$code_file = nl2br($code_file);
-$code_file = json_encode($code_file, JSON_HEX_TAG);
-?>
+
 </body>
 
 <script language="javascript">
@@ -20,9 +18,17 @@ function injectHTML(){
 	//step 1: get the DOM object of the iframe.
 	var iframe = document.getElementById('test_iframe');
 
-	var client = <?php echo $code_file; ?>;
+	<?php 
+	$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
+	$code_file = nl2br($code_file);
+	$code_file = json_encode($code_file, JSON_HEX_TAG);
+	?>
 
-	var html_string = '<html><head></head><body><p>' + client + '</p></body></html>';
+	var client = <?php echo $code_file; ?>;
+	var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; }</style>';
+	var test = '<pre><code>line 1\n</code><code>line 2\n</code><code>line 3\n</code><code>line 4\n</code><code>line 5</code></pre>';
+
+	var html_string = css + '<html><head></head><body><p>' + test + '</p></body></html>';
 
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
