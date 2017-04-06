@@ -45,12 +45,56 @@ foreach($_POST['detector'] as $detector) {
         }
         echo $args;
 
-        mysqli_close($con);
-
         # run nicad
         $nicad_path="/home/clone/nicad.sh";
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
-        echo shell_exec($cmd);
+        $nicad_raw = shell_exec($cmd);
+        echo "$nicad_raw<br>";
+
+        $file = "/home/pi/MyNAS/nicad/".$_POST['datasetSelect'].".html";
+        file_put_contents($file, $nicad_raw);
+        shell_exec("chmod 0600 $file");
+
+        # get clones
+        $clones=`./parse.sh $file`;
+        $clones=explode(" ", $clones);
+
+        # add clones to database
+        $num_clones=0;
+        for($i=0; $i<count($clones)-1; ) {
+            $num_frags=$clones[$i++]; 
+            $sim=$clones[$i++];
+
+            $query = mysqli_query($con, 
+                "SELECT * FROM Clones ORDER BY cloneID DESC limit 1");
+            $cloneID=mysqli_fetch_assoc($query)['cloneID'] + 1;
+
+            echo "num_frags: $num_frags<br>";
+            for ($j=0; $j<$num_frags; $j++) {
+                $datasetID=$clones[$i++];
+                $projectID=$clones[$i++];
+                $file=$clones[$i++];
+                $st=$clones[$i++];
+                $end=$clones[$i++];
+
+                $sql="INSERT INTO Clones (cloneID, datasetID, projectID, ".
+                    "file, start, end, sim, detector) ".
+                    "VALUES($cloneID, $datasetID, $projectID, '$file', $st, 
+                    $end, $sim, 'nicad')";
+                echo "$sql<br>";;
+
+                if (!mysqli_query($con, $sql)) {
+                    die("Error: " . mysqli_error($con));
+                }
+                $num_clones++;
+            }
+        }
+
+        $num_classes=`grep "Number" $file | awk '{print $4}'`;
+        echo "There were $num_classes classes of clones.<br>";
+        echo "Added $num_clones clones pairs.";
+
+        mysqli_close($con);
     }
 }
 

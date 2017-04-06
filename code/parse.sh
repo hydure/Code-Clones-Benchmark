@@ -17,17 +17,15 @@ for i in `seq $num_classes`; do
     for j in `seq $num_frags`; do
         clone=`grep "Lines" $1 | head -$(($sum_frags+$num_frags)) | \
             tail -$num_frags | head -$j | tail -1`
-        #echo $clone
-        file=`echo $clone | awk '{print $6}' | sed 's:.*cc_bench/::'`
+        datasetID=`echo $clone | awk -F/ '{print $5}'`
+        projectID=`echo $clone | awk -F/ '{print $6}'`
+        file=`echo $clone | awk '{print $6}' | sed 's:.*cc_bench/[0-9]*/[0-9]*/::'`
         st=`echo $clone | awk '{print $2}'`
         end=`echo $clone | awk '{print $4}'`
-        args="$args $file $st $end"
+        args="$args $datasetID $projectID $file $st $end"
     done
     sum_frags=$sum_frags+$num_frags
 done
 
 echo $args
-echo
-
-python gen_pairs.py $args
-echo
+#python gen_pairs.py $args
