@@ -123,8 +123,8 @@ $(document).ready(function() {
         &emsp;&emsp;<label><input type="radio" name="n_language[]" value="c">C (.c)</label><br>
         &emsp;&emsp;<label><input type="radio" name="n_language[]" value="cs">C# (.cs)</label><br>
               <label><input type="checkbox" name="detector[]" value="deckard">Deckard</label><br />
-        &emsp;&emsp;<label><input type="radio" name="d_language[]" value="py">Python (.py)</label><br>
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="java">Java (.java)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="d_language[]" value="php">PHP (.php)</label><br>
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="c">C (.c)</label><br>
               <label><input type="checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br />
               <div class="col-md-4 text-center"> 

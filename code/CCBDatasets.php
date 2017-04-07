@@ -116,31 +116,36 @@ tr:nth-child(even) {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT projectID, title, last_accessed, uploaded, ownership, userId FROM Projects");
+            $result = $con->query("SELECT projectID, title, author, ".  
+                "last_accessed, uploaded, ownership, userId FROM Projects");
             echo "<html>";
             echo "<body>";
             echo "<table>";
             echo "<tr>";
+            echo "<th>Add</th>";
             echo "<th>ID</th>";
             echo "<th>Project</th>";
+            echo "<th>Author</th>";
             echo "<th>Last Accessed</th>";
             echo "<th>Date Uploaded</th>";
             echo "<th>Ownership</th>";
-            echo "<th>Add</th>";
             echo "</tr>";
             while ($row = $result->fetch_assoc()) {
 
-                  unset($projectID, $title, $last_accessed, $uploaded, $ownership, $userId);
+                  unset($projectID, $title, $author, $last_accessed, $uploaded, $ownership, $userId);
                   $projectID = $row['projectID'];
                   $title = $row['title'];
+                  $author = $row['author'];
                   $last_accessed = $row['last_accessed'];
                   $uploaded = $row['uploaded'];
                   $ownership = $row['ownership'];
                   $userId = $row['userId'];
                   if ($_SESSION['userSession'] == $userId || $ownership == -1)  {
                     echo "<tr>";
+                    echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'></td>";
                     echo '<th>'.$projectID.'</th>';
                     echo '<th>'.$title.'</th>';
+                    echo '<th>'.$author.'</th>';
                     echo '<th>'.$last_accessed.'</th>';
                     echo '<th>'.$uploaded.'</th>';
                     if (intval($ownership) != -1) { 
@@ -148,7 +153,6 @@ tr:nth-child(even) {
                     } else {
                       echo '<th>Public</th>';
                     }
-                    echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'></td>";
                     echo "</tr>";
                   }
             }
