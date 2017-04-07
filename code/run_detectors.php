@@ -13,7 +13,7 @@ foreach($_POST['detector'] as $detector) {
 echo "> on dataset ".$_POST['datasetSelect']."<br>";
 
 foreach($_POST['detector'] as $detector) {
-    if ($detector == "Nicad") {
+    if ($detector == "nicad") {
         # get language
         foreach ($_POST['n_language'] as $lang) {
             if ($lang != "") break;
@@ -57,8 +57,8 @@ foreach($_POST['detector'] as $detector) {
         }
 
         #update tags in Datasets
-        $dateAR = getdate();
-        $date = $dateAR['mon']."/".$dateAR['mday']."/".$dateAR['year'];
+        date_default_timezone_set('America/New_York');
+        $date = date('Y-m-d H:i:s');
         $sql = "UPDATE Datasets SET Nicad_flag=1, submit_date='$date' WHERE datasetID=".$_POST['datasetSelect'];
         if(!$con->query($sql))
             echo "failed to update dataset info";
@@ -114,6 +114,7 @@ foreach($_POST['detector'] as $detector) {
         echo "Added $num_clones clones pairs.";
 
         mysqli_close($con);
+    } else if ($detector == 'deckard') {
     }
 }
 
@@ -121,6 +122,8 @@ foreach($_POST['detector'] as $detector) {
 } else {
     echo "No code clone detectors were selected.<br>";
 }
+
+echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
 ?>
 
 </body>
