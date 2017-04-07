@@ -65,6 +65,8 @@ foreach($_POST['detector'] as $detector) {
 
         # run nicad
         $nicad_path="/home/clone/nicad.sh";
+        #$file = "/home/pi/MyNAS/nicad/".$_POST['datasetSelect'].".html";
+        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$file 2>/dev/null &";
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
         $nicad_raw = shell_exec($cmd);
         echo "$nicad_raw<br>";
