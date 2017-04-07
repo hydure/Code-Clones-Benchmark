@@ -1,6 +1,7 @@
 <?php
 session_start();
 $clone_selected = intval($_POST['clone_selected']);
+$file1_selected = $_POST['file1_selected'];
 //echo $clone_selected;
 //if (!empty($_POST['row'])) {
 //$con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
@@ -33,7 +34,7 @@ function injectHTML() {
 	}
 	$start_array = array();
 	$end_array = array(); 
-	$sql = "SELECT start, end FROM Clones where cloneID = '$clone_selected'";
+	$sql = "SELECT start, end FROM Clones where cloneID = '$clone_selected' AND file = '$file1_selected'";
 	$result = $con->query($sql);
 	while ($row = $result->fetch_assoc()) {
 	  unset($start, $end);
@@ -54,7 +55,7 @@ function injectHTML() {
 	$handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
 	if ($handle) {
 		while (($line = fgets($handle)) != false) {
-			if ($line_counter == $start_array[$array_counter] || $highlighting) {
+			if ($line_counter == $start_array[$array_counter] || $highlighting) {   //highlight l
 				$line = '<code><mark>' . substr($line, 0, -1) . '</mark></code><br>';
 				
 				if ($highlighting == false) {

@@ -265,7 +265,7 @@ $(document).ready(function() {
                 }
               ?>
             </select> 
-            <select name= "file_selected" id="file_selected" multiple> 
+            <select name= "file1_selected" id="file1_selected" multiple> 
               <?php 
                 $file_array = array();
                 $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
