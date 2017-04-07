@@ -117,7 +117,8 @@ tr:nth-child(even) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
             $result = $con->query("SELECT projectID, title, author, ".  
-                "last_accessed, uploaded, ownership, userId FROM Projects");
+                "last_accessed, uploaded, ownership, userId FROM Projects ".
+                "ORDER BY last_accessed DESC");
             echo "<html>";
             echo "<body>";
             echo "<table>";
