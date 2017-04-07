@@ -22,9 +22,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-
-
-
 function injectHTML(){
 
   //step 1: get the DOM object of the iframe.
@@ -33,7 +30,10 @@ function injectHTML(){
 
   //step 1.5: get the correct string to be printed!
   <?php
-
+  /**
+  if (isset($_POST['clone_selector'])) {
+    echo '<script> alert("fuck"); </script>';
+  } **/
   $datasetID = 1;
   $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
   if(mysqli_connect_errno()) {
@@ -245,9 +245,9 @@ $(document).ready(function() {
             
 
             <select id="dataset_selector" name="DS" multiple></select> -->
-            <form action '#'>
-            <select id="clone_selector" multiple>
-              <?php
+            <form action="iframe.php" method="post" enctype='multipart/form-data'>
+            <select name= "clone_selected" id="clone_selected" multiple> 
+              <?php 
                 $datasetID = 1;
                 $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
                 if(mysqli_connect_errno()) {
@@ -265,8 +265,11 @@ $(document).ready(function() {
                 }
                 $con->close();
               ?>
-            </select>
-            <button id="clone_button" onClick="javascript:highlightClone();">Highlight Clone</button> 
+            </select> 
+            <input type = "submit" name ="clone_button" value = "Select Clone" id = "clone_dataset" />
+           <!-- <button id="clone_button" onClick="javascript:injectHTML();">Highlight Clone</button>  
+            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' /> 
+            <button id="clone_button" onClick="javascript:injectHTML();">Highlight Clone</button> -->
             </form>
 
             <div align="center">
