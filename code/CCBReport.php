@@ -248,10 +248,23 @@ $(document).ready(function() {
             <form action '#'>
             <select id="clone_selector" multiple>
               <?php
-
-                echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
+                $datasetID = 1;
+                $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+                if(mysqli_connect_errno()) {
+                    die("MySQL connection failed: ". mysqli_connect_error());
+                }
+                $cloneID_array = array();
+                $result = $con->query("SELECT cloneID FROM Clones where datasetID = '$datasetID'");
+                while ($row = $result->fetch_assoc()) {
+                  unset($cloneID);
+                  $cloneID = $row['cloneID'];
+                    if (!in_array($cloneID, $cloneID_array)) {
+                      array_push($cloneID_array, $cloneID);
+                      echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
+                    }
+                }
+                $con->close();
               ?>
-              <option value=""
             </select>
             <button id="clone_button" onClick="javascript:highlightClone();">Highlight Clone</button> 
             </form>
