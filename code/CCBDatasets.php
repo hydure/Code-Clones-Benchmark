@@ -117,7 +117,8 @@ tr:nth-child(even) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
             $result = $con->query("SELECT projectID, title, author, ".  
-                "last_accessed, uploaded, ownership, userId FROM Projects");
+                "last_accessed, uploaded, ownership, userId FROM Projects ".
+                "ORDER BY last_accessed DESC");
             echo "<html>";
             echo "<body>";
             echo "<table>";
@@ -172,7 +173,7 @@ tr:nth-child(even) {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets");
+            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets ORDER BY submit_date DESC");
             //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
             echo "<html>";
             echo "<body>";

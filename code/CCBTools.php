@@ -115,7 +115,7 @@ $(document).ready(function() {
             $con->close();
             ?>
             
-            <p>Please select your code cloner(s):
+            <p>Please select your code clone detector(s):
               <br />
               <label><input type="checkbox" name="detector[]" value="nicad">Nicad</label><br />
         &emsp;&emsp;<label><input type="radio" name="n_language[]" value="py">Python (.py)</label><br>

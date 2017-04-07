@@ -15,8 +15,15 @@ $datasetID = mysqli_fetch_assoc($query)['datasetID'] + 1;
 $userId = intval($_SESSION['userSession']);
 $submit_date = 'Never';
 
+date_default_timezone_set('America/New_York');
+$date = date('Y-m-d H:i:s');
+
 foreach($_POST['row'] as $row) {
-	$sql="INSERT INTO Datasets (datasetID, projectID, userId, submit_date, status) VALUES ($datasetID, $row, $userId, '$submit_date', FALSE)";
+    $sql="INSERT INTO Datasets (datasetID, projectID, userId, submit_date, ".
+         "status) VALUES ($datasetID, $row, $userId, '$submit_date', FALSE)";
+    $date_sql = "UPDATE Projects SET last_accessed='$date' WHERE projectID=".$row;
+    if(!$con->query($date_sql))
+        echo "failed to update dataset info<br>";
 
 	if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
