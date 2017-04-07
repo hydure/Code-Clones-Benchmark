@@ -104,7 +104,7 @@ function injectHTML(){
 
 }
 /**
-**/
+
 function generateDatasets() {
   //alert("the cooks");
   if (document.getElementById('Deckard_checkbox').checked) {
@@ -172,7 +172,7 @@ function eraseCookie(name) {
     createCookie(name,"",-1);
 }
 
-
+**/
 $(document).ready(function() {
 
 
@@ -230,12 +230,11 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-11">
 
-            <!--frames for adding results. each iframe should contain one set-->
-            <!--add inside of quotes after iframe src=" "-->
+
 
             
             <button id = "iframe_button" onClick="javascript:injectHTML();">Inject HTML</button>
-
+            <!--
             <form action="#">
               <p align="center-block">Choose a Clone Detector:</p>
               <label><input type="checkbox" name="detector[]" id="Nicad_checkbox" value="Nicad">Nicad</label><br />
@@ -243,9 +242,13 @@ $(document).ready(function() {
               <label><input type="checkbox" name="detector[]" id="Deckard_checkbox" value="Deckard">Deckard</label><br />
             <button id="detector_button" onClick="javascript:generateDatasets();">Generate Datasets</button> 
             </form>
+            
 
-            <select id="dataset_selector" name="DS" multiple></select>
+            <select id="dataset_selector" name="DS" multiple></select> -->
+            <form action '#'>
             <select id="clone_selector" multiple></select>
+            <button id="clone_button" onClick="javascript:highlightClone();">Highlight Clone</button> 
+            </form>
 
             <div align="center">
                 <iframe id="iframe_one" width=60% height=70%></iframe>
