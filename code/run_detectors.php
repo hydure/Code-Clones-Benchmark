@@ -30,13 +30,6 @@ if (!$pIDs) {
     die("Error: " . mysqli_error($con));
 }
 
-#update tags in Datasets
-date_default_timezone_set('America/New_York');
-$date = date('Y-m-d H:i:s');
-$sql = "UPDATE Datasets SET Nicad_flag=1, submit_date='$date' WHERE datasetID=".$datasetID;
-if(!$con->query($sql))
-    echo "failed to update dataset info";
-
 foreach($_POST['detector'] as $detector) {
 
         /***************************
@@ -83,6 +76,14 @@ foreach($_POST['detector'] as $detector) {
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
         $nicad_raw = shell_exec($cmd);
         #echo "$nicad_raw<br>";
+        
+        #update tags in Datasets
+        date_default_timezone_set('America/New_York');
+        $date = date('Y-m-d H:i:s');
+        $sql = "UPDATE Datasets SET Nicad_flag=1, submit_date='$date' ".
+               "WHERE datasetID=".$datasetID;
+        if(!$con->query($sql))
+            echo "failed to update dataset info";
 
         # write nicad output to file
         $file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
@@ -178,6 +179,14 @@ foreach($_POST['detector'] as $detector) {
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$deckard_path $args' | grep -v 'known hosts'";
         $deckard_raw = shell_exec($cmd);
         #echo "$deckard_raw<br>";
+
+        #update tags in Datasets
+        date_default_timezone_set('America/New_York');
+        $date = date('Y-m-d H:i:s');
+        $sql = "UPDATE Datasets SET Deckard_flag=1, submit_date='$date' ".
+               "WHERE datasetID=".$datasetID;
+        if(!$con->query($sql))
+            echo "failed to update dataset info";
 
         if (preg_match('/^Error: there are no/', $deckard_raw)) {
             echo "$deckard_raw<br>";
