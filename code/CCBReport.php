@@ -246,7 +246,13 @@ $(document).ready(function() {
 
             <select id="dataset_selector" name="DS" multiple></select> -->
             <form action '#'>
-            <select id="clone_selector" multiple></select>
+            <select id="clone_selector" multiple>
+              <?php
+
+                echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
+              ?>
+              <option value=""
+            </select>
             <button id="clone_button" onClick="javascript:highlightClone();">Highlight Clone</button> 
             </form>
 
