@@ -24,6 +24,17 @@ foreach($_POST['detector'] as $detector) {
         if(!$con) {
                 die('could not connect: ' . mysqli_connect_error());
         }
+ # check if dataset has been examined already
+        $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
+            "datasetID=".$_POST['datasetSelect']." AND detector='nicad'");
+        if ($history->num_rows > 0) {
+            echo "You ran this dataset already!<br>";
+            exit;
+        } else {
+            echo "blah<br>";
+            exit;
+        }
+
 
         # obtain projectIDs from selected dataset
         $sql="SELECT projectID FROM Datasets WHERE datasetID=".$_POST['datasetSelect'];
