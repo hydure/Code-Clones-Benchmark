@@ -12,14 +12,14 @@ $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+/**
 if(isset($_POST['select_dataset_action']))
 {
 	$id = $_POST['datasetSelect'];
 	echo "dataset is $id";
 	header("refresh:2;CCBReport.php?data=$id");
 }
-
+ **/
 ?>
 
 
@@ -27,11 +27,11 @@ if(isset($_POST['select_dataset_action']))
 <head></head>
 <body>
 
-<form id='deleteDataset' method='post' enctype='multipart/form-data'>
+<form action = "CCBReport.php" id='deleteDataset' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
             #$con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-		$con = new mysqli('localhost', 'root', 'S3quenC3', 'cc_bench');
+		        $con = new mysqli('localhost', 'root', '*XMmysq$', 'cc_bench');
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }

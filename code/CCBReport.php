@@ -248,7 +248,7 @@ $(document).ready(function() {
             <form action="iframe.php" method="post" enctype='multipart/form-data'>
             <select name= "clone_selected" id="clone_selected" multiple> 
               <?php 
-                $datasetID = 1;
+                $datasetID = intval($_POST['datasetSelect']);
                 $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
                 if(mysqli_connect_errno()) {
                     die("MySQL connection failed: ". mysqli_connect_error());
@@ -263,13 +263,24 @@ $(document).ready(function() {
                       echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
                     }
                 }
-                $con->close();
               ?>
             </select> 
+            <select name= "file_selected" id="file_selected" multiple> 
+              <?php 
+                $file_array = array();
+                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
+                while ($row = $result->fetch_assoc()) {
+                  unset($file);
+                  $file = $row['file'];
+                    if (!in_array($file, $file_array)) {
+                      array_push($file_array, $file);
+                      echo '<option value='.$file.'>'.$file.'</option>';
+                    }
+                }
+                $con->close();
+              ?>
+            </select>
             <input type = "submit" name ="clone_button" value = "Select Clone" id = "clone_dataset" />
-           <!-- <button id="clone_button" onClick="javascript:injectHTML();">Highlight Clone</button>  
-            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' /> 
-            <button id="clone_button" onClick="javascript:injectHTML();">Highlight Clone</button> -->
             </form>
 
             <div align="center">
