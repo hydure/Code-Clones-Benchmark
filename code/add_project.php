@@ -71,8 +71,9 @@ if (!mysqli_query($con, $sql)) {
 }
 mysqli_close($con);
 } else {
-    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
-          <div id="snackbar">Must enter URL and commit number.</div>';
+    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">',
+          '<div id="snackbar">Must enter URL and commit number.</div>',
+          'showSnackbar()', '</script>';
 }
 echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
 ?>
