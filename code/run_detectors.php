@@ -82,7 +82,7 @@ foreach($_POST['detector'] as $detector) {
         #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$file 2>/dev/null &";
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
         $nicad_raw = shell_exec($cmd);
-        echo "$nicad_raw<br>";
+        #echo "$nicad_raw<br>";
 
         # write nicad output to file
         $file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
@@ -109,6 +109,15 @@ foreach($_POST['detector'] as $detector) {
                 $st=$clones[$i++];
                 $end=$clones[$i++];
 
+                # check if clone has been added already
+                $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
+                    "projectID=$projectID AND detector='nicad' AND ".
+                    "language='$lang' AND file='$file' AND start='$st' ".
+                    "AND end=$end");
+                if ($history->num_rows > 0) {
+                    continue;
+                }
+       
                 $sql="INSERT INTO Clones (cloneID, datasetID, projectID, ".
                     "userID, file, start, end, sim, detector, language) ".
                     "VALUES($cloneID, $datasetID, $projectID, '$userID', '$file', 
@@ -143,7 +152,7 @@ foreach($_POST['detector'] as $detector) {
         
         # check if dataset has been examined already
         $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
-            "datasetID=".$datasetID." AND detector='nicad'".
+            "datasetID=".$datasetID." AND detector='deckard'".
             " AND language='$lang'");
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
@@ -191,6 +200,7 @@ foreach($_POST['detector'] as $detector) {
 
         $num_classes=0;
         $num_clones=0;
+        $prev="\n";
         while (($line = fgets($handle)) != false) {
             if ($line != "\n") {
                 $parsed = explode(" ", $line);
@@ -202,20 +212,30 @@ foreach($_POST['detector'] as $detector) {
                 $start = $index[1];
                 $end = intval(($index[2])) + intval($start);
 
+                # check if clone has been added already
+                $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
+                    "projectID=$projectID AND detector='deckard' AND ".
+                    "language='$lang' AND file='$file' AND start='$start' ".
+                    "AND end=$end");
+                if ($history->num_rows > 0) {
+                    continue;
+                } 
+
                 $sql = "INSERT INTO Clones (cloneID, datasetID, projectID, ".
-                        "userID, file, start, end, detector ) ".
+                        "userID, file, start, end, detector, language) ".
                         "VALUES ( '{$cloneID}', '{$datasetID}', ".
                         "'{$projectID}', '{$userID}','{$file}', ".
-                        "'{$start}', '{$end}', 'deckard')";
+                        "'{$start}', '{$end}', 'deckard', '$lang')";
 
                 if (!mysqli_query($con, $sql)) {
                     die("Error: " . mysqli_error($con));
                 }
                 $num_clones++;
-            } else { 
+            } else if ($line != $prev) { 
                 $cloneID += 1;
                 $num_classes++;
             }
+            $prev=$line;
         }
         fclose($handle);
 

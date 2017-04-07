@@ -19,7 +19,7 @@ for i in `seq $num_classes`; do
             tail -$num_frags | head -$j | tail -1`
         datasetID=`echo $clone | awk -F/ '{print $6}'`
         projectID=`echo $clone | awk -F/ '{print $7}'`
-        file=`echo $clone | awk '{print $6}' | sed 's:.*cc_bench/[0-9]*/[0-9]*/::'`
+        file=`echo $clone | awk '{print $6}' | sed 's:.*cc_bench/nicad/[0-9]*/[0-9]*/::'`
         st=`echo $clone | awk '{print $2}'`
         end=`echo $clone | awk '{print $4}'`
         args="$args $datasetID $projectID $file $st $end"
