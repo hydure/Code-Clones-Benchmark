@@ -172,7 +172,7 @@ tr:nth-child(even) {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets");
+            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets ORDER BY submit_date DESC");
             //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
             echo "<html>";
             echo "<body>";
