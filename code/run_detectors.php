@@ -15,7 +15,7 @@ echo "> on dataset ".$_POST['datasetSelect']."<br>";
 foreach($_POST['detector'] as $detector) {
     if ($detector == "Nicad") {
         # get language
-        foreach ($_POST['language'] as $lang) {
+        foreach ($_POST['n_language'] as $lang) {
             if ($lang != "") break;
         }
         

@@ -118,12 +118,15 @@ $(document).ready(function() {
             <p>Please select your code cloner(s):
               <br />
               <label><input type="checkbox" name="detector[]" value="Nicad">Nicad</label><br />
-  &emsp;&emsp;<label><input type="radio" name="language[]" value="py">Python (.py)</label><br>
-  &emsp;&emsp;<label><input type="radio" name="language[]" value="java">Java (.java)</label><br>
-  &emsp;&emsp;<label><input type="radio" name="language[]" value="c">C (.c)</label><br>
-  &emsp;&emsp;<label><input type="radio" name="language[]" value="cs">C# (.cs)</label><br>
-              <label><input type="checkbox" name="detector[]" value="CCFinderX">CCFinderX</label><br />
+        &emsp;&emsp;<label><input type="radio" name="n_language[]" value="py">Python (.py)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="n_language[]" value="java">Java (.java)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="n_language[]" value="c">C (.c)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="n_language[]" value="cs">C# (.cs)</label><br>
               <label><input type="checkbox" name="detector[]" value="Deckard">Deckard</label><br />
+        &emsp;&emsp;<label><input type="radio" name="d_language[]" value="py">Python (.py)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="d_language[]" value="java">Java (.java)</label><br>
+        &emsp;&emsp;<label><input type="radio" name="d_language[]" value="c">C (.c)</label><br>
+              <label><input type="checkbox" name="detector[]" value="CCFinderX">CCFinderX</label><br />
               <div class="col-md-4 text-center"> 
     			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
 			  </div>
