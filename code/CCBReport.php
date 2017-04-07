@@ -277,10 +277,24 @@ $(document).ready(function() {
                       echo '<option value='.$file.'>'.$file.'</option>';
                     }
                 }
+              ?>
+            </select>
+            <select name= "file2_selected" id="file2_selected" multiple> 
+              <?php 
+                $file_array = array();
+                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
+                while ($row = $result->fetch_assoc()) {
+                  unset($file);
+                  $file = $row['file'];
+                    if (!in_array($file, $file_array)) {
+                      array_push($file_array, $file);
+                      echo '<option value='.$file.'>'.$file.'</option>';
+                    }
+                }
                 $con->close();
               ?>
             </select>
-            <input type = "submit" name ="clone_button" value = "Select Clone" id = "clone_dataset" />
+            <input type = "submit" name ="clone_button" value = "Select Clone Fragment" id = "clone_dataset" />
             </form>
 
             <div align="center">
