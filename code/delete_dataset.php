@@ -11,6 +11,20 @@ if ($con->query($sql) == TRUE) {
 } else {
 	echo "Error Deleting Dataset: " . $con->error;
 }
+$sql = "DELETE FROM Clones WHERE datasetID='".$dataset_val."'";
+if ($con->query($sql) == TRUE) {
+	echo "Dataset deleted sucessfully";
+
+} else {
+	echo "Error Deleting Dataset: " . $con->error;
+}
+$sql = "DELETE FROM deckard_DB WHERE datasetID='".$dataset_val."'";
+if ($con->query($sql) == TRUE) {
+	echo "Dataset deleted sucessfully";
+
+} else {
+	echo "Error Deleting Dataset: " . $con->error;
+}
 $con->close();
 header('Location:CCBDatasets.php');
 ?>

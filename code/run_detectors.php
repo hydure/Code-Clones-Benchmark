@@ -20,12 +20,11 @@ foreach($_POST['detector'] as $detector) {
         }
         
         # connect to database
-        $con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
+        con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
         if(!$con) {
                 die('could not connect: ' . mysqli_connect_error());
         }
-
-        # check if dataset has been examined already
+ # check if dataset has been examined already
         $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
             "datasetID=".$_POST['datasetSelect']." AND detector='nicad'");
         if ($history->num_rows > 0) {
@@ -35,6 +34,7 @@ foreach($_POST['detector'] as $detector) {
             echo "blah<br>";
             exit;
         }
+
 
         # obtain projectIDs from selected dataset
         $sql="SELECT projectID FROM Datasets WHERE datasetID=".$_POST['datasetSelect'];
@@ -55,6 +55,14 @@ foreach($_POST['detector'] as $detector) {
             $args="$args ".mysqli_fetch_array($pURL)['url'];
         }
         echo $args;
+	#update tags in Datasets
+	$dateAR = getdate();
+	$date = $dateAR['mon']."/".$dateAR['mday']."/".$dateAR['year'];
+	echo "The date is $date";
+	$sql = "UPDATE Datasets SET Nicad_flag=1, submit_date='$date' WHERE datasetID=".$_POST['datasetSelect'];
+	if(!$con->query($sql))
+		echo "failed to update dataset info";
+	
 
         # run nicad
         $nicad_path="/home/clone/nicad.sh";

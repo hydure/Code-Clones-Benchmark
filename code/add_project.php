@@ -3,6 +3,22 @@ session_start();
 ?>
 
 <html>
+    <head>
+        <script type="text/javascript">
+         <!--
+            function showSnackbar() {
+                // Get the snackbar DIV
+                var x = document.getElementById("snackbar")
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            }
+         //-->
+      </script>
+    </head>
 <body>
 
 <?php
@@ -71,8 +87,9 @@ if (!mysqli_query($con, $sql)) {
 }
 mysqli_close($con);
 } else {
-    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
-          <div id="snackbar">Must enter URL and commit number.</div>';
+    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">',
+          '<div id="snackbar">Must enter URL and commit number.</div>',
+          'showSnackbar()', '</script>';
 }
 echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
 ?>
