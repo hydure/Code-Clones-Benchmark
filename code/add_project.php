@@ -66,11 +66,13 @@ $sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId, aut
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
 }
-echo "Successfully added a project!";
+    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+          <div id="snackbar">Successfully added a project!</div>';
 }
 mysqli_close($con);
 } else {
-echo "Must enter URL and commit number.";
+    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+          <div id="snackbar">Must enter URL and commit number.</div>';
 }
 echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
 ?>
