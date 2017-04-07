@@ -30,6 +30,7 @@ if ($_POST['project_action'] == 'Delete Project') {
 			echo "Failed to delete server file!";
 		}
 	}
+	
 	$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'"; //delete project from database
 	if ($con->query($sql) == TRUE) {
 		echo "Record delted sucessfully";
@@ -37,14 +38,18 @@ if ($_POST['project_action'] == 'Delete Project') {
 	} else {
 		echo "Error Deleting Record: " . $con->error;
 	}
-	/**$sql = "DELETE FROM Projects WHERE projectID='".$project_val."'"; //update status in datasets
-	if ($con->query($sql) == TRUE) {
-		echo "Record delted sucessfully";
+	$sql = "SELECT datasetID FROM Datasets where projectID='".$project_val."'";
+	$result = $con->query($sql);
+	while($row = $result->fetch_assoc()){
+		$uid = $_SESSION['userSession'];
+		$sql = "UPDATE Datasets SET status=-1 WHERE datasetID='".$row['datasetID']."'"; //update status in datasets
+		if ($con->query($sql) == TRUE) {
+			echo "Record delted sucessfully";
 
-	} else {
-		echo "Error Deleting Record: " . $con->error;
-	} **/
-
+		} else {
+			echo "Error Deleting Record: " . $con->error;
+		}
+	}
 	$con->close();
 	header('Location:CCBProjects.php');
 }
@@ -64,11 +69,16 @@ if ($_POST['project_action'] == 'Switch Ownership') {
 		$value = $return->fetch_assoc();
 		$ownership_val = $value['ownership'];
 		$userId = $value['userId'];
+		echo "$userId";
 		$curr_user = $_SESSION['userSession'];
 		if ($ownership_val == -1 && $curr_user = $userId) { //switch to private if its public & the user is the owner of the file
+			$sql = "UPDATE Datasets SET status=-1 WHERE userId!=".$userId." && projectID='".$project_val."'";
+			if($con->query($sql) != TRUE) echo "failed to switch database status";
 			$sql = "UPDATE Projects SET ownership = " . $userId . " WHERE projectID='".$project_val."'";
 		}
 		if ($ownership_val != -1 && $curr_user = $userId) { //switch to public if its private & the user is the owner of the file
+			$sql = "UPDATE Datasets SET status=0 WHERE userId!=".$userId." && projectID='".$project_val."'";
+			if($con->query($sql) != TRUE) echo "failed to switch database status";
 			$sql = "UPDATE Projects SET ownership = -1 WHERE projectID='".$project_val."'";
 		}
 		echo $query;
@@ -198,7 +208,7 @@ div.round {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-          	$result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId, content FROM Projects");
+          	$result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId FROM Projects");
 
 			echo "<html>";
 			echo "<body>";
@@ -231,7 +241,7 @@ div.round {
 					$ownership = $row['ownership'];
 					$url = $row['url'];
 					$size = $row['size'];
-					$content = $row['content'];
+					#$content = $row['content'];
 
 					echo "<tr>";
 					echo '<th>'.$projectID.'</th>';
@@ -258,7 +268,7 @@ div.round {
 			echo "<br/>";
 			//echo "<div class='code'>";
 			echo "Content: ";
-			echo '<div class="round">'.$content.'</div>';
+			#$echo '<div class="round">'.$content.'</div>';
 			//echo "</div>";
 			echo "<br/>";
 			echo "</body>";
