@@ -2,7 +2,11 @@
 #############################################################
 # Configuration file for clone detection.
 #
-
+################################The config file is highly specific. I believe this one
+################################will require a directory structure set up as follows:
+################################Main Directory Contains
+################################clusters (dir), src (dir), times (dir), vectors (dir), this config file.
+################################src will contain two files to be compared.
 #############################################################################
 # Often, need to change these common parameters:
 # - FILE_PATTERN : what are the input file name patterns for Deckard
@@ -39,9 +43,9 @@ RELEVANT_NODEFILE='/home/lingxiao/projects/Deckard/testdata/deckard3/AstRelevant
 LEAF_NODEFILE='/home/lingxiao/projects/Deckard/testdata/deckard3/AstLeafNodes.txt'
 PARENT_NODEFILE='/home/lingxiao/projects/Deckard/testdata/deckard3/AstParentNodes.txt'
 
-# where is Deckard?
+# where is Deckard? ############################################Important Change Here#######
 DECKARD_DIR="/home/f85/crouse/Downloads/Deckard-parallel1.3"
-# clone parameters; refer to paper.
+# clone parameters; refer to paper. ######################### Parameterizaton here#########
 MIN_TOKENS='30 50'  # can be a sequence of integers
 STRIDE='2 0'  # can be a sequence of integers
 SIMILARITY='1.0 0.95'  # can be a sequence of values <= 1
