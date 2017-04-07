@@ -109,7 +109,7 @@ tr:nth-child(even) {
           <br />
           -->
           <form action="add_dataset.php", method="post">
-            <p align="center-block" style="font-size: 160%">Create Dataset</p>
+            <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
 
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
@@ -161,7 +161,7 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type="submit" value="Create">
+            <input type="submit" value="Initialize Dataset">
             <br />
 
           <form action="#">
