@@ -32,10 +32,10 @@ foreach($_POST['detector'] as $detector) {
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
             exit;
-        } else {
-            echo "blah<br>";
-            exit;
-        }
+        }# else {
+         #   echo "blah<br>";
+         #   exit;
+        #}
 
         # obtain projectIDs from selected dataset
         $sql="SELECT projectID FROM Datasets WHERE datasetID=".$_POST['datasetSelect'];
@@ -55,12 +55,10 @@ foreach($_POST['detector'] as $detector) {
             $args="$args ".$row['projectID'];
             $args="$args ".mysqli_fetch_array($pURL)['url'];
         }
-        echo $args;
 
         #update tags in Datasets
         $dateAR = getdate();
         $date = $dateAR['mon']."/".$dateAR['mday']."/".$dateAR['year'];
-        echo "The date is $date";
         $sql = "UPDATE Datasets SET Nicad_flag=1, submit_date='$date' WHERE datasetID=".$_POST['datasetSelect'];
         if(!$con->query($sql))
             echo "failed to update dataset info";
@@ -71,9 +69,10 @@ foreach($_POST['detector'] as $detector) {
         $nicad_raw = shell_exec($cmd);
         echo "$nicad_raw<br>";
 
+        # write nicad output to file
         $file = "/home/pi/MyNAS/nicad/".$_POST['datasetSelect'].".html";
         file_put_contents($file, $nicad_raw);
-        shell_exec("chmod 0600 $file");
+        shell_exec("chmod 600 $file");
 
         # get clones
         $clones=`./parse.sh $file`;
@@ -89,7 +88,6 @@ foreach($_POST['detector'] as $detector) {
                 "SELECT * FROM Clones ORDER BY cloneID DESC limit 1");
             $cloneID=mysqli_fetch_assoc($query)['cloneID'] + 1;
 
-            echo "num_frags: $num_frags<br>";
             for ($j=0; $j<$num_frags; $j++) {
                 $datasetID=$clones[$i++];
                 $projectID=$clones[$i++];
@@ -101,7 +99,6 @@ foreach($_POST['detector'] as $detector) {
                     "file, start, end, sim, detector, language) ".
                     "VALUES($cloneID, $datasetID, $projectID, '$file', $st, 
                     $end, $sim, 'nicad', '$lang')";
-                echo "$sql<br>";;
 
                 if (!mysqli_query($con, $sql)) {
                     die("Error: " . mysqli_error($con));

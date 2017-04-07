@@ -17,8 +17,8 @@ for i in `seq $num_classes`; do
     for j in `seq $num_frags`; do
         clone=`grep "Lines" $1 | head -$(($sum_frags+$num_frags)) | \
             tail -$num_frags | head -$j | tail -1`
-        datasetID=`echo $clone | awk -F/ '{print $5}'`
-        projectID=`echo $clone | awk -F/ '{print $6}'`
+        datasetID=`echo $clone | awk -F/ '{print $6}'`
+        projectID=`echo $clone | awk -F/ '{print $7}'`
         file=`echo $clone | awk '{print $6}' | sed 's:.*cc_bench/[0-9]*/[0-9]*/::'`
         st=`echo $clone | awk '{print $2}'`
         end=`echo $clone | awk '{print $4}'`
