@@ -23,11 +23,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <script type="text/javascript">
 
-<?php 
-$code_file = file_get_contents('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java');
-$code_file = nl2br($code_file);
-$code_file = json_encode($code_file, JSON_HEX_TAG);
-?>
+
 
 function injectHTML(){
 
@@ -37,6 +33,27 @@ function injectHTML(){
 
   //step 1.5: get the correct string to be printed!
   <?php
+
+  $datasetID = 1;
+  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+  if(mysqli_connect_errno()) {
+      die("MySQL connection failed: ". mysqli_connect_error());
+  }
+  $file = 'src/AbstractTableRendering.java';
+  $sql = "SELECT cloneID, start, end FROM Clones where datasetID= '$datasetID' AND file='$file'";
+  $result = $con->query($sql);
+  $clonesArray=array();
+  while ($row = $result->fetch_assoc()) {
+    //unset($projectID, $submit_date, $status);
+    $cloneID = $row['cloneID'];
+    array_push($clonesArray, $cloneID);
+    $start= $row['start'];
+    $end = $row['end'];
+  }
+
+
+
+
   $code_array = array();
   array_push($code_array, '<pre>');
   $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
@@ -51,7 +68,10 @@ function injectHTML(){
   array_push($code_array, '</pre>');
   $code_string = implode("", $code_array);
   $code_string = json_encode($code_string, JSON_HEX_TAG);
+  $con->close();
   ?>
+
+
 
 
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
@@ -70,7 +90,7 @@ function injectHTML(){
     else if (iframe.contentWindow)
       iframedoc = iframe.contentWindow.document;
 
-   if (iframedoc){
+   if (iframedoc) {
      // Put the content in the iframe
      iframedoc.open();
      iframedoc.writeln(html_string);
@@ -83,12 +103,78 @@ function injectHTML(){
 
 
 }
+/**
+**/
+function generateDatasets() {
+  //alert("the cooks");
+  if (document.getElementById('Deckard_checkbox').checked) {
+    var detector = 'Deckard';
+  } 
+  if (document.getElementById('Nicad_checkbox').checked) {
+    var detector = 'Nicad';
+  }
+  createCookie('detector', 'Nicad', 7);
+
+  
+  
+  <?php
+
+  //$detector = $_COOKIE["detector"]; 
+  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+  if(mysqli_connect_errno()) {
+      die("MySQL connection failed: ". mysqli_connect_error());
+  }
+  $userId = $_SESSION['userSession']; /**
+  if ($detector == 'Nicad') {
+    $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
+  } **/
+  $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
+  //if ($detector == 'Deckard') {
+    //$sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Deckard_flag = 1";
+  //}
+  $result = $con->query($sql);
+  unset($datasetID_array);
+  $datasetID_array = array();
+  while ($row = $result->fetch_assoc()) {
+      unset($datasetID);
+      $datasetID = $row['datasetID'];
+      if (!in_array($datasetID, $datasetID_array)) {
+        array_push($datasetID_array, $datasetID);
+      }
+  }
+
+  $con->close(); 
+  ?>
+  var datasetID_array = <?php echo json_encode($datasetID_array); ?>;
+  var select = document.getElementById('dataset_selector');
+
+  for (var prop in datasetID_array) {
+    var opt = document.createElement('option');
+    opt.innerHTML = datasetID_array[prop];
+    opt.value = datasetID_array[prop];
+    select.append(opt);
+  }
+  //eraseCookie('detector');
+
+}
+
+function createCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function eraseCookie(name) {
+    createCookie(name,"",-1);
+}
+
 
 $(document).ready(function() {
-  //$('#highlight').click(function() {
-    //var will_highlight = $("#highlight");
-      //$('.')
-  //}
+
 
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
@@ -146,9 +232,20 @@ $(document).ready(function() {
 
             <!--frames for adding results. each iframe should contain one set-->
             <!--add inside of quotes after iframe src=" "-->
+
             
-            <button onClick="javascript:injectHTML();">Inject HTML</button>
-            <button id="highlight">Highlight</button>
+            <button id = "iframe_button" onClick="javascript:injectHTML();">Inject HTML</button>
+
+            <form action="#">
+              <p align="center-block">Choose a Clone Detector:</p>
+              <label><input type="checkbox" name="detector[]" id="Nicad_checkbox" value="Nicad">Nicad</label><br />
+              <label><input type="checkbox" name="detector[]" id="CCFinderX_checkbox" value="CCFinderX">CCFinderX</label><br />
+              <label><input type="checkbox" name="detector[]" id="Deckard_checkbox" value="Deckard">Deckard</label><br />
+            <button id="detector_button" onClick="javascript:generateDatasets();">Generate Datasets</button> 
+            </form>
+
+            <select id="dataset_selector" name="DS" multiple></select>
+            <select id="clone_selector" multiple></select>
 
             <div align="center">
                 <iframe id="iframe_one" width=60% height=70%></iframe>
