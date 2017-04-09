@@ -12,6 +12,41 @@ $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+
+//this area of code finds ALL relevant data for the parameter selection
+$con = new mysqli('localhost', 'root', '*XMmysq$', 'cc_bench');
+if(mysqli_connect_errno()) {
+    die("MySQL connection failed: ". mysqli_connect_error());
+}
+$currUserID = ($_SESSION['userSession']);
+$sql = "SELECT datasetID, userID, file, start, end, detector FROM Clones WHERE userID = '$currUserID'";
+$result = $con->query($sql);
+$dataset_array_Deckard = array();
+$dataset_array_Nicad = array();
+$dataset_array_CCFinderX = array();
+while ($row = $result->fetch_assoc()) {
+
+      unset($datasetID, $userID, $file, $start, $end, $detector);
+      $datasetID = $row['datasetID'];
+      $userID = $row['userID'];
+      $detector = $row['detector'];
+      if ($_SESSION['userSession'] == $userID && !in_array($datasetID, $dataset_array_Deckard)) { //push to Deckard, Nicad, or CCFinderX for sorting
+        if ($detector == 'Deckard') {
+          array_push($dataset_array_Deckard, $datasetID);
+        }
+        if ($detector == 'Nicad') {
+          array_push($dataset_array_Nicad, $datasetID);
+        }
+        if ($detector == 'CCFinderX') {
+          array_push($dataset_array_CCFinderX, $datasetID);
+        }
+      }
+}       
+$con->close();
+$phparray = array("Volov", "BMW");
+print_r($dataset_array_Deckard);
+              
 ?>
 
 
@@ -30,10 +65,6 @@ function injectHTML(){
 
   //step 1.5: get the correct string to be printed!
   <?php
-  /**
-  if (isset($_POST['clone_selector'])) {
-    echo '<script> alert("fuck"); </script>';
-  } **/
   $datasetID = 1;
   $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
   if(mysqli_connect_errno()) {
@@ -44,15 +75,11 @@ function injectHTML(){
   $result = $con->query($sql);
   $clonesArray=array();
   while ($row = $result->fetch_assoc()) {
-    //unset($projectID, $submit_date, $status);
     $cloneID = $row['cloneID'];
     array_push($clonesArray, $cloneID);
     $start= $row['start'];
     $end = $row['end'];
   }
-
-
-
 
   $code_array = array();
   array_push($code_array, '<pre>');
@@ -61,7 +88,6 @@ function injectHTML(){
     while (($line = fgets($handle)) != false) {
       $line = '<code>' . substr($line, 0, -1) . '</code><br>';
       array_push($code_array, $line);
-      //echo $line;
     }
     fclose($handle);
   }
@@ -71,9 +97,6 @@ function injectHTML(){
   $con->close();
   ?>
 
-
-
-
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   var code = <?php echo $code_string; ?>;
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
@@ -82,8 +105,6 @@ function injectHTML(){
   */
 
   //step 2: obtain the document associated with the iframe tag
-  //most of the browser supports .document. Some supports (such as the NetScape series) .contentDocumet, while some (e.g. IE5/6) supports .contentWindow.document
-  //we try to read whatever that exists.
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
       iframedoc = iframe.contentDocument;
@@ -91,95 +112,27 @@ function injectHTML(){
       iframedoc = iframe.contentWindow.document;
 
    if (iframedoc) {
-     // Put the content in the iframe
      iframedoc.open();
      iframedoc.writeln(html_string);
      iframedoc.close();
    } else {
-    //just in case of browsers that don't support the above 3 properties.
-    //fortunately we don't come across such case so far.
     alert('Cannot inject dynamic contents into iframe.');
    }
 
 
 }
-/**
-
-function generateDatasets() {
-  //alert("the cooks");
-  if (document.getElementById('Deckard_checkbox').checked) {
-    var detector = 'Deckard';
-  } 
-  if (document.getElementById('Nicad_checkbox').checked) {
-    var detector = 'Nicad';
+function displayDatasets() {
+  var select = $("#datasetSelect");
+  var dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
+  for (var value in dataset_array) {
+    var option = document.createElement('option');
+    option.innerHTML = dataset_array[value];
+    option.value = dataset_array[value];
+    select.append(option);
   }
-  createCookie('detector', 'Nicad', 7);
-
-  
-  
-  <?php
-
-  //$detector = $_COOKIE["detector"]; 
-  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-  if(mysqli_connect_errno()) {
-      die("MySQL connection failed: ". mysqli_connect_error());
-  }
-  $userId = $_SESSION['userSession']; /**
-  if ($detector == 'Nicad') {
-    $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
-  } **/
-  $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
-  //if ($detector == 'Deckard') {
-    //$sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Deckard_flag = 1";
-  //}
-  $result = $con->query($sql);
-  unset($datasetID_array);
-  $datasetID_array = array();
-  while ($row = $result->fetch_assoc()) {
-      unset($datasetID);
-      $datasetID = $row['datasetID'];
-      if (!in_array($datasetID, $datasetID_array)) {
-        array_push($datasetID_array, $datasetID);
-      }
-  }
-
-  $con->close(); 
-  ?>
-  var datasetID_array = <?php echo json_encode($datasetID_array); ?>;
-  var select = document.getElementById('dataset_selector');
-
-  for (var prop in datasetID_array) {
-    var opt = document.createElement('option');
-    opt.innerHTML = datasetID_array[prop];
-    opt.value = datasetID_array[prop];
-    select.append(opt);
-  }
-  //eraseCookie('detector');
-
 }
 
-function createCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-}
 
-function eraseCookie(name) {
-    createCookie(name,"",-1);
-}
-
-**/
-$(document).ready(function() {
-
-
-  $('[data-toggle=offcanvas]').click(function() {
-    $('.row-offcanvas').toggleClass('active');
-  });
-});
 </script>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
@@ -230,22 +183,18 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-11">
 
-
-
+          
             
-            <button id = "iframe_button" onClick="javascript:injectHTML();">Inject HTML</button>
-            <!--
-            <form action="#">
-              <p align="center-block">Choose a Clone Detector:</p>
-              <label><input type="checkbox" name="detector[]" id="Nicad_checkbox" value="Nicad">Nicad</label><br />
-              <label><input type="checkbox" name="detector[]" id="CCFinderX_checkbox" value="CCFinderX">CCFinderX</label><br />
-              <label><input type="checkbox" name="detector[]" id="Deckard_checkbox" value="Deckard">Deckard</label><br />
-            <button id="detector_button" onClick="javascript:generateDatasets();">Generate Datasets</button> 
-            </form>
-            
+          <form>
 
-            <select id="dataset_selector" name="DS" multiple></select> -->
+            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
+          </form>
+            <select name='datasetSelect' id = 'datasetSelect' multiple>
+
+            </select>
             <form action="iframe.php" method="post" enctype='multipart/form-data'>
+
+            Clone Clone:
             <select name= "clone_selected" id="clone_selected" multiple> 
               <?php 
                 $datasetID = intval($_POST['datasetSelect']);
@@ -264,7 +213,8 @@ $(document).ready(function() {
                     }
                 }
               ?>
-            </select> 
+            </select>
+            Frame One: 
             <select name= "file1_selected" id="file1_selected" multiple> 
               <?php 
                 $file_array = array();
@@ -279,6 +229,7 @@ $(document).ready(function() {
                 }
               ?>
             </select>
+            Frame Two:
             <select name= "file2_selected" id="file2_selected" multiple> 
               <?php 
                 $file_array = array();
@@ -294,7 +245,7 @@ $(document).ready(function() {
                 $con->close();
               ?>
             </select>
-            <input type = "submit" name ="clone_button" value = "Select Clone Fragment" id = "clone_dataset" />
+            <input type = "submit" name ="clone_button" value = "View Clones" id = "clone_dataset" />
             </form>
 
             <div align="center">
