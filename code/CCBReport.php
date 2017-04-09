@@ -20,7 +20,7 @@ if(mysqli_connect_errno()) {
     die("MySQL connection failed: ". mysqli_connect_error());
 }
 $currUserID = ($_SESSION['userSession']);
-$sql = "SELECT datasetID, userID, file, start, end, detector FROM Clones WHERE userID = '$currUserID'";
+$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
 $dataset_array_Deckard = array();
 $dataset_array_Nicad = array();
@@ -29,14 +29,17 @@ $file_array = array();
 $dataset_files = array();
 $dataset_start = array();
 $dataset_end = array();
+$dataset_cloneID = array();
 $start_array = array();
 $end_array = array(); 
+$cloneID_array = array();
 $last_dataset = 0;
 $last_file = '';
 $first_dataset_for_files = true;
 $first_dataset_for_clones = true;
 while ($row = $result->fetch_assoc()) {
   unset($datasetID, $userID, $file, $start, $end, $detector);
+  $cloneID = $row['cloneID'];
   $datasetID = $row['datasetID'];
   $userID = $row['userID'];
   $detector = $row['detector'];
@@ -54,6 +57,25 @@ while ($row = $result->fetch_assoc()) {
       array_push($dataset_array_CCFinderX, $datasetID);
     }
   }
+
+  /**
+  handles cloneID array creation, where
+  cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
+  **/
+  if ($last_dataset != $datasetID) {
+    array_unshift($dataset_cloneID, $last_dataset);
+    array_push($cloneID_array, $dataset_cloneID);
+    $dataset_cloneID= array($cloneID);
+  } else {
+    if (!in_array($cloneID, $dataset_cloneID)) {
+      array_push($dataset_cloneID, $cloneID);
+    }
+  } 
+
+  /**
+  handles clone start and end array creation, where
+  start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
+  **/
   if ($last_dataset != $datasetID) {
     array_unshift($dataset_start, $last_dataset);
     array_push($start_array, $dataset_start);
@@ -86,6 +108,10 @@ while ($row = $result->fetch_assoc()) {
   $last_dataset = $datasetID;
   $last_file = $file;
 }
+//deletes first blank array values and adds the most recent start, end, or file to array
+array_unshift($dataset_cloneID, $last_dataset);
+array_push($cloneID_array, $dataset_cloneID);
+array_splice($cloneID_array, 0, 1);
 array_unshift($dataset_start, $last_dataset);
 array_push($start_array, $dataset_start);
 array_unshift($dataset_end, $last_dataset);
@@ -95,7 +121,8 @@ array_splice($end_array, 0, 1);
 array_unshift($dataset_files, $datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();           
+$con->close();  
+print_r($cloneID_array);         
 ?>
 
 
@@ -194,6 +221,10 @@ function displayDatasets() {
     option.value = dataset_array[value];
     select.append(option);
   }
+}
+
+function displayClones() {
+
 }
 
 
