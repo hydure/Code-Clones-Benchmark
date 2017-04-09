@@ -12,6 +12,115 @@ $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+
+//this area of code finds ALL relevant data for the parameter selection
+$con = new mysqli('localhost', 'root', '*XMmysq$', 'cc_bench');
+if(mysqli_connect_errno()) {
+    die("MySQL connection failed: ". mysqli_connect_error());
+}
+$currUserID = ($_SESSION['userSession']);
+$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector FROM Clones WHERE userID = '$currUserID'";
+$result = $con->query($sql);
+$dataset_array_Deckard = array();
+$dataset_array_Nicad = array();
+$dataset_array_CCFinderX = array();
+$file_array = array();
+$dataset_files = array();
+$dataset_start = array();
+$dataset_end = array();
+$dataset_cloneID = array();
+$start_array = array();
+$end_array = array(); 
+$cloneID_array = array();
+$cloneID_index = array();
+$last_dataset = 0;
+$last_file = '';
+$first_dataset_for_files = true;
+$first_dataset_for_clones = true;
+while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
+  unset($datasetID, $userID, $file, $start, $end, $detector);
+  $cloneID = $row['cloneID'];
+  $datasetID = $row['datasetID'];
+  $userID = $row['userID'];
+  $detector = $row['detector'];
+  $file = $row['file'];
+  $start = $row['start'];
+  $end = $row['end'];
+  //handles detector -> dataset selection
+  if ($_SESSION['userSession'] == $userID) { 
+    if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
+      array_push($dataset_array_Deckard, $datasetID);
+    }
+    if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
+      array_push($dataset_array_Nicad, $datasetID);
+    }
+    if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
+      array_push($dataset_array_CCFinderX, $datasetID);
+    }
+  }
+  /** handles cloneID array creation, where
+  cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
+  **/
+  if ($last_dataset != $datasetID) {
+    array_unshift($dataset_cloneID, $last_dataset);
+    //array_push($cloneID_index, $index);
+    array_push($cloneID_array, $dataset_cloneID);
+    $dataset_cloneID= array($cloneID);
+  } else {
+    if (!in_array($cloneID, $dataset_cloneID)) {
+      array_push($dataset_cloneID, $cloneID);
+    }
+  } 
+  /** handles clone line start and end array creation, where
+  start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
+  **/
+  if ($last_dataset != $datasetID) {
+    array_unshift($dataset_start, $last_dataset);
+    array_push($start_array, $dataset_start);
+    array_unshift($dataset_end, $last_dataset);
+    array_push($end_array, $dataset_end);
+    $dataset_start = array($start);
+    $dataset_end = array($end);
+  } else {
+     array_push($dataset_start, $start);
+     array_push($dataset_end, $end);
+  }
+  /** handles file creation, where 
+  file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
+  **/
+  if ($last_dataset != $datasetID) { 
+    array_unshift($dataset_files, $last_dataset);
+    array_push($file_array, $dataset_files);
+    if (!$first_dataset_for_files) {
+      $dataset_files = array($last_file);
+    } else {
+      $dataset_files = array($file);
+      $first_dataset_for_files = false;
+    }
+  } else {
+    if (!in_array($last_file, $dataset_files)) {
+      array_push($dataset_files, $last_file);
+    }
+  }
+  
+  $last_dataset = $datasetID;
+  $last_file = $file;
+}
+//deletes first blank array values and adds the most recent start, end, or file to array
+array_unshift($dataset_cloneID, $last_dataset);
+array_push($cloneID_array, $dataset_cloneID);
+array_splice($cloneID_array, 0, 1);
+array_unshift($dataset_start, $last_dataset);
+array_push($start_array, $dataset_start);
+array_unshift($dataset_end, $last_dataset);
+array_push($end_array, $dataset_end);
+array_splice($start_array, 0, 1); 
+array_splice($end_array, 0, 1); 
+array_unshift($dataset_files, $datasetID);
+array_push($file_array, $dataset_files);
+array_splice($file_array, 0, 1);       
+$con->close();        
 ?>
 
 
@@ -30,11 +139,7 @@ function injectHTML(){
 
   //step 1.5: get the correct string to be printed!
   <?php
-  /**
-  if (isset($_POST['clone_selector'])) {
-    echo '<script> alert("fuck"); </script>';
-  } **/
-  $datasetID = 1;
+  //$datasetID = 1;
   $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
   if(mysqli_connect_errno()) {
       die("MySQL connection failed: ". mysqli_connect_error());
@@ -44,15 +149,11 @@ function injectHTML(){
   $result = $con->query($sql);
   $clonesArray=array();
   while ($row = $result->fetch_assoc()) {
-    //unset($projectID, $submit_date, $status);
     $cloneID = $row['cloneID'];
     array_push($clonesArray, $cloneID);
     $start= $row['start'];
     $end = $row['end'];
   }
-
-
-
 
   $code_array = array();
   array_push($code_array, '<pre>');
@@ -61,7 +162,6 @@ function injectHTML(){
     while (($line = fgets($handle)) != false) {
       $line = '<code>' . substr($line, 0, -1) . '</code><br>';
       array_push($code_array, $line);
-      //echo $line;
     }
     fclose($handle);
   }
@@ -71,9 +171,6 @@ function injectHTML(){
   $con->close();
   ?>
 
-
-
-
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   var code = <?php echo $code_string; ?>;
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
@@ -82,8 +179,6 @@ function injectHTML(){
   */
 
   //step 2: obtain the document associated with the iframe tag
-  //most of the browser supports .document. Some supports (such as the NetScape series) .contentDocumet, while some (e.g. IE5/6) supports .contentWindow.document
-  //we try to read whatever that exists.
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
       iframedoc = iframe.contentDocument;
@@ -91,95 +186,84 @@ function injectHTML(){
       iframedoc = iframe.contentWindow.document;
 
    if (iframedoc) {
-     // Put the content in the iframe
      iframedoc.open();
      iframedoc.writeln(html_string);
      iframedoc.close();
    } else {
-    //just in case of browsers that don't support the above 3 properties.
-    //fortunately we don't come across such case so far.
     alert('Cannot inject dynamic contents into iframe.');
    }
 
 
 }
-/**
-
-function generateDatasets() {
-  //alert("the cooks");
-  if (document.getElementById('Deckard_checkbox').checked) {
-    var detector = 'Deckard';
-  } 
-  if (document.getElementById('Nicad_checkbox').checked) {
-    var detector = 'Nicad';
-  }
-  createCookie('detector', 'Nicad', 7);
-
+function displayDatasets() {
   
-  
-  <?php
-
-  //$detector = $_COOKIE["detector"]; 
-  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-  if(mysqli_connect_errno()) {
-      die("MySQL connection failed: ". mysqli_connect_error());
+  var dataset_array;
+  if (document.getElementById("detector1_checkbox").checked) { //return only Nicad datasets
+    dataset_array = <?php  echo json_encode($dataset_array_Nicad); ?>;
   }
-  $userId = $_SESSION['userSession']; /**
-  if ($detector == 'Nicad') {
-    $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
-  } **/
-  $sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Nicad_flag = 1";
-  //if ($detector == 'Deckard') {
-    //$sql = "SELECT datasetID FROM Datasets WHERE userId = '$userId' AND Deckard_flag = 1";
-  //}
-  $result = $con->query($sql);
-  unset($datasetID_array);
-  $datasetID_array = array();
-  while ($row = $result->fetch_assoc()) {
-      unset($datasetID);
-      $datasetID = $row['datasetID'];
-      if (!in_array($datasetID, $datasetID_array)) {
-        array_push($datasetID_array, $datasetID);
-      }
+  if (document.getElementById("detector2_checkbox").checked) { //return only Deckard datasets
+    dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
   }
-
-  $con->close(); 
-  ?>
-  var datasetID_array = <?php echo json_encode($datasetID_array); ?>;
-  var select = document.getElementById('dataset_selector');
-
-  for (var prop in datasetID_array) {
-    var opt = document.createElement('option');
-    opt.innerHTML = datasetID_array[prop];
-    opt.value = datasetID_array[prop];
-    select.append(opt);
+  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return both datasets
+    dataset_array = <?php 
+    $merged_array = array_unique(array_merge($dataset_array_Nicad, $dataset_array_Deckard), SORT_REGULAR);
+    sort($merged_array);
+    echo json_encode($merged_array); 
+    ?>;
   }
-  //eraseCookie('detector');
-
+  var dataset_selector = $("#datasetSelect");
+  $("#datasetSelect").empty(); // empties previous values;
+  for (var index in dataset_array) {
+    var option = document.createElement('option');
+    option.innerHTML = dataset_array[index];
+    option.value = dataset_array[index];
+    dataset_selector.append(option);
+  }
 }
 
-function createCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
+function displayClonesAndFiles() { 
+  var selector = document.getElementById('datasetSelect');  
+  var value = selector[selector.selectedIndex].value;
+  var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
+  for (var index in cloneID_array) { //find range for selected cloneID
+    if (cloneID_array[index][0] == value) {
+      var selected_cloneID_array = cloneID_array[index].slice(1);
     }
-    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+  var clone_selector = document.getElementById('cloneSelect');
+  $("#cloneSelect").empty();
+  for (var index in selected_cloneID_array) { //displays clones
+    var option = document.createElement('option');
+    option.innerHTML = selected_cloneID_array[index];
+    option.value = selected_cloneID_array[index];
+    clone_selector.append(option);    
+  }
+  
+  var file_array = <?php  echo json_encode($file_array); ?>;
+  for (var index in file_array) { //find range for selected files
+    //alert(file_array[index]);
+    if (file_array[index][0] == value) {
+      var selected_file_array = file_array[index].slice(1);
+      //alert(selected_file_array);
+    }
+  }
+  var file1_selector = document.getElementById('file1Select');
+  var file2_selector = document.getElementById('file2Select');
+  $("#file1Select").empty();
+  $("#file2Select").empty();
+  for (var index in selected_file_array) { //displays files in both multiselectors
+    var option = document.createElement('option');
+    option.innerHTML = selected_file_array[index];
+    option.value = selected_file_array[index];
+    file1_selector.append(option); 
+    var option = document.createElement('option'); //must do this twice or the other append doesn't work
+    option.innerHTML = selected_file_array[index];
+    option.value = selected_file_array[index];
+    file2_selector.append(option);   
+  }
 }
 
-function eraseCookie(name) {
-    createCookie(name,"",-1);
-}
 
-**/
-$(document).ready(function() {
-
-
-  $('[data-toggle=offcanvas]').click(function() {
-    $('.row-offcanvas').toggleClass('active');
-  });
-});
 </script>
 <html lang="en">
 <!-- still need to create sidebar, etc. -->
@@ -228,75 +312,26 @@ $(document).ready(function() {
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-11">
-
-
-
-            
-            <button id = "iframe_button" onClick="javascript:injectHTML();">Inject HTML</button>
-            <!--
-            <form action="#">
-              <p align="center-block">Choose a Clone Detector:</p>
-              <label><input type="checkbox" name="detector[]" id="Nicad_checkbox" value="Nicad">Nicad</label><br />
-              <label><input type="checkbox" name="detector[]" id="CCFinderX_checkbox" value="CCFinderX">CCFinderX</label><br />
-              <label><input type="checkbox" name="detector[]" id="Deckard_checkbox" value="Deckard">Deckard</label><br />
-            <button id="detector_button" onClick="javascript:generateDatasets();">Generate Datasets</button> 
-            </form>
-            
-
-            <select id="dataset_selector" name="DS" multiple></select> -->
-            <form action="iframe.php" method="post" enctype='multipart/form-data'>
-            <select name= "clone_selected" id="clone_selected" multiple> 
-              <?php 
-                $datasetID = intval($_POST['datasetSelect']);
-                $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-                if(mysqli_connect_errno()) {
-                    die("MySQL connection failed: ". mysqli_connect_error());
-                }
-                $cloneID_array = array();
-                $result = $con->query("SELECT cloneID FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($cloneID);
-                  $cloneID = $row['cloneID'];
-                    if (!in_array($cloneID, $cloneID_array)) {
-                      array_push($cloneID_array, $cloneID);
-                      echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
-                    }
-                }
-              ?>
-            </select> 
-            <select name= "file1_selected" id="file1_selected" multiple> 
-              <?php 
-                $file_array = array();
-                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($file);
-                  $file = $row['file'];
-                    if (!in_array($file, $file_array)) {
-                      array_push($file_array, $file);
-                      echo '<option value='.$file.'>'.$file.'</option>';
-                    }
-                }
-              ?>
-            </select>
-            <select name= "file2_selected" id="file2_selected" multiple> 
-              <?php 
-                $file_array = array();
-                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($file);
-                  $file = $row['file'];
-                    if (!in_array($file, $file_array)) {
-                      array_push($file_array, $file);
-                      echo '<option value='.$file.'>'.$file.'</option>';
-                    }
-                }
-                $con->close();
-              ?>
-            </select>
-            <input type = "submit" name ="clone_button" value = "Select Clone Fragment" id = "clone_dataset" />
-            </form>
-
+        <div class="col-xs-12 col-sm-11">       
+          <form>
+            <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
+            <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
+            <input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>
+            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
+          </form>
+          <form>
+            <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
+            <input type = "submit" name ="clones_button" onClick="javascript:displayClonesAndFiles(); return false" value = "View Clones" id = "clones" />
+          </form>
+          <form>
+            Clone:
+            <select name= "cloneSelect" id="cloneSelect" multiple></select> 
+            Frame One: 
+            <select name= "file1Select" id="file1Select" multiple></select> 
+            Frame Two:
+            <select name= "file2Select" id="file2Select" multiple></select> 
+            <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
+          </form>
             <div align="center">
                 <iframe id="iframe_one" width=60% height=70%></iframe>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
