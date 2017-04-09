@@ -92,15 +92,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   if ($last_dataset != $datasetID) { 
     array_unshift($dataset_files, $last_dataset);
     array_push($file_array, $dataset_files);
-    if (!$first_dataset_for_files) {
-      $dataset_files = array($last_file);
-    } else {
-      $dataset_files = array($file);
-      $first_dataset_for_files = false;
-    }
+    $dataset_files = array($file);
   } else {
-    if (!in_array($last_file, $dataset_files)) {
-      array_push($dataset_files, $last_file);
+    if (!in_array($file, $dataset_files)) {
+      array_push($dataset_files, $file);
     }
   }
   
@@ -117,7 +112,7 @@ array_unshift($dataset_end, $last_dataset);
 array_push($end_array, $dataset_end);
 array_splice($start_array, 0, 1); 
 array_splice($end_array, 0, 1); 
-array_unshift($dataset_files, $datasetID);
+array_unshift($dataset_files, $last_dataset);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();        
