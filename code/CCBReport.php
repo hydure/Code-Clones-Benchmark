@@ -27,15 +27,22 @@ $dataset_array_Nicad = array();
 $dataset_array_CCFinderX = array();
 $file_array = array();
 $dataset_files = array();
+$dataset_start = array();
+$dataset_end = array();
+$start_array = array();
+$end_array = array(); 
 $last_dataset = 0;
 $last_file = '';
-$first_dataset = true;
+$first_dataset_for_files = true;
+$first_dataset_for_clones = true;
 while ($row = $result->fetch_assoc()) {
   unset($datasetID, $userID, $file, $start, $end, $detector);
   $datasetID = $row['datasetID'];
   $userID = $row['userID'];
   $detector = $row['detector'];
   $file = $row['file'];
+  $start = $row['start'];
+  $end = $row['end'];
   if ($_SESSION['userSession'] == $userID) { //handles detector -> dataset selection
     if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
       array_push($dataset_array_Deckard, $datasetID);
@@ -47,15 +54,29 @@ while ($row = $result->fetch_assoc()) {
       array_push($dataset_array_CCFinderX, $datasetID);
     }
   }
-  
-  if ($last_dataset != $datasetID) { //Handles file creation
+  if ($last_dataset != $datasetID) {
+    array_unshift($dataset_start, $last_dataset);
+    array_push($start_array, $dataset_start);
+    array_unshift($dataset_end, $last_dataset);
+    array_push($end_array, $dataset_end);
+    $dataset_start = array($start);
+    $dataset_end = array($end);
+  } else {
+     array_push($dataset_start, $start);
+     array_push($dataset_end, $end);
+  }
+
+  /**handles file creation, where 
+  file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
+  **/
+  if ($last_dataset != $datasetID) { 
     array_unshift($dataset_files, $last_dataset);
     array_push($file_array, $dataset_files);
-    if (!$first_dataset) {
+    if (!$first_dataset_for_files) {
       $dataset_files = array($last_file);
     } else {
       $dataset_files = array($file);
-      $first_dataset = false;
+      $first_dataset_for_files = false;
     }
   } else {
     if (!in_array($last_file, $dataset_files)) {
@@ -65,11 +86,16 @@ while ($row = $result->fetch_assoc()) {
   $last_dataset = $datasetID;
   $last_file = $file;
 }
+array_unshift($dataset_start, $last_dataset);
+array_push($start_array, $dataset_start);
+array_unshift($dataset_end, $last_dataset);
+array_push($end_array, $dataset_end);
+array_splice($start_array, 0, 1); 
+array_splice($end_array, 0, 1); 
 array_unshift($dataset_files, $datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();
-//print_r($file_array);              
+$con->close();           
 ?>
 
 
