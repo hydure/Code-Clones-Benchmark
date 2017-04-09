@@ -33,8 +33,10 @@ $dataset_cloneID = array();
 $start_array = array();
 $end_array = array(); 
 $cloneID_array = array();
+$cloneID_index = array();
 $last_dataset = 0;
 $last_file = '';
+//$index = 0;
 $first_dataset_for_files = true;
 $first_dataset_for_clones = true;
 while ($row = $result->fetch_assoc()) {
@@ -64,6 +66,7 @@ while ($row = $result->fetch_assoc()) {
   **/
   if ($last_dataset != $datasetID) {
     array_unshift($dataset_cloneID, $last_dataset);
+    //array_push($cloneID_index, $index);
     array_push($cloneID_array, $dataset_cloneID);
     $dataset_cloneID= array($cloneID);
   } else {
@@ -73,7 +76,7 @@ while ($row = $result->fetch_assoc()) {
   } 
 
   /**
-  handles clone start and end array creation, where
+  handles clone line start and end array creation, where
   start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
   **/
   if ($last_dataset != $datasetID) {
@@ -105,11 +108,15 @@ while ($row = $result->fetch_assoc()) {
       array_push($dataset_files, $last_file);
     }
   }
+  
   $last_dataset = $datasetID;
   $last_file = $file;
 }
 //deletes first blank array values and adds the most recent start, end, or file to array
+//array_unshift($dataset_cloneID, "break" . $last_dataset);
 array_unshift($dataset_cloneID, $last_dataset);
+//$index += 1;
+//array_push($cloneID_index, $index);
 array_push($cloneID_array, $dataset_cloneID);
 array_splice($cloneID_array, 0, 1);
 array_unshift($dataset_start, $last_dataset);
@@ -121,8 +128,7 @@ array_splice($end_array, 0, 1);
 array_unshift($dataset_files, $datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();  
-print_r($cloneID_array);         
+$con->close();        
 ?>
 
 
@@ -141,7 +147,7 @@ function injectHTML(){
 
   //step 1.5: get the correct string to be printed!
   <?php
-  $datasetID = 1;
+  //$datasetID = 1;
   $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
   if(mysqli_connect_errno()) {
       die("MySQL connection failed: ". mysqli_connect_error());
@@ -214,17 +220,32 @@ function displayDatasets() {
     ?>;
   }
   var select = $("#datasetSelect");
-  select.empty(); // empties previous values;
-  for (var value in dataset_array) {
+  $("#datasetSelect").empty(); // empties previous values;
+  for (var index in dataset_array) {
     var option = document.createElement('option');
-    option.innerHTML = dataset_array[value];
-    option.value = dataset_array[value];
+    option.innerHTML = dataset_array[index];
+    option.value = dataset_array[index];
     select.append(option);
   }
 }
 
-function displayClones() {
-
+function displayClones() { 
+  var selector = document.getElementById('datasetSelect');  
+  var value = selector[selector.selectedIndex].value;
+  var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
+  for (var index in cloneID_array) { //find range for selected cloneID
+    if (cloneID_array[index][0] == value) {
+      var selected_cloneID_array = cloneID_array[index].slice(1);
+    }
+  }
+  var clone_selector = document.getElementById('cloneSelect');
+  $("#cloneSelect").empty();
+  for (var index in selected_cloneID_array) {
+    var option = document.createElement('option');
+    option.innerHTML = selected_cloneID_array[index];
+    option.value = selected_cloneID_array[index];
+    clone_selector.append(option);    
+  }
 }
 
 
@@ -292,16 +313,16 @@ function displayClones() {
           </form>
             <form action="iframe.php" method="post" enctype='multipart/form-data'>
 
-            Clone Clone:
-            <select name= "clone_selected" id="clone_selected" multiple> 
-              <?php 
-                $datasetID = intval($_POST['datasetSelect']);
+            Clone:
+            <select name= "cloneSelect" id="cloneSelect" multiple> 
+              <?php /***
+                //$datasetID = intval($_POST['datasetSelect']);
                 $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
                 if(mysqli_connect_errno()) {
                     die("MySQL connection failed: ". mysqli_connect_error());
                 }
                 $cloneID_array = array();
-                $result = $con->query("SELECT cloneID FROM Clones where datasetID = '$datasetID'");
+                //$result = $con->query("SELECT cloneID FROM Clones where datasetID = '$datasetID'");
                 while ($row = $result->fetch_assoc()) {
                   unset($cloneID);
                   $cloneID = $row['cloneID'];
@@ -310,13 +331,13 @@ function displayClones() {
                       echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
                     }
                 }
-              ?>
+            **/  ?>
             </select>
             Frame One: 
             <select name= "file1_selected" id="file1_selected" multiple> 
               <?php 
                 $file_array = array();
-                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
+                //$result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
                 while ($row = $result->fetch_assoc()) {
                   unset($file);
                   $file = $row['file'];
@@ -331,7 +352,7 @@ function displayClones() {
             <select name= "file2_selected" id="file2_selected" multiple> 
               <?php 
                 $file_array = array();
-                $result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
+                //$result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
                 while ($row = $result->fetch_assoc()) {
                   unset($file);
                   $file = $row['file'];
