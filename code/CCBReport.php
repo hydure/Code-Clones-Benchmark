@@ -229,7 +229,7 @@ function displayDatasets() {
   }
 }
 
-function displayClones() { 
+function displayClonesAndFiles() { 
   var selector = document.getElementById('datasetSelect');  
   var value = selector[selector.selectedIndex].value;
   var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
@@ -297,10 +297,7 @@ function displayClones() {
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-11">
-
-          
-            
+        <div class="col-xs-12 col-sm-11">       
           <form>
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
@@ -308,65 +305,18 @@ function displayClones() {
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
           </form>
           <form>
-            <select name='datasetSelect' id = 'datasetSelect' multiple/>
-            <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
+            <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
+            <input type = "submit" name ="clones_button" onClick="javascript:displayClonesAndFiles(); return false" value = "View Clones" id = "clones" />
           </form>
-            <form action="iframe.php" method="post" enctype='multipart/form-data'>
-
+          <form>
             Clone:
-            <select name= "cloneSelect" id="cloneSelect" multiple> 
-              <?php /***
-                //$datasetID = intval($_POST['datasetSelect']);
-                $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-                if(mysqli_connect_errno()) {
-                    die("MySQL connection failed: ". mysqli_connect_error());
-                }
-                $cloneID_array = array();
-                //$result = $con->query("SELECT cloneID FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($cloneID);
-                  $cloneID = $row['cloneID'];
-                    if (!in_array($cloneID, $cloneID_array)) {
-                      array_push($cloneID_array, $cloneID);
-                      echo '<option value='.$cloneID.'>'.$cloneID.'</option>';
-                    }
-                }
-            **/  ?>
-            </select>
+            <select name= "cloneSelect" id="cloneSelect" multiple></select> 
             Frame One: 
-            <select name= "file1_selected" id="file1_selected" multiple> 
-              <?php 
-                $file_array = array();
-                //$result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($file);
-                  $file = $row['file'];
-                    if (!in_array($file, $file_array)) {
-                      array_push($file_array, $file);
-                      echo '<option value='.$file.'>'.$file.'</option>';
-                    }
-                }
-              ?>
-            </select>
+            <select name= "file1_selected" id="file1_selected" multiple></select> 
             Frame Two:
-            <select name= "file2_selected" id="file2_selected" multiple> 
-              <?php 
-                $file_array = array();
-                //$result = $con->query("SELECT file FROM Clones where datasetID = '$datasetID'");
-                while ($row = $result->fetch_assoc()) {
-                  unset($file);
-                  $file = $row['file'];
-                    if (!in_array($file, $file_array)) {
-                      array_push($file_array, $file);
-                      echo '<option value='.$file.'>'.$file.'</option>';
-                    }
-                }
-                $con->close();
-              ?>
-            </select>
+            <select name= "file2_selected" id="file2_selected" multiple></select> 
             <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
-            </form>
-
+          </form>
             <div align="center">
                 <iframe id="iframe_one" width=60% height=70%></iframe>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
