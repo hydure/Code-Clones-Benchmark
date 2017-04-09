@@ -31,21 +31,19 @@ while ($row = $result->fetch_assoc()) {
       $datasetID = $row['datasetID'];
       $userID = $row['userID'];
       $detector = $row['detector'];
-      if ($_SESSION['userSession'] == $userID && !in_array($datasetID, $dataset_array_Deckard)) { //push to Deckard, Nicad, or CCFinderX for sorting
-        if ($detector == 'Deckard') {
+      if ($_SESSION['userSession'] == $userID) { //push to Deckard, Nicad, or CCFinderX for sorting
+        if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
           array_push($dataset_array_Deckard, $datasetID);
         }
-        if ($detector == 'Nicad') {
+        if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
           array_push($dataset_array_Nicad, $datasetID);
         }
-        if ($detector == 'CCFinderX') {
+        if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
           array_push($dataset_array_CCFinderX, $datasetID);
         }
       }
 }       
 $con->close();
-$phparray = array("Volov", "BMW");
-print_r($dataset_array_Deckard);
               
 ?>
 
@@ -122,8 +120,23 @@ function injectHTML(){
 
 }
 function displayDatasets() {
+  
+  var dataset_array;
+  if (document.getElementById("detector1_checkbox").checked) { //return only Nicad datasets
+    dataset_array = <?php  echo json_encode($dataset_array_Nicad); ?>;
+  }
+  if (document.getElementById("detector2_checkbox").checked) { //return only Deckard datasets
+    dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
+  }
+  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return both datasets
+    dataset_array = <?php 
+    $merged_array = array_unique(array_merge($dataset_array_Nicad, $dataset_array_Deckard), SORT_REGULAR);
+    sort($merged_array);
+    echo json_encode($merged_array); 
+    ?>;
+  }
   var select = $("#datasetSelect");
-  var dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
+  select.empty(); // empties previous values;
   for (var value in dataset_array) {
     var option = document.createElement('option');
     option.innerHTML = dataset_array[value];
@@ -186,7 +199,9 @@ function displayDatasets() {
           
             
           <form>
-
+            <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
+            <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
+            <input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
           </form>
             <select name='datasetSelect' id = 'datasetSelect' multiple>
