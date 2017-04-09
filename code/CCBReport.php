@@ -25,26 +25,51 @@ $result = $con->query($sql);
 $dataset_array_Deckard = array();
 $dataset_array_Nicad = array();
 $dataset_array_CCFinderX = array();
+$file_array = array();
+$dataset_files = array();
+$last_dataset = 0;
+$last_file = '';
+$first_dataset = true;
 while ($row = $result->fetch_assoc()) {
-
-      unset($datasetID, $userID, $file, $start, $end, $detector);
-      $datasetID = $row['datasetID'];
-      $userID = $row['userID'];
-      $detector = $row['detector'];
-      if ($_SESSION['userSession'] == $userID) { //push to Deckard, Nicad, or CCFinderX for sorting
-        if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
-          array_push($dataset_array_Deckard, $datasetID);
-        }
-        if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
-          array_push($dataset_array_Nicad, $datasetID);
-        }
-        if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
-          array_push($dataset_array_CCFinderX, $datasetID);
-        }
-      }
-}       
+  unset($datasetID, $userID, $file, $start, $end, $detector);
+  $datasetID = $row['datasetID'];
+  $userID = $row['userID'];
+  $detector = $row['detector'];
+  $file = $row['file'];
+  if ($_SESSION['userSession'] == $userID) { //handles detector -> dataset selection
+    if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
+      array_push($dataset_array_Deckard, $datasetID);
+    }
+    if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
+      array_push($dataset_array_Nicad, $datasetID);
+    }
+    if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
+      array_push($dataset_array_CCFinderX, $datasetID);
+    }
+  }
+  
+  if ($last_dataset != $datasetID) { //Handles file creation
+    array_unshift($dataset_files, $last_dataset);
+    array_push($file_array, $dataset_files);
+    if (!$first_dataset) {
+      $dataset_files = array($last_file);
+    } else {
+      $dataset_files = array($file);
+      $first_dataset = false;
+    }
+  } else {
+    if (!in_array($last_file, $dataset_files)) {
+      array_push($dataset_files, $last_file);
+    }
+  }
+  $last_dataset = $datasetID;
+  $last_file = $file;
+}
+array_unshift($dataset_files, $datasetID);
+array_push($file_array, $dataset_files);
+array_splice($file_array, 0, 1);       
 $con->close();
-              
+//print_r($file_array);              
 ?>
 
 
@@ -204,9 +229,10 @@ function displayDatasets() {
             <input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
           </form>
-            <select name='datasetSelect' id = 'datasetSelect' multiple>
-
-            </select>
+          <form>
+            <select name='datasetSelect' id = 'datasetSelect' multiple/>
+            <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
+          </form>
             <form action="iframe.php" method="post" enctype='multipart/form-data'>
 
             Clone Clone:
@@ -260,7 +286,7 @@ function displayDatasets() {
                 $con->close();
               ?>
             </select>
-            <input type = "submit" name ="clone_button" value = "View Clones" id = "clone_dataset" />
+            <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
             </form>
 
             <div align="center">
