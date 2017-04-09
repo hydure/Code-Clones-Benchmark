@@ -36,10 +36,9 @@ $cloneID_array = array();
 $cloneID_index = array();
 $last_dataset = 0;
 $last_file = '';
-//$index = 0;
 $first_dataset_for_files = true;
 $first_dataset_for_clones = true;
-while ($row = $result->fetch_assoc()) {
+while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector);
   $cloneID = $row['cloneID'];
   $datasetID = $row['datasetID'];
@@ -48,7 +47,8 @@ while ($row = $result->fetch_assoc()) {
   $file = $row['file'];
   $start = $row['start'];
   $end = $row['end'];
-  if ($_SESSION['userSession'] == $userID) { //handles detector -> dataset selection
+  //handles detector -> dataset selection
+  if ($_SESSION['userSession'] == $userID) { 
     if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
       array_push($dataset_array_Deckard, $datasetID);
     }
@@ -59,9 +59,7 @@ while ($row = $result->fetch_assoc()) {
       array_push($dataset_array_CCFinderX, $datasetID);
     }
   }
-
-  /**
-  handles cloneID array creation, where
+  /** handles cloneID array creation, where
   cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
   **/
   if ($last_dataset != $datasetID) {
@@ -74,9 +72,7 @@ while ($row = $result->fetch_assoc()) {
       array_push($dataset_cloneID, $cloneID);
     }
   } 
-
-  /**
-  handles clone line start and end array creation, where
+  /** handles clone line start and end array creation, where
   start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
   **/
   if ($last_dataset != $datasetID) {
@@ -90,8 +86,7 @@ while ($row = $result->fetch_assoc()) {
      array_push($dataset_start, $start);
      array_push($dataset_end, $end);
   }
-
-  /**handles file creation, where 
+  /** handles file creation, where 
   file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
   **/
   if ($last_dataset != $datasetID) { 
@@ -113,10 +108,7 @@ while ($row = $result->fetch_assoc()) {
   $last_file = $file;
 }
 //deletes first blank array values and adds the most recent start, end, or file to array
-//array_unshift($dataset_cloneID, "break" . $last_dataset);
 array_unshift($dataset_cloneID, $last_dataset);
-//$index += 1;
-//array_push($cloneID_index, $index);
 array_push($cloneID_array, $dataset_cloneID);
 array_splice($cloneID_array, 0, 1);
 array_unshift($dataset_start, $last_dataset);
@@ -219,13 +211,13 @@ function displayDatasets() {
     echo json_encode($merged_array); 
     ?>;
   }
-  var select = $("#datasetSelect");
+  var dataset_selector = $("#datasetSelect");
   $("#datasetSelect").empty(); // empties previous values;
   for (var index in dataset_array) {
     var option = document.createElement('option');
     option.innerHTML = dataset_array[index];
     option.value = dataset_array[index];
-    select.append(option);
+    dataset_selector.append(option);
   }
 }
 
@@ -240,11 +232,34 @@ function displayClonesAndFiles() {
   }
   var clone_selector = document.getElementById('cloneSelect');
   $("#cloneSelect").empty();
-  for (var index in selected_cloneID_array) {
+  for (var index in selected_cloneID_array) { //displays clones
     var option = document.createElement('option');
     option.innerHTML = selected_cloneID_array[index];
     option.value = selected_cloneID_array[index];
     clone_selector.append(option);    
+  }
+  
+  var file_array = <?php  echo json_encode($file_array); ?>;
+  for (var index in file_array) { //find range for selected files
+    //alert(file_array[index]);
+    if (file_array[index][0] == value) {
+      var selected_file_array = file_array[index].slice(1);
+      //alert(selected_file_array);
+    }
+  }
+  var file1_selector = document.getElementById('file1Select');
+  var file2_selector = document.getElementById('file2Select');
+  $("#file1Select").empty();
+  $("#file2Select").empty();
+  for (var index in selected_file_array) { //displays files in both multiselectors
+    var option = document.createElement('option');
+    option.innerHTML = selected_file_array[index];
+    option.value = selected_file_array[index];
+    file1_selector.append(option); 
+    var option = document.createElement('option'); //must do this twice or the other append doesn't work
+    option.innerHTML = selected_file_array[index];
+    option.value = selected_file_array[index];
+    file2_selector.append(option);   
   }
 }
 
@@ -312,9 +327,9 @@ function displayClonesAndFiles() {
             Clone:
             <select name= "cloneSelect" id="cloneSelect" multiple></select> 
             Frame One: 
-            <select name= "file1_selected" id="file1_selected" multiple></select> 
+            <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
-            <select name= "file2_selected" id="file2_selected" multiple></select> 
+            <select name= "file2Select" id="file2Select" multiple></select> 
             <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
           </form>
             <div align="center">
