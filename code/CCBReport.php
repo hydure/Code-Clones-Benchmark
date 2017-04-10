@@ -35,6 +35,7 @@ $end_array = array();
 $cloneID_array = array();
 $cloneID_index = array();
 $last_datasetID = 0;
+$last_cloneID = 0;
 $last_file = '';
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector);
@@ -73,10 +74,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles clone line start and end array creation, where
   start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
   **/
-  if ($last_datasetID != $datasetID) {
-    array_unshift($dataset_start, $last_datasetID);
+  if ($last_cloneID != $cloneID) {
+    array_unshift($dataset_start, $last_cloneID);
     array_push($start_array, $dataset_start);
-    array_unshift($dataset_end, $last_datasetID);
+    array_unshift($dataset_end, $last_cloneID);
     array_push($end_array, $dataset_end);
     $dataset_start = array($start);
     $dataset_end = array($end);
@@ -96,7 +97,7 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
       array_push($dataset_files, $file);
     }
   }
-  
+  $last_cloneID = $cloneID;
   $last_datasetID = $datasetID;
   $last_file = $file;
 }
@@ -104,16 +105,17 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
 array_unshift($dataset_cloneID, $last_datasetID);
 array_push($cloneID_array, $dataset_cloneID);
 array_splice($cloneID_array, 0, 1);
-array_unshift($dataset_start, $last_datasetID);
+array_unshift($dataset_start, $last_cloneID);
 array_push($start_array, $dataset_start);
-array_unshift($dataset_end, $last_datasetID);
+array_unshift($dataset_end, $last_cloneID);
 array_push($end_array, $dataset_end);
 array_splice($start_array, 0, 1); 
 array_splice($end_array, 0, 1); 
 array_unshift($dataset_files, $last_datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();        
+$con->close();
+print_r($start_array);        
 ?>
 
 
