@@ -119,7 +119,7 @@ array_unshift($dataset_files, $last_datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();
-print_r($start_array);        
+print_r($end_array);        
 ?>
 
 
@@ -170,17 +170,29 @@ function displayFile(){
   //array_push($code_array, '</pre>');
   //$code_string = implode("", $code_array);
   $code_string = 'tit';
-  $code_string = json_encode($code_string, JSON_HEX_TAG);
-  
+  $code_string = json_encode($code_string, JSON_HEX_TAG);  
   ?>
-
-
+  var display_selector = document.getElementById('cloneSelect');  
+  var value = display_selector[display_selector.selectedIndex].value;
+  //alert(value);
+  var start_array = <?php  echo json_encode($start_array); ?>;
+  for (var index in start_array) { //find range for selected files
+    if (start_array[index][0] == value) {
+      var selected_start_array = start_array[index].slice(1);
+      alert(selected_start_array);
+    }
+  }
+  var end_array = <?php  echo json_encode($end_array); ?>;
+  for (var index in end_array) { //find range for selected files
+    if (end_array[index][0] == value) {
+      var selected_end_array = end_array[index].slice(1);
+      alert(selected_end_array);
+    }
+  }
+  var end_array = <?php  echo json_encode($end_array); ?>;
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
   var code = <?php echo $code_string; ?>;
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
-  /* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
-  var iframe = $('iframe#target_iframe_id').get(0);
-  */
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -206,12 +218,11 @@ function displayDatasets() {
   if (document.getElementById("detector2_checkbox").checked) { //return only Deckard datasets
     dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
   }
-  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return both datasets
-    dataset_array = <?php 
-    $merged_array = array_unique(array_merge($dataset_array_Nicad, $dataset_array_Deckard), SORT_REGULAR);
-    sort($merged_array);
-    echo json_encode($merged_array); 
-    ?>;
+  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return datasets only with both detectors ran
+    dataset_array = <?php
+    $return_array = array_intersect($dataset_array_Nicad, $dataset_array_Deckard);
+    echo json_encode($return_array);
+    ?>
   }
   var dataset_selector = $("#datasetSelect");
   $("#datasetSelect").empty(); // empties previous values;
@@ -223,7 +234,7 @@ function displayDatasets() {
   }
 }
 
-function displayClonesAndFiles() { 
+function displayClones() { 
   var selector = document.getElementById('datasetSelect');  
   var value = selector[selector.selectedIndex].value;
   var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
@@ -240,26 +251,41 @@ function displayClonesAndFiles() {
     option.value = selected_cloneID_array[index];
     clone_selector.append(option);    
   }
-  
+}
+
+function displayFiles() {
+  var selector = document.getElementById('datasetSelect');  
+  var value = selector[selector.selectedIndex].value;
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
     if (file_array[index][0] == value) {
       var selected_file_array = file_array[index].slice(1);
+      alert(selected_file_array);
     }
   }
+  alert(file_array);
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
-  $("#file1Select").empty();
-  $("#file2Select").empty();
-  for (var index in selected_file_array) { //displays files in both multiselectors
-    var option = document.createElement('option');
-    option.innerHTML = selected_file_array[index];
-    option.value = selected_file_array[index];
-    file1_selector.append(option); 
-    var option = document.createElement('option'); //must do this twice or the other append doesn't work
-    option.innerHTML = selected_file_array[index];
-    option.value = selected_file_array[index];
-    file2_selector.append(option);   
+  if (document.getElementById("files_frame1_checkbox").checked) {
+    $("#file1Select").empty();
+  }
+  if (document.getElementById("files_frame2_checkbox").checked) {
+    $("#file2Select").empty();
+  }
+  for (var index in selected_file_array) { //displays files multiselectors
+    if (document.getElementById("files_frame1_checkbox").checked) {
+      var option = document.createElement('option');
+      option.innerHTML = selected_file_array[index];
+      option.value = selected_file_array[index];
+      file1_selector.append(option);
+    }
+    if (document.getElementById("files_frame2_checkbox").checked) {
+      
+      var option = document.createElement('option');
+      option.innerHTML = selected_file_array[index];
+      option.value = selected_file_array[index];
+      file2_selector.append(option);  
+    } 
   }
 }
 
@@ -321,16 +347,21 @@ function displayClonesAndFiles() {
           </form>
           <form>
             <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
-            <input type = "submit" name ="clones_button" onClick="javascript:displayClonesAndFiles(); return false" value = "View Clones" id = "clones" />
+            <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
           </form>
           <form>
             Clone:
             <select name= "cloneSelect" id="cloneSelect" multiple></select> 
+            <input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
+            <input type="checkbox" id="files_frame2_checkbox" name="files_checkbox[]" value="files_frame2">Show Files in Frame Two</label><br/>
+            <input type = "submit" name ="files_button" onClick="javascript:displayFiles(); return false" value = "View Files" id = "files" />
+          </form>
+          <form>
             Frame One: 
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
             <select name= "file2Select" id="file2Select" multiple></select> 
-            <input type = "submit" name ="analyze_button" onClick="javascript:displayFile(); return false" value = "Analyze Clones" id = "clones_for_file" />
+            <input type = "submit" name ="analyze_button" onClick="javascript:AnalyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
                 <iframe id="iframe1" width=60% height=70%></iframe>
