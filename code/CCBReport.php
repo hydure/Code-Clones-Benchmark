@@ -49,10 +49,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   $end = $row['end'];
   //handles detector -> dataset selection
   if ($_SESSION['userSession'] == $userID) { 
-    if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
+    if ($detector == 'deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
       array_push($dataset_array_Deckard, $datasetID);
     }
-    if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
+    if ($detector == 'nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
       array_push($dataset_array_Nicad, $datasetID);
     }
     if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
@@ -116,6 +116,11 @@ array_unshift($dataset_files, $last_dataset);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();        
+print_r($dataset_array_Deckard);
+echo "\n";
+print_r($dataset_array_Nicad);
+echo "\n";
+print_r($cloneID_array);
 ?>
 
 
@@ -206,6 +211,7 @@ function displayDatasets() {
     echo json_encode($merged_array); 
     ?>;
   }
+  alert(dataset_array);
   var dataset_selector = $("#datasetSelect");
   $("#datasetSelect").empty(); // empties previous values;
   for (var index in dataset_array) {
