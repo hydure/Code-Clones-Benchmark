@@ -72,7 +72,7 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     }
   } 
   /** handles clone line start and end array creation, where
-  start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
+  start_array = ((cloneID1, $start1, $start1's_file, $start2, $start2's_file...),(cloneID2, $start1, $start1's_file, $start2, $start2's_file, ...), ..)
   **/
   if ($last_cloneID != $cloneID) {
     array_unshift($dataset_start, $last_cloneID);
@@ -80,10 +80,14 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     array_unshift($dataset_end, $last_cloneID);
     array_push($end_array, $dataset_end);
     $dataset_start = array($start);
+    array_push($dataset_start, $file);
     $dataset_end = array($end);
+    array_push($dataset_end, $file);
   } else {
      array_push($dataset_start, $start);
      array_push($dataset_end, $end);
+     array_push($dataset_start, $file);
+     array_push($dataset_end, $file);
   }
   /** handles file creation, where 
   file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
