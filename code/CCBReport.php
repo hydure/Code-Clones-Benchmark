@@ -136,7 +136,7 @@ foreach ($handle_array as $handlepath) {
   $handle = fopen($handlepath, "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      $line = substr($line, 0, -1);
+      //$line = substr($line, 0, -1);
       array_push($line_array, $line);
     }
   }
@@ -151,7 +151,7 @@ foreach ($handle_array as $handlepath) {
   $c += 1;
 
 }
-//print_r($sourcefile_array);     
+//print_r(count($sourcefile_array));    
 ?>
 
 
@@ -197,21 +197,18 @@ function analyzeClones(){
     } 
     fclose($handle);
   } **/
-  //$code_array = array('color');
   //array_push($code_array, '</pre>');
   //$code_string = implode("", $code_array);
-
-
   $code_string = 'tit';
   $code_string = json_encode($code_string, JSON_HEX_TAG);  
   ?>
   
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
-  var file1 = file1_selector[file1_selector.selectedIndex].value;
-  var file2 = file2_selector[file2_selector.selectedIndex].value;
+  var file1_value = file1_selector[file1_selector.selectedIndex].value;
+  var file2_value = file2_selector[file2_selector.selectedIndex].value;
   value = GlobalVar.value;
-  alert("global: " + GlobalVar.value);
+  //alert("global: " + GlobalVar.value);
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
@@ -225,9 +222,27 @@ function analyzeClones(){
       var selected_end_array = end_array[index].slice(1);
       //alert(selected_end_array);
     }
-  } 
+  }
+  var frame1_array = [];
+  var frame2_array = [];
+  //alert(" file1: " + file1_value);
+  var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
+
+  for (var index in sourcefile_array) {
+    if (sourcefile_array[index][0] == file1_value) {
+      frame1_array = sourcefile_array[index].slice(1);
+      alert("FOUJND");
+
+    }
+    if (sourcefile_array[index][0] == file2_value) {
+      frame2_array = sourcefile_array[index].slice(1);
+    }
+  }
+  
+  var code = frame2_array.join('');
+
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
-  var code = <?php echo $code_string; ?>;
+  //var code = <?php echo $code_string; ?>;
   //code = "orca";
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
@@ -402,7 +417,7 @@ function displayFiles() {
             <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
-                <iframe id="iframe1" width=60% height=70%></iframe>
+                <iframe id="iframe1" width=80% height=70%></iframe>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
             </div>
             <!--frames for adding results above-->
