@@ -34,10 +34,9 @@ $start_array = array();
 $end_array = array(); 
 $cloneID_array = array();
 $cloneID_index = array();
-$last_dataset = 0;
+$last_datasetID = 0;
+$last_cloneID = 0;
 $last_file = '';
-$first_dataset_for_files = true;
-$first_dataset_for_clones = true;
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector);
   $cloneID = $row['cloneID'];
@@ -62,8 +61,8 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles cloneID array creation, where
   cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
   **/
-  if ($last_dataset != $datasetID) {
-    array_unshift($dataset_cloneID, $last_dataset);
+  if ($last_datasetID != $datasetID) {
+    array_unshift($dataset_cloneID, $last_datasetID);
     //array_push($cloneID_index, $index);
     array_push($cloneID_array, $dataset_cloneID);
     $dataset_cloneID= array($cloneID);
@@ -73,24 +72,28 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     }
   } 
   /** handles clone line start and end array creation, where
-  start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
+  start_array = ((cloneID1, $start1, $start1's_file, $start2, $start2's_file...),(cloneID2, $start1, $start1's_file, $start2, $start2's_file, ...), ..)
   **/
-  if ($last_dataset != $datasetID) {
-    array_unshift($dataset_start, $last_dataset);
+  if ($last_cloneID != $cloneID) {
+    array_unshift($dataset_start, $last_cloneID);
     array_push($start_array, $dataset_start);
-    array_unshift($dataset_end, $last_dataset);
+    array_unshift($dataset_end, $last_cloneID);
     array_push($end_array, $dataset_end);
     $dataset_start = array($start);
+    array_push($dataset_start, $file);
     $dataset_end = array($end);
+    array_push($dataset_end, $file);
   } else {
      array_push($dataset_start, $start);
      array_push($dataset_end, $end);
+     array_push($dataset_start, $file);
+     array_push($dataset_end, $file);
   }
   /** handles file creation, where 
   file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
   **/
-  if ($last_dataset != $datasetID) { 
-    array_unshift($dataset_files, $last_dataset);
+  if ($last_cloneID != $cloneID) { 
+    array_unshift($dataset_files, $last_cloneID);
     array_push($file_array, $dataset_files);
     $dataset_files = array($file);
   } else {
@@ -98,29 +101,24 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
       array_push($dataset_files, $file);
     }
   }
-  
-  $last_dataset = $datasetID;
+  $last_cloneID = $cloneID;
+  $last_datasetID = $datasetID;
   $last_file = $file;
 }
 //deletes first blank array values and adds the most recent start, end, or file to array
-array_unshift($dataset_cloneID, $last_dataset);
+array_unshift($dataset_cloneID, $last_datasetID);
 array_push($cloneID_array, $dataset_cloneID);
 array_splice($cloneID_array, 0, 1);
-array_unshift($dataset_start, $last_dataset);
+array_unshift($dataset_start, $last_cloneID);
 array_push($start_array, $dataset_start);
-array_unshift($dataset_end, $last_dataset);
+array_unshift($dataset_end, $last_cloneID);
 array_push($end_array, $dataset_end);
 array_splice($start_array, 0, 1); 
 array_splice($end_array, 0, 1); 
-array_unshift($dataset_files, $last_dataset);
+array_unshift($dataset_files, $last_cloneID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();        
-print_r($dataset_array_Deckard);
-echo "\n";
-print_r($dataset_array_Nicad);
-echo "\n";
-print_r($cloneID_array);
+$con->close();
 ?>
 
 
@@ -131,53 +129,69 @@ print_r($cloneID_array);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-function injectHTML(){
-
+function displayFile(){
+  //alert('shame');
   //step 1: get the DOM object of the iframe.
-  var iframe = document.getElementById('iframe_one');
+  var iframe = document.getElementById('iframe1');
+//alert('Cannot inject dynamic contents into iframe.');
 
 
-  //step 1.5: get the correct string to be printed!
-  <?php
-  //$datasetID = 1;
-  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-  if(mysqli_connect_errno()) {
-      die("MySQL connection failed: ". mysqli_connect_error());
-  }
-  $file = 'src/AbstractTableRendering.java';
-  $sql = "SELECT cloneID, start, end FROM Clones where datasetID= '$datasetID' AND file='$file'";
-  $result = $con->query($sql);
-  $clonesArray=array();
-  while ($row = $result->fetch_assoc()) {
-    $cloneID = $row['cloneID'];
-    array_push($clonesArray, $cloneID);
-    $start= $row['start'];
-    $end = $row['end'];
-  }
-
+  <?php /**
   $code_array = array();
+  $line_counter = 1;
+  $array_counter = 0;
+  $highlighting = false;
   array_push($code_array, '<pre>');
   $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      $line = '<code>' . substr($line, 0, -1) . '</code><br>';
+      if ($line_counter == $start_array[$array_counter] || $highlighting) {   //highlight l
+        $line = '<code><mark>' . substr($line, 0, -1) . '</mark></code><br>';
+        
+        if ($highlighting == false) {
+          $highlighting = true;
+        }
+      } else {
+        $line = '<code>' . substr($line, 0, -1) . '</code><br>';        
+      }
       array_push($code_array, $line);
-    }
+      $line_counter += 1; 
+      if ($line_counter == $end_array[$array_counter]) {
+        $highlighting = false;
+        if ($array_counter <= count($start_array)) {
+          $array_counter += 1;
+        }
+      } 
+    } 
     fclose($handle);
-  }
-  array_push($code_array, '</pre>');
-  $code_string = implode("", $code_array);
-  $code_string = json_encode($code_string, JSON_HEX_TAG);
-  $con->close();
+  } **/
+  //$code_array = array('color');
+  //array_push($code_array, '</pre>');
+  //$code_string = implode("", $code_array);
+  $code_string = 'tit';
+  $code_string = json_encode($code_string, JSON_HEX_TAG);  
   ?>
-
-  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
+  var display_selector = document.getElementById('cloneSelect');  
+  var value = display_selector[display_selector.selectedIndex].value;
+  //alert(value);
+  var start_array = <?php  echo json_encode($start_array); ?>;
+  for (var index in start_array) { //find range for selected files
+    if (start_array[index][0] == value) {
+      var selected_start_array = start_array[index].slice(1);
+      alert(selected_start_array);
+    }
+  }
+  var end_array = <?php  echo json_encode($end_array); ?>;
+  for (var index in end_array) { //find range for selected files
+    if (end_array[index][0] == value) {
+      var selected_end_array = end_array[index].slice(1);
+      alert(selected_end_array);
+    }
+  }
+  var end_array = <?php  echo json_encode($end_array); ?>;
+  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
   var code = <?php echo $code_string; ?>;
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
-  /* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
-  var iframe = $('iframe#target_iframe_id').get(0);
-  */
-
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -185,14 +199,13 @@ function injectHTML(){
     else if (iframe.contentWindow)
       iframedoc = iframe.contentWindow.document;
 
-   if (iframedoc) {
+   if (iframedoc){
      iframedoc.open();
      iframedoc.writeln(html_string);
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
    }
-
 
 }
 function displayDatasets() {
@@ -204,14 +217,12 @@ function displayDatasets() {
   if (document.getElementById("detector2_checkbox").checked) { //return only Deckard datasets
     dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
   }
-  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return both datasets
-    dataset_array = <?php 
-    $merged_array = array_unique(array_merge($dataset_array_Nicad, $dataset_array_Deckard), SORT_REGULAR);
-    sort($merged_array);
-    echo json_encode($merged_array); 
-    ?>;
+  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return datasets only with both detectors ran
+    dataset_array = <?php
+    $return_array = array_intersect($dataset_array_Nicad, $dataset_array_Deckard);
+    echo json_encode($return_array);
+    ?>
   }
-  alert(dataset_array);
   var dataset_selector = $("#datasetSelect");
   $("#datasetSelect").empty(); // empties previous values;
   for (var index in dataset_array) {
@@ -222,7 +233,7 @@ function displayDatasets() {
   }
 }
 
-function displayClonesAndFiles() { 
+function displayClones() { 
   var selector = document.getElementById('datasetSelect');  
   var value = selector[selector.selectedIndex].value;
   var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
@@ -239,28 +250,39 @@ function displayClonesAndFiles() {
     option.value = selected_cloneID_array[index];
     clone_selector.append(option);    
   }
-  
+}
+
+function displayFiles() {
+  var selector = document.getElementById('cloneSelect');  
+  var value = selector[selector.selectedIndex].value;
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
-    //alert(file_array[index]);
     if (file_array[index][0] == value) {
       var selected_file_array = file_array[index].slice(1);
-      //alert(selected_file_array);
     }
   }
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
-  $("#file1Select").empty();
-  $("#file2Select").empty();
-  for (var index in selected_file_array) { //displays files in both multiselectors
-    var option = document.createElement('option');
-    option.innerHTML = selected_file_array[index];
-    option.value = selected_file_array[index];
-    file1_selector.append(option); 
-    var option = document.createElement('option'); //must do this twice or the other append doesn't work
-    option.innerHTML = selected_file_array[index];
-    option.value = selected_file_array[index];
-    file2_selector.append(option);   
+  if (document.getElementById("files_frame1_checkbox").checked) {
+    $("#file1Select").empty();
+  }
+  if (document.getElementById("files_frame2_checkbox").checked) {
+    $("#file2Select").empty();
+  }
+  for (var index in selected_file_array) { //displays files multiselectors
+    if (document.getElementById("files_frame1_checkbox").checked) {
+      var option = document.createElement('option');
+      option.innerHTML = selected_file_array[index];
+      option.value = selected_file_array[index];
+      file1_selector.append(option);
+    }
+    if (document.getElementById("files_frame2_checkbox").checked) {
+      
+      var option = document.createElement('option');
+      option.innerHTML = selected_file_array[index];
+      option.value = selected_file_array[index];
+      file2_selector.append(option);  
+    } 
   }
 }
 
@@ -322,19 +344,24 @@ function displayClonesAndFiles() {
           </form>
           <form>
             <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
-            <input type = "submit" name ="clones_button" onClick="javascript:displayClonesAndFiles(); return false" value = "View Clones" id = "clones" />
+            <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
           </form>
           <form>
             Clone:
             <select name= "cloneSelect" id="cloneSelect" multiple></select> 
+            <input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
+            <input type="checkbox" id="files_frame2_checkbox" name="files_checkbox[]" value="files_frame2">Show Files in Frame Two</label><br/>
+            <input type = "submit" name ="files_button" onClick="javascript:displayFiles(); return false" value = "View Files" id = "files" />
+          </form>
+          <form>
             Frame One: 
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
             <select name= "file2Select" id="file2Select" multiple></select> 
-            <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
+            <input type = "submit" name ="analyze_button" onClick="javascript:AnalyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
-                <iframe id="iframe_one" width=60% height=70%></iframe>
+                <iframe id="iframe1" width=60% height=70%></iframe>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
             </div>
             <!--frames for adding results above-->
