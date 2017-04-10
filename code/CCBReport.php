@@ -34,10 +34,8 @@ $start_array = array();
 $end_array = array(); 
 $cloneID_array = array();
 $cloneID_index = array();
-$last_dataset = 0;
+$last_datasetID = 0;
 $last_file = '';
-$first_dataset_for_files = true;
-$first_dataset_for_clones = true;
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector);
   $cloneID = $row['cloneID'];
@@ -62,8 +60,8 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles cloneID array creation, where
   cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
   **/
-  if ($last_dataset != $datasetID) {
-    array_unshift($dataset_cloneID, $last_dataset);
+  if ($last_datasetID != $datasetID) {
+    array_unshift($dataset_cloneID, $last_datasetID);
     //array_push($cloneID_index, $index);
     array_push($cloneID_array, $dataset_cloneID);
     $dataset_cloneID= array($cloneID);
@@ -75,10 +73,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles clone line start and end array creation, where
   start_array = ((datasetID1, $start1, $start2, ...),(datasetID2, $start1, $start2, ...), ..)
   **/
-  if ($last_dataset != $datasetID) {
-    array_unshift($dataset_start, $last_dataset);
+  if ($last_datasetID != $datasetID) {
+    array_unshift($dataset_start, $last_datasetID);
     array_push($start_array, $dataset_start);
-    array_unshift($dataset_end, $last_dataset);
+    array_unshift($dataset_end, $last_datasetID);
     array_push($end_array, $dataset_end);
     $dataset_start = array($start);
     $dataset_end = array($end);
@@ -89,8 +87,8 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles file creation, where 
   file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
   **/
-  if ($last_dataset != $datasetID) { 
-    array_unshift($dataset_files, $last_dataset);
+  if ($last_datasetID != $datasetID) { 
+    array_unshift($dataset_files, $last_datasetID);
     array_push($file_array, $dataset_files);
     $dataset_files = array($file);
   } else {
@@ -99,20 +97,20 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     }
   }
   
-  $last_dataset = $datasetID;
+  $last_datasetID = $datasetID;
   $last_file = $file;
 }
 //deletes first blank array values and adds the most recent start, end, or file to array
-array_unshift($dataset_cloneID, $last_dataset);
+array_unshift($dataset_cloneID, $last_datasetID);
 array_push($cloneID_array, $dataset_cloneID);
 array_splice($cloneID_array, 0, 1);
-array_unshift($dataset_start, $last_dataset);
+array_unshift($dataset_start, $last_datasetID);
 array_push($start_array, $dataset_start);
-array_unshift($dataset_end, $last_dataset);
+array_unshift($dataset_end, $last_datasetID);
 array_push($end_array, $dataset_end);
 array_splice($start_array, 0, 1); 
 array_splice($end_array, 0, 1); 
-array_unshift($dataset_files, $last_dataset);
+array_unshift($dataset_files, $last_datasetID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();        
@@ -126,53 +124,57 @@ $con->close();
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-function injectHTML(){
-
+function displayFile(){
+  //alert('shame');
   //step 1: get the DOM object of the iframe.
-  var iframe = document.getElementById('iframe_one');
+  var iframe = document.getElementById('iframe1');
+//alert('Cannot inject dynamic contents into iframe.');
 
 
-  //step 1.5: get the correct string to be printed!
-  <?php
-  //$datasetID = 1;
-  $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-  if(mysqli_connect_errno()) {
-      die("MySQL connection failed: ". mysqli_connect_error());
-  }
-  $file = 'src/AbstractTableRendering.java';
-  $sql = "SELECT cloneID, start, end FROM Clones where datasetID= '$datasetID' AND file='$file'";
-  $result = $con->query($sql);
-  $clonesArray=array();
-  while ($row = $result->fetch_assoc()) {
-    $cloneID = $row['cloneID'];
-    array_push($clonesArray, $cloneID);
-    $start= $row['start'];
-    $end = $row['end'];
-  }
-
+  <?php /**
   $code_array = array();
+  $line_counter = 1;
+  $array_counter = 0;
+  $highlighting = false;
   array_push($code_array, '<pre>');
   $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      $line = '<code>' . substr($line, 0, -1) . '</code><br>';
+      if ($line_counter == $start_array[$array_counter] || $highlighting) {   //highlight l
+        $line = '<code><mark>' . substr($line, 0, -1) . '</mark></code><br>';
+        
+        if ($highlighting == false) {
+          $highlighting = true;
+        }
+      } else {
+        $line = '<code>' . substr($line, 0, -1) . '</code><br>';        
+      }
       array_push($code_array, $line);
-    }
+      $line_counter += 1; 
+      if ($line_counter == $end_array[$array_counter]) {
+        $highlighting = false;
+        if ($array_counter <= count($start_array)) {
+          $array_counter += 1;
+        }
+      } 
+    } 
     fclose($handle);
-  }
-  array_push($code_array, '</pre>');
-  $code_string = implode("", $code_array);
+  } **/
+  //$code_array = array('color');
+  //array_push($code_array, '</pre>');
+  //$code_string = implode("", $code_array);
+  $code_string = 'tit';
   $code_string = json_encode($code_string, JSON_HEX_TAG);
-  $con->close();
+  
   ?>
 
-  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
+
+  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
   var code = <?php echo $code_string; ?>;
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
   /* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
   var iframe = $('iframe#target_iframe_id').get(0);
   */
-
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -180,14 +182,13 @@ function injectHTML(){
     else if (iframe.contentWindow)
       iframedoc = iframe.contentWindow.document;
 
-   if (iframedoc) {
+   if (iframedoc){
      iframedoc.open();
      iframedoc.writeln(html_string);
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
    }
-
 
 }
 function displayDatasets() {
@@ -236,10 +237,8 @@ function displayClonesAndFiles() {
   
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
-    //alert(file_array[index]);
     if (file_array[index][0] == value) {
       var selected_file_array = file_array[index].slice(1);
-      //alert(selected_file_array);
     }
   }
   var file1_selector = document.getElementById('file1Select');
@@ -325,10 +324,10 @@ function displayClonesAndFiles() {
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
             <select name= "file2Select" id="file2Select" multiple></select> 
-            <input type = "submit" name ="analyze_button" value = "Analyze Clones" id = "clone_dataset" />
+            <input type = "submit" name ="analyze_button" onClick="javascript:displayFile(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
-                <iframe id="iframe_one" width=60% height=70%></iframe>
+                <iframe id="iframe1" width=60% height=70%></iframe>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
             </div>
             <!--frames for adding results above-->
