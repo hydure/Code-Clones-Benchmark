@@ -92,8 +92,8 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   /** handles file creation, where 
   file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
   **/
-  if ($last_datasetID != $datasetID) { 
-    array_unshift($dataset_files, $last_datasetID);
+  if ($last_cloneID != $cloneID) { 
+    array_unshift($dataset_files, $last_cloneID);
     array_push($file_array, $dataset_files);
     $dataset_files = array($file);
   } else {
@@ -115,7 +115,7 @@ array_unshift($dataset_end, $last_cloneID);
 array_push($end_array, $dataset_end);
 array_splice($start_array, 0, 1); 
 array_splice($end_array, 0, 1); 
-array_unshift($dataset_files, $last_datasetID);
+array_unshift($dataset_files, $last_cloneID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();
@@ -254,16 +254,14 @@ function displayClones() {
 }
 
 function displayFiles() {
-  var selector = document.getElementById('datasetSelect');  
+  var selector = document.getElementById('cloneSelect');  
   var value = selector[selector.selectedIndex].value;
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
     if (file_array[index][0] == value) {
       var selected_file_array = file_array[index].slice(1);
-      alert(selected_file_array);
     }
   }
-  alert(file_array);
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
   if (document.getElementById("files_frame1_checkbox").checked) {
