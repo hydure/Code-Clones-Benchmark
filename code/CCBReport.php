@@ -48,10 +48,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   $end = $row['end'];
   //handles detector -> dataset selection
   if ($_SESSION['userSession'] == $userID) { 
-    if ($detector == 'Deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
+    if ($detector == 'deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
       array_push($dataset_array_Deckard, $datasetID);
     }
-    if ($detector == 'Nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
+    if ($detector == 'nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
       array_push($dataset_array_Nicad, $datasetID);
     }
     if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
@@ -119,7 +119,39 @@ array_unshift($dataset_files, $last_cloneID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();
-print_r($end_array);        
+
+$handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY
+$filepath1 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java';
+array_push($handle_array, $filepath1);
+$filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
+array_push($handle_array, $filepath2);
+
+/** source file stored as 
+( ($filename1, line1, line2, ...), ($filename2, line1, line2, ...), ...)
+**/
+$c = 0;
+$sourcefile_array = array();
+foreach ($handle_array as $handlepath) {
+  $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
+  $handle = fopen($handlepath, "r");
+  if ($handle) {
+    while (($line = fgets($handle)) != false) {
+      $line = substr($line, 0, -1);
+      array_push($line_array, $line);
+    }
+  }
+  fclose($handle);
+  if ($c == 0) {  //THIS IS TEMPORARY, FIX WHEN WE GET CORRECT HANDLE_ARRAY
+    array_unshift($line_array, "src/AbstractAsyncTableRendering.java");
+  }
+  if ($c == 1) {
+    array_unshift($line_array, "src/AbstractTableRendering.java");
+  }
+  array_push($sourcefile_array, $line_array);
+  $c += 1;
+
+}
+//print_r($sourcefile_array);     
 ?>
 
 
@@ -130,11 +162,10 @@ print_r($end_array);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-function displayFile(){
-  //alert('shame');
+var GlobalVar = {};
+function analyzeClones(){
   //step 1: get the DOM object of the iframe.
   var iframe = document.getElementById('iframe1');
-//alert('Cannot inject dynamic contents into iframe.');
 
 
   <?php /**
@@ -169,12 +200,18 @@ function displayFile(){
   //$code_array = array('color');
   //array_push($code_array, '</pre>');
   //$code_string = implode("", $code_array);
+
+
   $code_string = 'tit';
   $code_string = json_encode($code_string, JSON_HEX_TAG);  
   ?>
-  var display_selector = document.getElementById('cloneSelect');  
-  var value = display_selector[display_selector.selectedIndex].value;
-  //alert(value);
+  
+  var file1_selector = document.getElementById('file1Select');
+  var file2_selector = document.getElementById('file2Select');
+  var file1 = file1_selector[file1_selector.selectedIndex].value;
+  var file2 = file2_selector[file2_selector.selectedIndex].value;
+  value = GlobalVar.value;
+  alert("global: " + GlobalVar.value);
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
@@ -186,12 +223,12 @@ function displayFile(){
   for (var index in end_array) { //find range for selected files
     if (end_array[index][0] == value) {
       var selected_end_array = end_array[index].slice(1);
-      alert(selected_end_array);
+      //alert(selected_end_array);
     }
-  }
-  var end_array = <?php  echo json_encode($end_array); ?>;
+  } 
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
   var code = <?php echo $code_string; ?>;
+  //code = "orca";
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
@@ -237,6 +274,7 @@ function displayDatasets() {
 function displayClones() { 
   var selector = document.getElementById('datasetSelect');  
   var value = selector[selector.selectedIndex].value;
+  //alert(GlobalVar.value);
   var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
   for (var index in cloneID_array) { //find range for selected cloneID
     if (cloneID_array[index][0] == value) {
@@ -256,6 +294,8 @@ function displayClones() {
 function displayFiles() {
   var selector = document.getElementById('cloneSelect');  
   var value = selector[selector.selectedIndex].value;
+  GlobalVar.value = value;
+  //alert(GlobalVar.value);
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
     if (file_array[index][0] == value) {
@@ -359,7 +399,7 @@ function displayFiles() {
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
             <select name= "file2Select" id="file2Select" multiple></select> 
-            <input type = "submit" name ="analyze_button" onClick="javascript:AnalyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
+            <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
                 <iframe id="iframe1" width=60% height=70%></iframe>
