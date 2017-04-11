@@ -136,7 +136,7 @@ foreach ($handle_array as $handlepath) {
   $handle = fopen($handlepath, "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      $line = substr($line, 0, -1);
+      //$line = substr($line, 0, -1);
       array_push($line_array, $line);
     }
   }
@@ -152,10 +152,12 @@ foreach ($handle_array as $handlepath) {
 
 }
 //print_r(count($sourcefile_array));  
-print_r($sourcefile_array[0]);  
+//print_r($sourcefile_array[0]);  
 ?>
 
-
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -163,47 +165,11 @@ print_r($sourcefile_array[0]);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
+
 var GlobalVar = {};
 function analyzeClones(){
   //step 1: get the DOM object of the iframe.
-  var iframe = document.getElementById('iframe1');
-
-
-  <?php /**
-  $code_array = array();
-  $line_counter = 1;
-  $array_counter = 0;
-  $highlighting = false;
-  array_push($code_array, '<pre>');
-  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
-  if ($handle) {
-    while (($line = fgets($handle)) != false) {
-      if ($line_counter == $start_array[$array_counter] || $highlighting) {   //highlight l
-        $line = '<code><mark>' . substr($line, 0, -1) . '</mark></code><br>';
-        
-        if ($highlighting == false) {
-          $highlighting = true;
-        }
-      } else {
-        $line = '<code>' . substr($line, 0, -1) . '</code><br>';        
-      }
-      array_push($code_array, $line);
-      $line_counter += 1; 
-      if ($line_counter == $end_array[$array_counter]) {
-        $highlighting = false;
-        if ($array_counter <= count($start_array)) {
-          $array_counter += 1;
-        }
-      } 
-    } 
-    fclose($handle);
-  } **/
-  //array_push($code_array, '</pre>');
-  //$code_string = implode("", $code_array);
-  $code_string = 'tit';
-  $code_string = json_encode($code_string, JSON_HEX_TAG);  
-  ?>
-  
+  var iframe = document.getElementById('iframe1'); 
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
@@ -224,7 +190,7 @@ function analyzeClones(){
       //alert(selected_end_array);
     }
   }
-  alert("range:" + selected_start_array[0] + " to " + selected_end_array[0]);
+  //alert("range:" + selected_start_array[0] + " to " + selected_end_array[0]);
   var dummy1_array = [];
   var dummy2_array = [];
   var code1_array = [];
@@ -250,37 +216,52 @@ function analyzeClones(){
   var line_counter = 0;
   var array_iterator = 0;
   var highlighted = false;
-  code1_array.push('<pre>');
+  code1_array.push("<pre><code class='java'>");
   //alert("START");
   for (var index in dummy1_array) {
-    var line = dummy1_array[index];
+    var line = dummy1_array[index]; /**
     if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
-      line = '<code><mark>' + line + '</mark></code><br>';
+      //line = '<code><mark>' + line + '</mark></code><br>';
+      //line = line + '<br>';
       if (highlighted == false) {
         highlighted = true;
       }
-      alert("FOUND");
+      //alert("FOUND");
     } else {
-      line = '<code>' + line + '</code><br>';
+      //line = '<code>' + line + '</code><br>';
+      //line = line + '<br>';
+    } **/
+    if (line_counter > 0) {
+      line = line.split('"').join("&quot"); //escapes HTML markup
+      line = line.split("&").join("&amp");
+      line = line.split("<").join("&lt");
+      line = line.split(">").join("&gt");
     }
     code1_array.push(line);
-    line_counter += 1;
+    line_counter += 1; 
     if (line_counter == selected_end_array[array_iterator]) {
-      highlighted = false;
-      array_iterator += 2;
+      //highlighted = false;
+      //array_iterator += 2;
     }
   }
-  alert(selected_start_array[array_iterator + 1]);
-  code1_array.push('</pre>');
+  //alert(selected_start_array[array_iterator + 1]);
+  code1_array.push('</code></pre>');
   code = code1_array.join("");
   //alert(code);
   
-
-
+  //document.getElementById("demo").innerHTML = code;
+  //code = "lol";
+  var script1 = "<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css'>";
+  var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
+  var scriptA = "</";
+  var scriptB = "script>";
+  var script3 = scriptA + scriptB;
+  var script4 = "<script>hljs.initHighlightingOnLoad();";
+  var script = script1 + script2 + script3 + script4 + script3;
+  //document.getElementById("demo").innerHTML = "HERE" + cttt;
   var css = '<style>pre{counter-reset: line;}code{counter-increment: line;} code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
-  //code = "orca";
-  //css = ''
-  var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
+  var css = '';
+  var html_string = script + css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -427,7 +408,8 @@ function displayFiles() {
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-11">       
+        <div class="col-xs-12 col-sm-11">
+        <p id="demo"></p>       
           <form>
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
@@ -453,7 +435,7 @@ function displayFiles() {
             <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
-                <iframe id="iframe1" width=80% height=70%></iframe>
+                <iframe id="iframe1" width=80% height=70%></iframe> <br><br><br>
                <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
             </div>
             <!--frames for adding results above-->
