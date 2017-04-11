@@ -136,7 +136,7 @@ foreach ($handle_array as $handlepath) {
   $handle = fopen($handlepath, "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      //$line = substr($line, 0, -1);
+      $line = substr($line, 0, -1);
       array_push($line_array, $line);
     }
   }
@@ -151,7 +151,8 @@ foreach ($handle_array as $handlepath) {
   $c += 1;
 
 }
-//print_r(count($sourcefile_array));    
+//print_r(count($sourcefile_array));  
+print_r($sourcefile_array[0]);  
 ?>
 
 
@@ -213,7 +214,7 @@ function analyzeClones(){
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
-      alert(selected_start_array);
+      //alert(selected_start_array);
     }
   }
   var end_array = <?php  echo json_encode($end_array); ?>;
@@ -223,27 +224,62 @@ function analyzeClones(){
       //alert(selected_end_array);
     }
   }
-  var frame1_array = [];
-  var frame2_array = [];
+  alert("range:" + selected_start_array[0] + " to " + selected_end_array[0]);
+  var dummy1_array = [];
+  var dummy2_array = [];
+  var code1_array = [];
+  var code2_array = [];
   //alert(" file1: " + file1_value);
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
 
   for (var index in sourcefile_array) {
     if (sourcefile_array[index][0] == file1_value) {
-      frame1_array = sourcefile_array[index].slice(1);
-      alert("FOUJND");
+      dummy1_array = sourcefile_array[index].slice(1);
+      //alert("FOUJND");
 
     }
     if (sourcefile_array[index][0] == file2_value) {
-      frame2_array = sourcefile_array[index].slice(1);
+      dummy2_array = sourcefile_array[index].slice(1);
     }
   }
+  //alert(dummy1_array);
+  start_array.push(0);
+  start_array.push(0);
+  end_array.push(0);
+  end_array.push(0);
+  var line_counter = 0;
+  var array_iterator = 0;
+  var highlighted = false;
+  code1_array.push('<pre>');
+  //alert("START");
+  for (var index in dummy1_array) {
+    var line = dummy1_array[index];
+    if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
+      line = '<code><mark>' + line + '</mark></code><br>';
+      if (highlighted == false) {
+        highlighted = true;
+      }
+      alert("FOUND");
+    } else {
+      line = '<code>' + line + '</code><br>';
+    }
+    code1_array.push(line);
+    line_counter += 1;
+    if (line_counter == selected_end_array[array_iterator]) {
+      highlighted = false;
+      array_iterator += 2;
+    }
+  }
+  alert(selected_start_array[array_iterator + 1]);
+  code1_array.push('</pre>');
+  code = code1_array.join("");
+  //alert(code);
   
-  var code = frame2_array.join('');
 
-  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
-  //var code = <?php echo $code_string; ?>;
+
+  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;} code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   //code = "orca";
+  //css = ''
   var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
