@@ -219,18 +219,19 @@ function analyzeClones(){
   code1_array.push("<pre><code class='java'>");
   //alert("START");
   for (var index in dummy1_array) {
-    var line = dummy1_array[index]; /**
+    var line = dummy1_array[index]; 
     if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
       //line = '<code><mark>' + line + '</mark></code><br>';
       //line = line + '<br>';
+      //line = "<span>" + line + "</span>";
       if (highlighted == false) {
-        highlighted = true;
+        //highlighted = true;
       }
       //alert("FOUND");
     } else {
       //line = '<code>' + line + '</code><br>';
       //line = line + '<br>';
-    } **/
+    } 
     if (line_counter > 0) {
       line = line.split('"').join("&quot"); //escapes HTML markup
       line = line.split("&").join("&amp");
@@ -240,8 +241,8 @@ function analyzeClones(){
     code1_array.push(line);
     line_counter += 1; 
     if (line_counter == selected_end_array[array_iterator]) {
-      //highlighted = false;
-      //array_iterator += 2;
+      highlighted = false;
+      array_iterator += 2;
     }
   }
   //alert(selected_start_array[array_iterator + 1]);
@@ -259,7 +260,7 @@ function analyzeClones(){
   var script4 = "<script>hljs.initHighlightingOnLoad();";
   var script = script1 + script2 + script3 + script4 + script3;
   //document.getElementById("demo").innerHTML = "HERE" + cttt;
-  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;} code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
+  var css = '<style>pre{counter-reset: line;} span{counter-increment: line;} span:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   var css = '';
   var html_string = script + css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
