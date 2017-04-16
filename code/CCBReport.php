@@ -154,10 +154,13 @@ foreach ($handle_array as $handlepath) {
 //print_r(count($sourcefile_array));  
 //print_r($sourcefile_array[0]);  
 ?>
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css">
+<link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+<script type='text/javascript' src="highlightjs-line-numbers.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+hljs.initLineNumbersOnLoad();
+</script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -252,12 +255,12 @@ function analyzeClones(){
   
   //document.getElementById("demo").innerHTML = code;
   //code = "lol";
-  var script1 = "<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css'>";
+  var script1 = "<link rel='stylesheet' href='hlns.css'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var scriptA = "</";
   var scriptB = "script>";
   var script3 = scriptA + scriptB;
-  var script4 = "<script>hljs.initHighlightingOnLoad();";
+  var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + script3 + script4 + script3;
   //document.getElementById("demo").innerHTML = "HERE" + cttt;
   var css = '<style>pre{counter-reset: line;} span{counter-increment: line;} span:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
