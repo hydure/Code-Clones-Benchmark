@@ -222,7 +222,13 @@ function analyzeClones(){
   code1_array.push("<pre><code class='java'>");
   //alert("START");
   for (var index in dummy1_array) {
-    var line = dummy1_array[index]; 
+    var line = dummy1_array[index];
+    if (line_counter > 0) {
+      //line = line.split('"').join("&quot"); //escapes HTML markup
+      line = line.split("&").join("&amp");
+      line = line.split("<").join("&lt");
+      line = line.split(">").join("&gt");
+    } 
     if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
       line = '<mark>' + line + '</mark>';
       //line = line + '<br>';
@@ -236,12 +242,7 @@ function analyzeClones(){
       //line = '<code>' + line + '</code><br>';
       //line = line + '<br>';
     } 
-    if (line_counter > 0) {
-      //line = line.split('"').join("&quot"); //escapes HTML markup
-      line = line.split("&").join("&amp");
-      line = line.split("<").join("&lt");
-      line = line.split(">").join("&gt");
-    }
+
     code1_array.push(line);
     line_counter += 1; 
     if (line_counter == selected_end_array[array_iterator]) {
