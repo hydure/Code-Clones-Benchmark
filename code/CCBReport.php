@@ -224,11 +224,12 @@ function analyzeClones(){
   for (var index in dummy1_array) {
     var line = dummy1_array[index]; 
     if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
-      //line = '<code><mark>' + line + '</mark></code><br>';
+      line = '<mark>' + line + '</mark>';
       //line = line + '<br>';
       //line = "<span>" + line + "</span>";
+      alert(line_counter + " found " + line);
       if (highlighted == false) {
-        //highlighted = true;
+        highlighted = true;
       }
       //alert("FOUND");
     } else {
@@ -236,7 +237,7 @@ function analyzeClones(){
       //line = line + '<br>';
     } 
     if (line_counter > 0) {
-      line = line.split('"').join("&quot"); //escapes HTML markup
+      //line = line.split('"').join("&quot"); //escapes HTML markup
       line = line.split("&").join("&amp");
       line = line.split("<").join("&lt");
       line = line.split(">").join("&gt");
@@ -255,15 +256,16 @@ function analyzeClones(){
   
   //document.getElementById("demo").innerHTML = code;
   //code = "lol";
-  var script1 = "<link rel='stylesheet' href='hlns.css'>";
+  var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
+  var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
   var scriptA = "</";
   var scriptB = "script>";
-  var script3 = scriptA + scriptB;
+  var scriptC = scriptA + scriptB;
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
-  var script = script1 + script2 + script3 + script4 + script3;
+  var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   //document.getElementById("demo").innerHTML = "HERE" + cttt;
-  var css = '<style>pre{counter-reset: line;} span{counter-increment: line;} span:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
+  //var css = '<style>pre{counter-reset: line;} span{counter-increment: line;} span:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   var css = '';
   var html_string = script + css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
