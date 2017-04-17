@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../user/class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
 {
- $user_home->redirect('index.php');
+ $user_home->redirect('../index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userID=:uid");
@@ -38,7 +38,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="../styles/CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -57,7 +57,7 @@ $(document).ready(function() {
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
            <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+              <input type="button" onclick="location.href='../user/logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
            <div style="position: absolute; top: 15; right: 170;">
@@ -85,7 +85,7 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Tools</h1>
-          <form action="run_detectors.php" method="post">
+          <form action="../detectors/run_detectors.php" method="post">
             <p align="center-block">Choose a Dataset:</p>
 
             <?php
