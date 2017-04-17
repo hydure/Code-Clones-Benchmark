@@ -1,5 +1,5 @@
 <?php
-require_once 'Dbconfig.php';
+require_once '../dataset_functions/Dbconfig.php';
 
 class USER
 { 
@@ -64,7 +64,7 @@ class USER
      {
       $_SESSION['userSession'] = $userRow['userId'];
       $_SESSION['userName'] = $userRow['username'];
-      header("Location: index.php?passsuccess");
+      header("Location: ../index.php?passsuccess");
       return true;
      }
      else
@@ -79,13 +79,13 @@ class USER
     }
     else
     {
-      header("Location: index.php?passerror");
+      header("Location: ../index.php?passerror");
       exit;
     } 
    }
    else
    {
-    header("Location: index.php?error");
+    header("Location: ../index.php?error");
     exit;
    }  
   }

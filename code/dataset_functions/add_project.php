@@ -41,7 +41,7 @@ $user = exec("echo $_POST[url] | sed 's:.*com/::' | sed 's:/.*::'");
 
 # get head commit number
 if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $_POST[url] | head -c 12");
+	$commit = exec("/home/pi/Code-Clones-Benchmark/code/dataset_functions/get_head_commit.sh $_POST[url] | head -c 12");
 } else {
 	$commit = exec("echo $_POST[commit] | head -c 12");
 }
@@ -82,7 +82,7 @@ $sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId, aut
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
 }
-    echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+    echo '<link href="../styles/CCB1.1.css" type = "text/css" rel="stylesheet">
           <div id="snackbar">Successfully added a project!</div>';
 }
 mysqli_close($con);
@@ -91,7 +91,7 @@ mysqli_close($con);
           '<div id="snackbar">Must enter URL and commit number.</div>',
           'showSnackbar()', '</script>';
 }
-echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
+echo '<p>Click <a href="../ccb/CCBProjects.php">here</a> to go back</p>';
 ?>
 </body>
 </html>

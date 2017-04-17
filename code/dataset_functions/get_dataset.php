@@ -17,7 +17,7 @@ if(isset($_POST['select_dataset_action']))
 {
 	$id = $_POST['datasetSelect'];
 	echo "dataset is $id";
-	header("refresh:2;CCBReport.php?data=$id");
+	header("refresh:2;../ccb/CCBReport.php?data=$id");
 }
  **/
 ?>
@@ -27,7 +27,7 @@ if(isset($_POST['select_dataset_action']))
 <head></head>
 <body>
 
-<form action = "CCBReport.php" id='deleteDataset' method='post' enctype='multipart/form-data'>
+<form action = "../ccb/CCBReport.php" id='deleteDataset' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
             #$con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');

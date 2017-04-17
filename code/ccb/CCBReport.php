@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../user/class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
 {
- $user_home->redirect('index.php');
+ $user_home->redirect('../index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
@@ -366,7 +366,7 @@ function displayFiles() {
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
            <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+              <input type="button" onclick="location.href='../user/logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
            <div style="position: absolute; top: 15; right: 170;">
