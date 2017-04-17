@@ -91,7 +91,7 @@ mysqli_close($con);
           '<div id="snackbar">Must enter URL and commit number.</div>',
           'showSnackbar()', '</script>';
 }
-echo '<p>Click <a href="CCBProjects.php">here</a> to go back</p>';
+echo '<p>Click <a href="ccb/CCBProjects.php">here</a> to go back</p>';
 ?>
 </body>
 </html>
