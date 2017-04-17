@@ -38,7 +38,7 @@ mysqli_close($con);
 echo "No projects were selected.";
 }
 
-echo '<p>Click <a href="ccb/CCBDatasets.php">here</a> to go back</p>';
+echo '<p>Click <a href="../ccb/CCBDatasets.php">here</a> to go back</p>';
 ?>
 </body>
 </html>
