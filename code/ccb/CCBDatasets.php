@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../user/class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
 {
- $user_home->redirect('index.php');
+ $user_home->redirect('../index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
@@ -73,7 +73,7 @@ tr:nth-child(even) {
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
            <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+              <input type="button" onclick="location.href='../user/logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
            <div style="position: absolute; top: 15; right: 170;">
@@ -108,7 +108,7 @@ tr:nth-child(even) {
           </form>
           <br />
           -->
-          <form action="add_dataset.php", method="post">
+          <form action="../dataset_functions/add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
 
             <?php
@@ -263,7 +263,7 @@ tr:nth-child(even) {
           </form>
           <br />
 
-          <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
+          <form id='deleteDataset' action='../dataset_functions/delete_dataset.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
