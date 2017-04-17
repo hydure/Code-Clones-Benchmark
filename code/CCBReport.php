@@ -136,7 +136,6 @@ foreach ($handle_array as $handlepath) {
   $handle = fopen($handlepath, "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
-      //$line = substr($line, 0, -1);
       array_push($line_array, $line);
     }
   }
@@ -151,8 +150,7 @@ foreach ($handle_array as $handlepath) {
   $c += 1;
 
 }
-//print_r(count($sourcefile_array));  
-//print_r($sourcefile_array[0]);  
+
 ?>
 <link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
@@ -178,40 +176,34 @@ function analyzeClones(){
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
   var file2_value = file2_selector[file2_selector.selectedIndex].value;
   value = GlobalVar.value;
-  //alert("global: " + GlobalVar.value);
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
-      //alert(selected_start_array);
     }
-  } //test
+  }
   var end_array = <?php  echo json_encode($end_array); ?>;
   for (var index in end_array) { //find range for selected files
     if (end_array[index][0] == value) {
       var selected_end_array = end_array[index].slice(1);
-      //alert(selected_end_array);
+
     }
   }
-  //alert("range:" + selected_start_array[0] + " to " + selected_end_array[0]);
   var dummy1_array = [];
   var dummy2_array = [];
   var code1_array = [];
   var code2_array = [];
-  //alert(" file1: " + file1_value);
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
 
   for (var index in sourcefile_array) {
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
-      //alert("FOUJND");
 
     }
     if (sourcefile_array[index][0] == file2_value) {
       dummy2_array = sourcefile_array[index].slice(1);
     }
   }
-  //alert(dummy1_array); stuff
   start_array.push(0);
   start_array.push(0);
   end_array.push(0);
@@ -220,7 +212,6 @@ function analyzeClones(){
   var array_iterator = 0;
   var highlighted = false;
   code1_array.push("<pre><code class='java'>");
-  //alert("START");
   for (var index in dummy1_array) {
     var line = dummy1_array[index];
     if (line_counter > 0) {
@@ -231,18 +222,11 @@ function analyzeClones(){
     } 
     if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
       line = '<mark>' + line + '</mark>';
-      //line = line + '<br>';
-      //line = "<span>" + line + "</span>";
       alert(line_counter + " found " + line);
       if (highlighted == false) {
         highlighted = true;
       }
-      //alert("FOUND");
-    } else {
-      //line = '<code>' + line + '</code><br>';
-      //line = line + '<br>';
-    } 
-
+    }
     code1_array.push(line);
     line_counter += 1; 
     if (line_counter == selected_end_array[array_iterator]) {
@@ -250,13 +234,8 @@ function analyzeClones(){
       array_iterator += 2;
     }
   }
-  //alert(selected_start_array[array_iterator + 1]);
   code1_array.push('</code></pre>');
   code = code1_array.join("");
-  //alert(code);
-  
-  //document.getElementById("demo").innerHTML = code;
-  //code = "lol";
   var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
@@ -265,8 +244,6 @@ function analyzeClones(){
   var scriptC = scriptA + scriptB;
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
-  //document.getElementById("demo").innerHTML = "HERE" + cttt;
-  //var css = '<style>pre{counter-reset: line;} span{counter-increment: line;} span:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';
   var css = '';
   var html_string = script + css + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
@@ -313,7 +290,6 @@ function displayDatasets() {
 function displayClones() { 
   var selector = document.getElementById('datasetSelect');  
   var value = selector[selector.selectedIndex].value;
-  //alert(GlobalVar.value);
   var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
   for (var index in cloneID_array) { //find range for selected cloneID
     if (cloneID_array[index][0] == value) {
@@ -334,7 +310,6 @@ function displayFiles() {
   var selector = document.getElementById('cloneSelect');  
   var value = selector[selector.selectedIndex].value;
   GlobalVar.value = value;
-  //alert(GlobalVar.value);
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
     if (file_array[index][0] == value) {
@@ -424,11 +399,12 @@ function displayFiles() {
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
           </form>
           <form>
+            Datasets:
             <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
             <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
           </form>
           <form>
-            Clone:
+            Clones:
             <select name= "cloneSelect" id="cloneSelect" multiple></select> 
             <input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
             <input type="checkbox" id="files_frame2_checkbox" name="files_checkbox[]" value="files_frame2">Show Files in Frame Two</label><br/>
@@ -438,12 +414,13 @@ function displayFiles() {
             Frame One: 
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
-            <select name= "file2Select" id="file2Select" multiple></select> 
+            <select name= "file2Select" id="file2Select" multiple></select>
+            <input type="checkbox" id="only_clones_checkbox" name="only_clones" value="only_clones">Only Show Clones</label><br/> 
             <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
                 <iframe id="iframe1" width=80% height=70%></iframe> <br><br><br>
-               <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
+                <iframe id="iframe2" width=80% height=70%></iframe>
             </div>
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
