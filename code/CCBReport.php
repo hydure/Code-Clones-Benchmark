@@ -185,7 +185,7 @@ function analyzeClones(){
       var selected_start_array = start_array[index].slice(1);
       //alert(selected_start_array);
     }
-  }
+  } //test
   var end_array = <?php  echo json_encode($end_array); ?>;
   for (var index in end_array) { //find range for selected files
     if (end_array[index][0] == value) {
