@@ -211,7 +211,7 @@ function analyzeClones(){
       dummy2_array = sourcefile_array[index].slice(1);
     }
   }
-  //alert(dummy1_array);
+  //alert(dummy1_array); stuff
   start_array.push(0);
   start_array.push(0);
   end_array.push(0);
