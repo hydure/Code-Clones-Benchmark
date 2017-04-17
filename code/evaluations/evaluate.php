@@ -38,7 +38,7 @@ if ($_POST['project_action'] == 'Delete Project') {
 		echo "Error Deleting Record: " . $con->error;
 	}
 	$con->close();
-	header('Location:CCBProjects.php');
+	header('Location:../ccb/CCBProjects.php');
 }
 
 if ($_POST['project_action'] == 'Switch Ownership') {
@@ -78,7 +78,7 @@ if ($_POST['project_action'] == 'Switch Ownership') {
 }
 
 
-require_once 'class.user.php';
+require_once '../user/class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
@@ -140,7 +140,7 @@ div.round {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="../styles/CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -174,11 +174,11 @@ div.round {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome.php">Home</a></li>
-              <li><a href="CCBProjects.php">Projects</a></li>
-              <li><a href="CCBDatasets.php">Datasets</a></li>
-              <li><a href="CCBTools.php">Tools</a></li>
-              <li><a href="CCBContacts.php">Contact</a></li>              
+              <li><a href="../ccb/CCBHome.php">Home</a></li>
+              <li><a href="../ccb/CCBProjects.php">Projects</a></li>
+              <li><a href="../ccb/CCBDatasets.php">Datasets</a></li>
+              <li><a href="../ccb/CCBTools.php">Tools</a></li>
+              <li><a href="../ccb/CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
 
