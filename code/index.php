@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once '/user/class.user.php';
+require_once 'user/class.user.php';
 $user_login = new USER();
 
 if($user_login->is_logged_in()!="")
 {
- $user_login->redirect('/ccb/CCBHome.php');
+ $user_login->redirect('ccb/CCBHome.php');
 }
 
 if(isset($_POST['btn-login']))
@@ -15,7 +15,7 @@ if(isset($_POST['btn-login']))
  echo "$uname $upass entered";
  if($user_login->login($uname,$upass))
  {
-  $user_login->redirect('/ccb/CCBHome.php');
+  $user_login->redirect('ccb/CCBHome.php');
  }
 }
 ?>
@@ -59,8 +59,8 @@ if(isset($_POST['btn-login']))
         <input type="password" class="input-block-level" placeholder="Password" name="txtupass" required />
       <hr />
         <button class="btn btn-large btn-primary" type="submit" name="btn-login">Sign in</button>
-        <a href="/user/signup.php" style="float:right;" class="btn btn-large">Register</a><hr />
-        <a href="/user/fpass.php">Lost your Password ? </a>
+        <a href="user/signup.php" style="float:right;" class="btn btn-large">Register</a><hr />
+        <a href="user/fpass.php">Lost your Password ? </a>
       </form>
 <a href="examples/add_project.html">add_project</a>
 <a href="examples/add_dataset.html">add_dataset</a>
