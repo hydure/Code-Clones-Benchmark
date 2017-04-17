@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <title></title>
-    <link href="style.css" rel="stylesheet" />
+    <link href="../styles/style.css" rel="stylesheet" />
     <script src="http://code.jquery.com/jquery-2.1.3.min.js" data-semver="2.1.3" data-require="jquery"></script>
     <script src="script.js"></script>
     <script>
