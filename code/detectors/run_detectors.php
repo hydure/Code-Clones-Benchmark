@@ -70,7 +70,7 @@ foreach($_POST['detector'] as $detector) {
         }
 
         # run nicad
-        $nicad_path="/home/clone/nicad.sh";
+        $nicad_path="/home/clone/detectors/nicad.sh";
         #$file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
         #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$file 2>/dev/null &";
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
@@ -173,7 +173,7 @@ foreach($_POST['detector'] as $detector) {
         }
 
         # run deckard
-        $deckard_path="/home/clone/deckard.sh";
+        $deckard_path="/home/clone/detectors/deckard.sh";
         #$file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
         #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$file 2>/dev/null &";
         $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$deckard_path $args' | grep -v 'known hosts'";
@@ -259,7 +259,7 @@ foreach($_POST['detector'] as $detector) {
     echo "No code clone detectors were selected.<br>";
 }
 
-echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
+echo '<p>Click <a href="../ccb/CCBTools.php">here</a> to go back</p>';
 ?>
 
 </body>
