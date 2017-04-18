@@ -175,6 +175,8 @@ function analyzeClones(){
   var file2_selector = document.getElementById('file2Select');
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
   var file2_value = file2_selector[file2_selector.selectedIndex].value;
+  document.getElementById('file1_name').innerHTML = file1_value;
+  document.getElementById('file2_name').innerHTML = file2_value;
   value = GlobalVar.value;
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
@@ -189,10 +191,8 @@ function analyzeClones(){
 
     }
   }
-  var dummy1_array = [];
+  var dummy1_array = []; //these will contain the unmodified source code
   var dummy2_array = [];
-  var code1_array = [];
-  var code2_array = [];
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
 
   for (var index in sourcefile_array) {
@@ -208,34 +208,8 @@ function analyzeClones(){
   start_array.push(0);
   end_array.push(0);
   end_array.push(0);
-  var line_counter = 0;
-  var array_iterator = 0;
-  var highlighted = false;
-  code1_array.push("<pre><code class='java'>");
-  for (var index in dummy1_array) {
-    var line = dummy1_array[index];
-    if (line_counter > 0) {
-      //line = line.split('"').join("&quot"); //escapes HTML markup
-      line = line.split("&").join("&amp");
-      line = line.split("<").join("&lt");
-      line = line.split(">").join("&gt");
-    } 
-    if ((line_counter == selected_start_array[array_iterator] && file1_value == selected_start_array[array_iterator + 1]) || highlighted) {
-      line = '<mark>' + line + '</mark>';
-      alert(line_counter + " found " + line);
-      if (highlighted == false) {
-        highlighted = true;
-      }
-    }
-    code1_array.push(line);
-    line_counter += 1; 
-    if (line_counter == selected_end_array[array_iterator]) {
-      highlighted = false;
-      array_iterator += 2;
-    }
-  }
-  code1_array.push('</code></pre>');
-  code = code1_array.join("");
+
+  code = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
   var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
@@ -261,7 +235,43 @@ function analyzeClones(){
     alert('Cannot inject dynamic contents into iframe.');
    }
 
+   //document.getElementById("scroll").scrollIntoView();
+
 }
+
+function makeIframeContent(dummy_array, selected_start_array, selected_end_array, file_value) {
+  var line_counter = 0;
+  var array_iterator = 0;
+  var scroll_counter = 0;
+  var highlighted = false;
+  var code_array = [];
+  code_array.push("<pre><code class='java'>");
+  for (var index in dummy_array) {
+    var line = dummy_array[index];
+    if (line_counter > 0) {
+      //line = line.split('"').join("&quot"); //escapes HTML markup
+      line = line.split("&").join("&amp");
+      line = line.split("<").join("&lt");
+      line = line.split(">").join("&gt");
+    } 
+    if ((line_counter == selected_start_array[array_iterator] && file_value == selected_start_array[array_iterator + 1]) || highlighted) {
+      line = "<mark>" + line + '</mark>';
+      //alert(line_counter + " found " + line);
+      if (highlighted == false) {
+        highlighted = true;
+      }
+    }
+    code_array.push(line);
+    line_counter += 1; 
+    if (line_counter == selected_end_array[array_iterator]) {
+      highlighted = false;
+      array_iterator += 2;
+    }
+  }
+  code_array.push('</code></pre>');
+  code = code_array.join("");
+  return code;
+}  
 function displayDatasets() {
   
   var dataset_array;
@@ -419,8 +429,10 @@ function displayFiles() {
             <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
             <div align="center">
-                <iframe id="iframe1" width=80% height=70%></iframe> <br><br><br>
-                <iframe id="iframe2" width=80% height=70%></iframe>
+              <div id="file1_name"></div>
+              <iframe id="iframe1" width=80% height=70%></iframe> <br><br><br>
+              <div id="file2_name"></div>
+              <iframe id="iframe2" width=80% height=70%></iframe>
             </div>
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
