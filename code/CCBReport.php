@@ -358,6 +358,16 @@ function displayFiles() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
+  <style>
+    .box {
+      float:left;
+      margin-right:20px;
+    }
+
+    .clear {
+      clear:both;
+    }
+  </style>
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -429,15 +439,20 @@ function displayFiles() {
             <input type="checkbox" id="only_clones_checkbox" name="only_clones" value="only_clones">Only Show Clones</label><br/> 
             <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
-            <div align="center">
-              <div id="file1_name"></div>
-              <iframe id="iframe1" width=80% height=70%></iframe> <br><br><br>
-              <div id="file2_name"></div>
-              <iframe id="iframe2" width=80% height=70%></iframe>
-            </div>
+
+              
+          
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
+
 </div><!--/.page-container-->
+              <div class="box" id="file1_name"></div>
+                <iframe id="iframe1" frameborder="1" width=700 height=512 align="left"></iframe>
+              
+              <div id="file2_name"></div>
+                <iframe id="iframe2" frameborder="1" width=700 height=512 align="right"></iframe>
+<div>
+
 </html>
