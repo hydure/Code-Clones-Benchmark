@@ -170,7 +170,8 @@ hljs.initLineNumbersOnLoad();
 var GlobalVar = {};
 function analyzeClones(){
   //step 1: get the DOM object of the iframe.
-  var iframe = document.getElementById('iframe1'); 
+  var iframe1 = document.getElementById('iframe1');
+  var iframe2 = document.getElementById('iframe2');  
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select');
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
@@ -204,12 +205,16 @@ function analyzeClones(){
       dummy2_array = sourcefile_array[index].slice(1);
     }
   }
-  start_array.push(0);
-  start_array.push(0);
-  end_array.push(0);
-  end_array.push(0);
 
-  code = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
+  code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
+  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
+  injectIframeContent(iframe1, code1);
+  injectIframeContent(iframe2, code2);
+
+   //document.getElementById("scroll").scrollIntoView();
+
+}
+function injectIframeContent(iframe, code) {
   var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
@@ -218,8 +223,7 @@ function analyzeClones(){
   var scriptC = scriptA + scriptB;
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
-  var css = '';
-  var html_string = script + css + '<html><head></head><body><p>' + code + '</p></body></html>';
+  var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -233,10 +237,7 @@ function analyzeClones(){
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
-   }
-
-   //document.getElementById("scroll").scrollIntoView();
-
+   } 
 }
 
 function makeIframeContent(dummy_array, selected_start_array, selected_end_array, file_value) {
