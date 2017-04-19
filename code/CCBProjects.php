@@ -122,7 +122,7 @@ tr:nth-child(even) {
 	          Private:<br>
 	          <input type="checkbox" name="private" value="1">
 	          <br>        
-	          <input type="submit" value="Upload"/>
+	          <input type="submit" value="Upload" class = "button"/>
           </form>
           <br />
           <form id="project_button" action="upload_project.php" method="post" enctype="multipart/form-data">
@@ -172,9 +172,9 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' />
-            <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' />
-            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' />
+            <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' class = 'button'/>
+            <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' class = 'button'/>
+            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' class = 'button'/>
             
             <!--<select name = "project">
               Create a code that lists all the projects available, but for now an example
