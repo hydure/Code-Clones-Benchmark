@@ -162,7 +162,7 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type="submit" value="Initialize Dataset">
+            <input type="submit" value="Initialize Dataset" class = "button">
             <br />
 
           <form action="#">
@@ -291,7 +291,7 @@ tr:nth-child(even) {
             echo "</html>";
             $con->close();
             ?>
-            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' />
+            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action' class = 'button'/>
           </form>
 
         </div><!-- /.col-xs-12 main -->
