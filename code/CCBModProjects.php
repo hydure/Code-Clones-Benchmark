@@ -71,14 +71,22 @@ if ($_POST['project_action'] == 'Switch Ownership') {
 		$userId = $value['userId'];
 		echo "$userId";
 		$curr_user = $_SESSION['userSession'];
+		$query1 = "SELECT datasetID from Datasets where projectID = ".$project_val;
+		$return = $con->query($query1);
 		if ($ownership_val == -1 && $curr_user = $userId) { //switch to private if its public & the user is the owner of the file
-			$sql = "UPDATE Datasets SET status=-1 WHERE userId!=".$userId." && projectID='".$project_val."'";
-			if($con->query($sql) != TRUE) echo "failed to switch database status";
+			while($row = $return->fetch_assoc()){
+				$datasetID = $row['datasetID'];
+				$sql = "UPDATE Datasets SET status=-1 WHERE userId!=".$userId." && datasetID =".$datasetID;
+				if($con->query($sql) != TRUE) echo "failed to switch database status";
+			}
 			$sql = "UPDATE Projects SET ownership = " . $userId . " WHERE projectID='".$project_val."'";
 		}
 		if ($ownership_val != -1 && $curr_user = $userId) { //switch to public if its private & the user is the owner of the file
-			$sql = "UPDATE Datasets SET status=0 WHERE userId!=".$userId." && projectID='".$project_val."'";
-			if($con->query($sql) != TRUE) echo "failed to switch database status";
+			while($row = $return->fetch_assoc()){
+				$datasetID = $row['datasetID'];
+				$sql = "UPDATE Datasets SET status=0 WHERE userId!=".$userId." && datasetID =".$datasetID;
+				if($con->query($sql) != TRUE) echo "failed to switch database status";
+			}
 			$sql = "UPDATE Projects SET ownership = -1 WHERE projectID='".$project_val."'";
 		}
 		echo $query;
