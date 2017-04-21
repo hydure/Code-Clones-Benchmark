@@ -93,7 +93,7 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, userId FROM Datasets");
+            $result = $con->query("SELECT datasetID, userId FROM Datasets where status != -1");
 
             echo "<html>";
             echo "<body>";
