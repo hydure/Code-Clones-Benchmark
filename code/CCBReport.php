@@ -407,6 +407,7 @@ function displayFiles() {
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
               <li class"active"><a href="#">Reports</a></li>
+              <li><a href="CCBEvaluate.php">Evaluate</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>
             </ul>
         </div>
