@@ -204,9 +204,15 @@ function displayClones() {
 }
 
 function test() {
-  var row_selector = document.getElementById('row1');
-  alert(row_selector);
+  var row_selector = document.getElementById('row3');
+  var row_special_selector = document.getElementById('row_special3');
   row_selector.innerHTML = "tortew";
+  row_special_selector.style.visibility='visible';
+}
+
+function hide() {
+  var row_special_selector = document.getElementById('row_special3');
+  row_special_selector.style.visibility='hidden';
 }
 
 window.onload = function () {
@@ -219,6 +225,16 @@ window.onload = function () {
     dataset_selector.append(option);    
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var row_special_selector = document.getElementById('row_special3');
+  row_special_selector.style.visibility='hidden';
+    var row_special_selector = document.getElementById('row_special2');
+  row_special_selector.style.visibility='hidden';
+    var row_special_selector = document.getElementById('row_special1');
+  row_special_selector.style.visibility='hidden';
+});
+
 
 
 
@@ -342,14 +358,14 @@ window.onload = function () {
           <input type="submit" name="select_button" onClick="javascript:test(); return false" value="Select" id="select_button" />
         </form>
 
-        <div class = 'wrapper'>
+        <div class = 'wrapper' >
         <div class='table'>
         <div class='row_special header blue'>
         <div class='cell'>Dataset ID</div>
         </div>
         <?php
         for ($i = 0; $i < count($dataset_array); $i++) {
-          echo "<div class='row_special'>";
+          echo "<div class='row_special' id='row_special".$i."' >";
           echo "<div class='cell'><div id='row".$i."'></div></div>";
           echo "</div>";
         }
@@ -359,7 +375,7 @@ window.onload = function () {
 
         </div>
         </div>
-
+        <div onload="hide();"></div>
 
 
               
