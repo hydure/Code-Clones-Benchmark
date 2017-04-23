@@ -57,7 +57,7 @@ foreach($_POST['detector'] as $detector) {
             break;
         }
        
-        # build arguments: language projectID1 url1 ...
+        # build arguments: language datasetID projectID1 url1 ...
         $args="$lang ".$datasetID;
         while($row = mysqli_fetch_array($pIDs)) {
             $pURL = mysqli_query($con, "SELECT url FROM Projects WHERE projectID=".$row['projectID']);
@@ -86,11 +86,11 @@ foreach($_POST['detector'] as $detector) {
             echo "failed to update dataset info";
 
         # write nicad output to file
-        $file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
-        file_put_contents($file, $nicad_raw);
+        $out_file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
+        file_put_contents($out_file, $nicad_raw);
 
         # get clones
-        $clones=`./parse.sh $file`;
+        $clones=`./parse.sh $out_file`;
         $clones=explode(" ", $clones);
 
         # add clones to database
@@ -136,7 +136,8 @@ foreach($_POST['detector'] as $detector) {
         echo "Added $num_clones clones.";
 
         # save files with clone fragments
-        shell_exec("./save_frags.sh $detector $file $args");
+        echo "<br>./save_frags.sh $detector $out_file $args<br>";
+        #shell_exec("./save_frags.sh $detector $file $args");
 
         /***************************
         *                          *
@@ -163,7 +164,7 @@ foreach($_POST['detector'] as $detector) {
             exit;
         }
 
-        # build arguments: language projectID1 url1 ...
+        # build arguments: language datasetID projectID1 url1 ...
         $args="$lang ".$datasetID;
         while($row = mysqli_fetch_array($pIDs)) {
             $pURL = mysqli_query($con, "SELECT url FROM Projects WHERE projectID=".$row['projectID']);
@@ -197,15 +198,15 @@ foreach($_POST['detector'] as $detector) {
         }
 
         # write deckard output to file
-        $file = "/home/pi/MyNAS/deckard/".$datasetID."_out";
-        file_put_contents($file, $deckard_raw);
+        $out_file = "/home/pi/MyNAS/deckard/".$datasetID."_out";
+        file_put_contents($out_file, $deckard_raw);
 
         # get cloneID
         $query = mysqli_query($con, 
             "SELECT * FROM Clones ORDER BY cloneID DESC limit 1");
         $cloneID=mysqli_fetch_assoc($query)['cloneID'] + 1;
         
-        if (!($handle = fopen($file, "r"))) {
+        if (!($handle = fopen($out_file, "r"))) {
             echo "Error: cannot open file '$file'<br>";
             break;
         }
@@ -253,6 +254,9 @@ foreach($_POST['detector'] as $detector) {
 
         echo "There were $num_classes classes of clones.<br>";
         echo "Added $num_clones clones.";
+
+        # save files with clone fragments
+        shell_exec("./save_frags.sh $detector $out_file $args");
     }
     mysqli_close($con);
 }

@@ -1,9 +1,10 @@
-#!/bin/bash
-# save_frags.sh $detector $file $lang $project1ID $project1URL ..
+#!/bin/bash -x
+# save_frags.sh $detector $file $lang $datasetID $project1ID $project1URL ..
 
 detector=$1
 file=$2
-shift; shift; shift;
+datasetID=$4
+shift; shift; shift; shift;
 
 i=0
 while [ "$#" -gt 1 ]; do
@@ -13,31 +14,35 @@ while [ "$#" -gt 1 ]; do
 done
 
 cd /home/pi/MyNAS/$detector
+if [ ! -d "$datasetID" ]; then
+    mkdir $datasetID
+fi
+cd $datasetID
 
 if [ "$detector" = "nicad" ]; then
-    datasetID=`echo $file | sed 's:.*/\([0-9]*\)\.html:\1:'`
-
-    if [ ! -d "$datasetID" ]; then
-        mkdir $datasetID
-    fi
-
-    cd $datasetID
+    files=`grep "Lines" $file | awk '{print $6}' | uniq | sed 's:.*/'$datasetID'/::'`
 
     j=0
     while [ "$j" -lt "$i" ]; do
         git clone ${projectURL[$j]} ${projectID[$j]}
         j=`expr $j + 1`
     done
-
-    files=`grep "Lines" $file | awk '{print $6}' | uniq | sed 's:.*/'$datasetID'/::'`
-    dir_files=`find . -type f | sed 's:^\./::'`
-
-    for f in $dir_files; do
-        if [[ ! "$files" =~ $f ]]; then
-            rm $f
-        fi
-    done
 elif [ "$detector" = "deckard" ]; then
-    datasetID=`echo $2 | sed 's/_out//'`
+    files=`grep "FILE" $file | awk '{print $4}' | uniq`
+
+    j=0
+    while [ "$j" -lt "$i" ]; do
+        git clone ${projectURL[$j]} src/${projectID[$j]}
+        rm -rf src/${projectID[$j]}/.git
+        j=`expr $j + 1`
+    done
 fi
 
+dir_files=`find . -type f | sed 's:^\./::'`
+
+for f in $dir_files; do
+    if [ "$files" != "$f" ]; then
+        rm $f
+    fi
+done
+find . -type d -empty -delete
