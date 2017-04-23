@@ -135,6 +135,9 @@ foreach($_POST['detector'] as $detector) {
         echo "There were $num_classes classes of clones.<br>";
         echo "Added $num_clones clones.";
 
+        # save files with clone fragments
+        shell_exec("./save_frags.sh $detector $file $args");
+
         /***************************
         *                          *
         *          DECKARD         *
@@ -194,7 +197,7 @@ foreach($_POST['detector'] as $detector) {
         }
 
         # write deckard output to file
-        $file = "/home/pi/MyNAS/deckard/".$datasetID.".html";
+        $file = "/home/pi/MyNAS/deckard/".$datasetID."_out";
         file_put_contents($file, $deckard_raw);
 
         # get cloneID
