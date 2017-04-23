@@ -20,7 +20,7 @@ if(mysqli_connect_errno()) {
     die("MySQL connection failed: ". mysqli_connect_error());
 }
 $currUserID = ($_SESSION['userSession']);
-$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector FROM Clones WHERE userID = '$currUserID'";
+$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
 $dataset_array_Deckard = array();
 $dataset_array_Nicad = array();
@@ -30,6 +30,8 @@ $dataset_files = array();
 $dataset_start = array();
 $dataset_end = array();
 $dataset_cloneID = array();
+$dataset_language = array();
+$language_array = array();
 $start_array = array();
 $end_array = array(); 
 $cloneID_array = array();
@@ -38,11 +40,12 @@ $last_datasetID = 0;
 $last_cloneID = 0;
 $last_file = '';
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
-  unset($datasetID, $userID, $file, $start, $end, $detector);
+  unset($datasetID, $userID, $file, $start, $end, $detector, $language);
   $cloneID = $row['cloneID'];
   $datasetID = $row['datasetID'];
   $userID = $row['userID'];
   $detector = $row['detector'];
+  $language = $row['language'];
   $file = $row['file'];
   $start = $row['start'];
   $end = $row['end'];
@@ -56,6 +59,17 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     }
     if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
       array_push($dataset_array_CCFinderX, $datasetID);
+    }
+  }
+  /** handles language array creation, where
+  language array = ((datasetID1, $language1), (datasetID2, $language), ..)
+  **/
+  if ($last_datasetID != $datasetID) {
+    array_push($dataset_language, $datasetID);
+    array_push($dataset_language, $language);
+    if (!in_array($dataset_language, $language_array)) {
+      array_push($language_array, $dataset_language);
+      $dataset_language = array();
     }
   }
   /** handles cloneID array creation, where
@@ -155,9 +169,7 @@ foreach ($handle_array as $handlepath) {
 <link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
 <script type='text/javascript' src="highlightjs-line-numbers.min.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-hljs.initLineNumbersOnLoad();
+<script>hljs.initHighlightingOnLoad(); hljs.initLineNumbersOnLoad();
 </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- jQuery library -->
@@ -167,136 +179,6 @@ hljs.initLineNumbersOnLoad();
 
 <script type="text/javascript">
 
-var GlobalVar = {};
-function analyzeClones(){
-  //step 1: get the DOM object of the iframe.
-  var iframe1 = document.getElementById('iframe1');
-  var iframe2 = document.getElementById('iframe2');  
-  var file1_selector = document.getElementById('file1Select');
-  var file2_selector = document.getElementById('file2Select');
-  var file1_value = file1_selector[file1_selector.selectedIndex].value;
-  var file2_value = file2_selector[file2_selector.selectedIndex].value;
-  document.getElementById('file1_name').innerHTML = file1_value;
-  document.getElementById('file2_name').innerHTML = file2_value;
-  value = GlobalVar.value;
-  var start_array = <?php  echo json_encode($start_array); ?>;
-  for (var index in start_array) { //find range for selected files
-    if (start_array[index][0] == value) {
-      var selected_start_array = start_array[index].slice(1);
-    }
-  }
-  var end_array = <?php  echo json_encode($end_array); ?>;
-  for (var index in end_array) { //find range for selected files
-    if (end_array[index][0] == value) {
-      var selected_end_array = end_array[index].slice(1);
-
-    }
-  }
-  var dummy1_array = []; //these will contain the unmodified source code
-  var dummy2_array = [];
-  var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
-
-  for (var index in sourcefile_array) {
-    if (sourcefile_array[index][0] == file1_value) {
-      dummy1_array = sourcefile_array[index].slice(1);
-
-    }
-    if (sourcefile_array[index][0] == file2_value) {
-      dummy2_array = sourcefile_array[index].slice(1);
-    }
-  }
-
-  code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
-  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
-  injectIframeContent(iframe1, code1);
-  injectIframeContent(iframe2, code2);
-
-   //document.getElementById("scroll").scrollIntoView();
-
-}
-function injectIframeContent(iframe, code) {
-  var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
-  var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
-  var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
-  var scriptA = "</";
-  var scriptB = "script>";
-  var scriptC = scriptA + scriptB;
-  var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
-  var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
-  var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
-  //step 2: obtain the document associated with the iframe tag
-  var iframedoc = iframe.document;
-    if (iframe.contentDocument)
-      iframedoc = iframe.contentDocument;
-    else if (iframe.contentWindow)
-      iframedoc = iframe.contentWindow.document;
-
-   if (iframedoc){
-     iframedoc.open();
-     iframedoc.writeln(html_string);
-     iframedoc.close();
-   } else {
-    alert('Cannot inject dynamic contents into iframe.');
-   } 
-}
-
-function makeIframeContent(dummy_array, selected_start_array, selected_end_array, file_value) {
-  var line_counter = 0;
-  var array_iterator = 0;
-  var scroll_counter = 0;
-  var highlighted = false;
-  var code_array = [];
-  code_array.push("<pre><code class='java'>");
-  for (var index in dummy_array) {
-    var line = dummy_array[index];
-    if (line_counter > 0) {
-      //line = line.split('"').join("&quot"); //escapes HTML markup
-      line = line.split("&").join("&amp");
-      line = line.split("<").join("&lt");
-      line = line.split(">").join("&gt");
-    } 
-    if ((line_counter == selected_start_array[array_iterator] && file_value == selected_start_array[array_iterator + 1]) || highlighted) {
-      line = "<mark>" + line + '</mark>';
-      //alert(line_counter + " found " + line);
-      if (highlighted == false) {
-        highlighted = true;
-      }
-    }
-    code_array.push(line);
-    line_counter += 1; 
-    if (line_counter == selected_end_array[array_iterator]) {
-      highlighted = false;
-      array_iterator += 2;
-    }
-  }
-  code_array.push('</code></pre>');
-  code = code_array.join("");
-  return code;
-}  
-function displayDatasets() {
-  
-  var dataset_array;
-  if (document.getElementById("detector1_checkbox").checked) { //return only Nicad datasets
-    dataset_array = <?php  echo json_encode($dataset_array_Nicad); ?>;
-  }
-  if (document.getElementById("detector2_checkbox").checked) { //return only Deckard datasets
-    dataset_array = <?php  echo json_encode($dataset_array_Deckard); ?>;
-  }
-  if (document.getElementById("detector1_checkbox").checked && document.getElementById("detector2_checkbox").checked) { //return datasets only with both detectors ran
-    dataset_array = <?php
-    $return_array = array_intersect($dataset_array_Nicad, $dataset_array_Deckard);
-    echo json_encode($return_array);
-    ?>
-  }
-  var dataset_selector = $("#datasetSelect");
-  $("#datasetSelect").empty(); // empties previous values;
-  for (var index in dataset_array) {
-    var option = document.createElement('option');
-    option.innerHTML = dataset_array[index];
-    option.value = dataset_array[index];
-    dataset_selector.append(option);
-  }
-}
 
 function displayClones() { 
   var selector = document.getElementById('datasetSelect');  
@@ -317,40 +199,11 @@ function displayClones() {
   }
 }
 
-function displayFiles() {
-  var selector = document.getElementById('cloneSelect');  
-  var value = selector[selector.selectedIndex].value;
-  GlobalVar.value = value;
-  var file_array = <?php  echo json_encode($file_array); ?>;
-  for (var index in file_array) { //find range for selected files
-    if (file_array[index][0] == value) {
-      var selected_file_array = file_array[index].slice(1);
-    }
-  }
-  var file1_selector = document.getElementById('file1Select');
-  var file2_selector = document.getElementById('file2Select');
-  if (document.getElementById("files_frame1_checkbox").checked) {
-    $("#file1Select").empty();
-  }
-  if (document.getElementById("files_frame2_checkbox").checked) {
-    $("#file2Select").empty();
-  }
-  for (var index in selected_file_array) { //displays files multiselectors
-    if (document.getElementById("files_frame1_checkbox").checked) {
-      var option = document.createElement('option');
-      option.innerHTML = selected_file_array[index];
-      option.value = selected_file_array[index];
-      file1_selector.append(option);
-    }
-    if (document.getElementById("files_frame2_checkbox").checked) {
-      
-      var option = document.createElement('option');
-      option.innerHTML = selected_file_array[index];
-      option.value = selected_file_array[index];
-      file2_selector.append(option);  
-    } 
-  }
+window.onload = function () {
+  var language_array = <?php echo json_encode($language_array); ?>;
+  alert(language_array);
 }
+
 
 
 </script>
@@ -414,10 +267,12 @@ function displayFiles() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-11">
 
+        <form>
+          Dataset Select:
+          <select name="datasetSelect" id="datasetSelect" multiple></select>
+        </form>
 
               
-          
-            <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->

@@ -233,7 +233,8 @@ $(document).ready(function() {
             echo "<div class='table'>";
             echo "<div class='row_special header green'>";
             echo "<div class='cell'>Dataset ID</div>";
-            echo "<div class='cell'>Project ID</div>";
+            echo "<div class='cell'>Dataset</div>";
+            echo "<div class='cell'>Project IDs</div>";
             echo "<div class='cell'>Submit Date</div>";
             echo "<div class='cell'>Status</div>";
             echo "</div>";
@@ -259,9 +260,11 @@ $(document).ready(function() {
                 $submit_date = $row['submit_date'];
                 $status = $row['status'];
               }
+              $title = 'title';
               //$project_string = implode(', ', $tempArray);
               echo "<div class='row_special'>";
               echo "<div class='cell'>".$dID.'</div>';
+              echo "<div class='cell'>".$title.'</div>';
 
               /** This part prints the project number normally if it is queried in the database, otherwise it is printed red
               **/
