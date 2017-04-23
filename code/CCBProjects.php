@@ -50,26 +50,26 @@ $(document).ready(function() {
   }
 }
 
-.thing {
+.row_special {
   display: table-row;
   background: #f6f6f6;
 }
-.thing:nth-of-type(odd) {
+.row_special:nth-of-type(odd) {
   background: #e9e9e9;
 }
-.thing.header {
+.row_special.header {
   font-weight: 900;
   color: #ffffff;
   background: #ea6153;
 }
-.thing.green {
+.row_special.green {
   background: #27ae60;
 }
-.thing.blue {
+.row_special.blue {
   background: #2980b9;
 }
 @media screen and (max-width: 580px) {
-  .thing {
+  .row_special {
     padding: 8px 0;
     display: block;
   }
@@ -234,7 +234,7 @@ $(document).ready(function() {
           $result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId, author FROM Projects");
           echo "<div class = 'wrapper'>";
           echo "<div class='table'>";
-          echo "<div class='thing header'>";
+          echo "<div class='row_special header'>";
           echo "<div class='cell'>Project ID</div>";
           echo "<div class='cell'>Project</div>";
           echo "<div class='cell'>Author</div>";
@@ -259,7 +259,7 @@ $(document).ready(function() {
                   $size = $row['size'];
                   $userId = $row['userId'];
                   if ($_SESSION['userSession'] == $userId || $ownership == -1) {
-                    echo "<div class='thing'>";
+                    echo "<div class='row_special'>";
                     echo "<div class='cell'>".$projectID.'</div>';
                     echo "<div class='cell'>".$title.'</div>';
                     echo "<div class='cell'>".$author.'</div>';
