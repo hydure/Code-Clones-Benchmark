@@ -95,27 +95,21 @@ $(document).ready(function() {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
             $result = $con->query("SELECT datasetID, userId, ownership FROM Datasets where status != -1");
-
-            echo "<html>";		  $ownership = $row['ownership'];
-            echo "<body>";
             echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
             $dataset_dropdown = array();
             while ($row = $result->fetch_assoc()) {
-
                   unset($datasetID, $userId);
                   $datasetID = $row['datasetID'];
                   $userId = $row['userId'];
-		  $ownership = $row['ownership'];
+		              $ownership = $row['ownership'];
                   if ($_SESSION['userSession'] == $userId || $ownership == -1){
-			if(!in_array($datasetID, $dataset_dropdown)) {
+			               if(!in_array($datasetID, $dataset_dropdown)) {
                     		echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
                     		array_push($dataset_dropdown, $datasetID);
-			}
+			               }
                   }
             }
             echo "</select>";
-            echo "</body>";
-            echo "</html>";
             $con->close();
             ?>
             
