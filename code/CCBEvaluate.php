@@ -203,6 +203,12 @@ function displayClones() {
   }
 }
 
+function test() {
+  var row_selector = document.getElementById('row1');
+  alert(row_selector);
+  row_selector.innerHTML = "tortew";
+}
+
 window.onload = function () {
   var dataset_selector = document.getElementById('datasetSelect');
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
@@ -230,6 +236,59 @@ window.onload = function () {
     .clear {
       clear:both;
     }
+
+    .wrapper {
+      max-width: 1200px;
+    }
+
+    .table {
+      margin: 8px 0 40px 0;
+      width: 100%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      display: table;
+    }
+    @media screen and (max-width: 580px) {
+      .table {
+        display: block;
+      }
+    }
+
+    .row_special {
+      display: table-row;
+      background: #f6f6f6;
+    }
+    .row_special:nth-of-type(odd) {
+      background: #e9e9e9;
+    }
+    .row_special.header {
+      font-weight: 900;
+      color: #ffffff;
+      background: #ea6153;
+    }
+    .row_special.green {
+      background: #27ae60;
+    }
+    .row_special.blue {
+      background: #2980b9;
+    }
+    @media screen and (max-width: 580px) {
+      .row_special {
+        padding: 8px 0;
+        display: block;
+      }
+    }
+
+    .cell {
+      padding: 6px 12px;
+      display: table-cell;
+    }
+    @media screen and (max-width: 580px) {
+      .cell {
+        padding: 2px 12px;
+        display: block;
+      }
+    }
+
   </style>
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
@@ -280,7 +339,28 @@ window.onload = function () {
         <form>
           Dataset Select:
           <select name="datasetSelect" id="datasetSelect" multiple></select>
+          <input type="submit" name="select_button" onClick="javascript:test(); return false" value="Select" id="select_button" />
         </form>
+
+        <div class = 'wrapper'>
+        <div class='table'>
+        <div class='row_special header blue'>
+        <div class='cell'>Dataset ID</div>
+        </div>
+        <?php
+        for ($i = 0; $i < count($dataset_array); $i++) {
+          echo "<div class='row_special'>";
+          echo "<div class='cell'><div id='row".$i."'></div></div>";
+          echo "</div>";
+        }
+
+
+        ?>
+
+        </div>
+        </div>
+
+
 
               
         </div><!-- /.col-xs-12 main -->

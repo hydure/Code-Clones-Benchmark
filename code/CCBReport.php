@@ -263,7 +263,7 @@ function makeIframeContent(dummy_array, selected_start_array, selected_end_array
       }
     }
     code_array.push(line);
-    line_counter += 1; 
+    line_counter++; 
     if (line_counter == selected_end_array[array_iterator]) {
       highlighted = false;
       array_iterator += 2;
