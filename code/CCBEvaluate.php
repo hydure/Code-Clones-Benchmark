@@ -22,11 +22,8 @@ if(mysqli_connect_errno()) {
 $currUserID = ($_SESSION['userSession']);
 $sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
-
 $dataset_array = array();
 $rows_array = array();
-$line_array = array();
-
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector, $language);
   $cloneID = $row['cloneID'];
@@ -43,6 +40,7 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     array_push($dataset_array, $datasetID);
   }
   $range = $start . '-' . $end;
+  $line_array = array();
   array_push($line_array, $datasetID);
   array_push($line_array, $cloneID);
   array_push($line_array, $file);
@@ -53,7 +51,6 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   array_push($rows_array, $line_array); 
 
 }
-    
 $con->close();
 
 
@@ -72,6 +69,15 @@ $con->close();
 <script type="text/javascript">
 
 function loadTable() {
+  var selected_rows_array = [];
+  var rows_array = <?php echo json_encode($rows_array); ?>;
+  for (var index in rows_array) { //find range for selected files
+    if (rows_array[index][0] == value) {
+      var selected_row = rows_array[index].slice(1);
+      //alert(selected_row_array);
+      selected_rows_array.push(selected_row);
+    }
+  }
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
   var dataset_selector = document.getElementById('datasetSelect');
   var value = dataset_selector[dataset_selector.selectedIndex].value;
@@ -79,19 +85,14 @@ function loadTable() {
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="";
   }
-  var rows_array = <?php echo json_encode($rows_array); ?>;
-  for (var index in rows_array) { //find range for selected files
-    if (rows_array[index][0] == value) {
-      var selected_row_array = rows_array[index].slice(1);
-      alert('f');
-    }
-  }
+
+
 }
 
-window.onload = function () {
+window.onload = function () { //populates datasets on page load
   var dataset_selector = document.getElementById('datasetSelect');
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
-  for (var index in dataset_array) { //displays clones
+  for (var index in dataset_array) {
     var option = document.createElement('option');
     option.innerHTML = dataset_array[index];
     option.value = dataset_array[index];
