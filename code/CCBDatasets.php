@@ -209,15 +209,14 @@ $(document).ready(function() {
             }
             $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets ORDER BY submit_date DESC");
             //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
-            echo "<html>";
-            echo "<body>";
-            echo "<table>";
-            echo "<tr>";
-            echo "<th>Dataset ID</th>";
-            echo "<th>Project ID(s)</th>";
-            echo "<th>Submit Date</th>";
-            echo "<th>Status</th>";
-            echo "</tr>";
+            echo "<div class = 'wrapper'>";
+            echo "<div class='table'>";
+            echo "<div class='row_special header green'>";
+            echo "<div class='cell'>Dataset ID</div>";
+            echo "<div class='cell'>Project ID</div>";
+            echo "<div class='cell'>Submit Date</div>";
+            echo "<div class='cell'>Status</div>";
+            echo "</div>";
 
             $ID_array = array();
             while ($row = $result->fetch_assoc()) {
@@ -241,12 +240,12 @@ $(document).ready(function() {
                 $status = $row['status'];
               }
               //$project_string = implode(', ', $tempArray);
-              echo "<tr>";
-              echo '<th>'.$dID.'</th>';
+              echo "<div class='row_special'>";
+              echo "<div class='cell'>".$dID.'</div>';
 
               /** This part prints the project number normally if it is queried in the database, otherwise it is printed red
               **/
-              echo '<th>'; //begin with opening table
+              echo "<div class='cell'>"; //begin with opening table
               $valid = true; //flag to set status as broken if anything is red
               $last_element = end($tempArray);
               foreach ($tempArray as $project_string) { //print project # as red if !exists or is no longer public
@@ -273,24 +272,24 @@ $(document).ready(function() {
                   echo ', ';
                 }
               }
-              echo '</th>'; //close the table value
+              echo '</div>'; //close the table value
 
-              echo '<th>'.$submit_date.'</th>';
+              echo "<div class='cell'>".$submit_date.'</div>';
+
               if ($valid) {
                 if (intval($status) == 0) { 
-                  echo '<th>Inactive</th>';
+                  echo "<div class='cell'>Inactive</div>";
                 } else {
-                  echo '<th>Active</th>';
+                  echo "<div class='cell'>Active</div>";
                 }
               } else {
-                echo '<th>Broken</th>';
+                echo "<div class='cell'>Broken</div>";
               }
-              echo "</tr>";              
+              echo "</div>";              
             }
 
-            echo "</table"; 
-            echo "</body>";
-            echo "</html>";
+            echo "</div>"; 
+            echo "</div>";
             $con->close();
             ?>
 
