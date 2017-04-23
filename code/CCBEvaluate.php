@@ -50,6 +50,7 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   $file = $row['file'];
   $start = $row['start'];
   $end = $row['end'];
+
   //handles detector -> dataset selection
   if ($_SESSION['userSession'] == $userID) { 
     if ($detector == 'deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
@@ -123,51 +124,9 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   $last_datasetID = $datasetID;
   $last_file = $file;
 }
-//deletes first blank array values and adds the most recent start, end, or file to array
-array_unshift($dataset_cloneID, $last_datasetID);
-array_push($cloneID_array, $dataset_cloneID);
-array_splice($cloneID_array, 0, 1);
-array_unshift($dataset_start, $last_cloneID);
-array_push($start_array, $dataset_start);
-array_unshift($dataset_end, $last_cloneID);
-array_push($end_array, $dataset_end);
-array_splice($start_array, 0, 1); 
-array_splice($end_array, 0, 1); 
-array_unshift($dataset_files, $last_cloneID);
-array_push($file_array, $dataset_files);
-array_splice($file_array, 0, 1);       
+    
 $con->close();
 
-$handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY
-$filepath1 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java';
-array_push($handle_array, $filepath1);
-$filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
-array_push($handle_array, $filepath2);
-
-/** source file stored as 
-( ($filename1, line1, line2, ...), ($filename2, line1, line2, ...), ...)
-**/
-$c = 0;
-$sourcefile_array = array();
-foreach ($handle_array as $handlepath) {
-  $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
-  $handle = fopen($handlepath, "r");
-  if ($handle) {
-    while (($line = fgets($handle)) != false) {
-      array_push($line_array, $line);
-    }
-  }
-  fclose($handle);
-  if ($c == 0) {  //THIS IS TEMPORARY, FIX WHEN WE GET CORRECT HANDLE_ARRAY
-    array_unshift($line_array, "src/AbstractAsyncTableRendering.java");
-  }
-  if ($c == 1) {
-    array_unshift($line_array, "src/AbstractTableRendering.java");
-  }
-  array_push($sourcefile_array, $line_array);
-  $c += 1;
-
-}
 
 ?>
 <link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
@@ -203,11 +162,12 @@ function displayClones() {
   }
 }
 
-function test() {
+function loadTable() {
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
+  var dataset_selector = document.getElementById('datasetSelect');
+  var value = dataset_selector[dataset_selector.selectedIndex].value;
   for (i = 0; i < dataset_array.length; i++) {
     var row_special_selector = document.getElementById("row_special" + i);
-    alert(row_special_selector);
     row_special_selector.style.display="";
   }
 }
@@ -348,17 +308,24 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         </div>
         <!-- main area -->
         <div class="col-xs-12 col-sm-11">
+        <h1>Code Cloning Evaluations</h1>
+          <br />
 
         <form>
           Dataset Select:
           <select name="datasetSelect" id="datasetSelect" multiple></select>
-          <input type="submit" name="select_button" onClick="javascript:test(); return false" value="Select" id="select_button" />
+          <input type="submit" name="select_button" onClick="javascript:loadTable(); return false" value="Select" id="select_button" />
         </form>
 
         <div class = 'wrapper' >
         <div class='table'>
         <div class='row_special header blue'>
-        <div class='cell'>Dataset ID</div>
+        <div class='cell'>Clone ID</div>
+        <div class='cell'>File</div>
+        <div class='cell'>LineRange</div>
+        <div class='cell'>Similarity</div>
+        <div class='cell'>Detector</div>
+        <div class='cell'>Language</div>
         </div>
         <?php
         for ($i = 0; $i < count($dataset_array); $i++) {
@@ -372,7 +339,6 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
 
         </div>
         </div>
-        <div onload="hide();"></div>
 
 
               
