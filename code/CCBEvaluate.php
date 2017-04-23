@@ -69,23 +69,29 @@ $con->close();
 <script type="text/javascript">
 
 function loadTable() {
-  var selected_rows_array = [];
-  var rows_array = <?php echo json_encode($rows_array); ?>;
-  for (var index in rows_array) { //find range for selected files
-    if (rows_array[index][0] == value) {
-      var selected_row = rows_array[index].slice(1);
-      //alert(selected_row_array);
-      selected_rows_array.push(selected_row);
-    }
+  for (i = 0; i < 500; i++) { //resets the rows
+    var row_special_selector = document.getElementById("row_special" + i);
+    row_special_selector.style.display="none";
   }
+  var selected_rows_array = [];
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
   var dataset_selector = document.getElementById('datasetSelect');
   var value = dataset_selector[dataset_selector.selectedIndex].value;
-  for (i = 0; i < dataset_array.length; i++) {
+  var rows_array = <?php echo json_encode($rows_array); ?>;
+  for (var index in rows_array) { //find range for selected rows
+    if (rows_array[index][0] == value) {
+      var selected_row = rows_array[index].slice(1);
+      selected_rows_array.push(selected_row);
+    }
+  }
+  for (i = 0; i < selected_rows_array.length; i++) { //unhides row and populates it
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="";
+    for (j = 0; j < 6; j++) {
+      var cell = document.getElementById(i + "cell" + j);
+      cell.innerHTML=selected_rows_array[i][j];
+    }
   }
-
 
 }
 
@@ -102,7 +108,7 @@ window.onload = function () { //populates datasets on page load
 
 document.addEventListener('DOMContentLoaded', function() { //hides all rows upon loading
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
-  for (i = 0; i < dataset_array.length; i++) {
+  for (i = 0; i < 500; i++) {
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="none";
   }
@@ -241,10 +247,10 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         <div class='cell'>Language</div>
         </div>
         <?php
-        for ($i = 0; $i < count($dataset_array); $i++) {
+        for ($i = 0; $i < 500; $i++) {
           echo "<div class='row_special' id='row_special".$i."' >";
           for ($j = 0; $j < 6; $j++) {
-            echo "<div class='cell'><div id='".$i."row".$j."'></div></div>";
+            echo "<div class='cell'><div id='".$i."cell".$j."'></div></div>";
           }
           echo "</div>";
         }
