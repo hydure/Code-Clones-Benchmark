@@ -36,6 +36,7 @@ $start_array = array();
 $end_array = array(); 
 $cloneID_array = array();
 $cloneID_index = array();
+$dataset_array = array();
 $last_datasetID = 0;
 $last_cloneID = 0;
 $last_file = '';
@@ -60,6 +61,9 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
     if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
       array_push($dataset_array_CCFinderX, $datasetID);
     }
+  }
+  if (!in_array($datasetID, $dataset_array)) {
+    array_push($dataset_array, $datasetID);
   }
   /** handles language array creation, where
   language array = ((datasetID1, $language1), (datasetID2, $language), ..)
@@ -200,8 +204,14 @@ function displayClones() {
 }
 
 window.onload = function () {
-  var language_array = <?php echo json_encode($language_array); ?>;
-  alert(language_array);
+  var dataset_selector = document.getElementById('datasetSelect');
+  var dataset_array = <?php echo json_encode($dataset_array); ?>;
+  for (var index in dataset_array) { //displays clones
+    var option = document.createElement('option');
+    option.innerHTML = dataset_array[index];
+    option.value = dataset_array[index];
+    dataset_selector.append(option);    
+  }
 }
 
 
