@@ -28,23 +28,58 @@ $(document).ready(function() {
   });
 });
 </script>
-
 <style>
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
+.wrapper {
+  margin: 0 auto;
+  max-width: 800px;
 }
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    font size ="3";
+.table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+@media screen and (max-width: 580px) {
+  .table {
+    display: block;
+  }
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.row_special {
+  display: table-row;
+  background: #f6f6f6;
+}
+.row_special:nth-of-type(odd) {
+  background: #e9e9e9;
+}
+.row_special.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+}
+.row_special.green {
+  background: #27ae60;
+}
+.row_special.blue {
+  background: #2980b9;
+}
+@media screen and (max-width: 580px) {
+  .row_special {
+    padding: 8px 0;
+    display: block;
+  }
+}
+
+.cell {
+  padding: 6px 12px;
+  display: table-cell;
+}
+@media screen and (max-width: 580px) {
+  .cell {
+    padding: 2px 12px;
+    display: block;
+  }
 }
 
 
@@ -120,18 +155,17 @@ tr:nth-child(even) {
             $result = $con->query("SELECT projectID, title, author, ".  
                 "last_accessed, uploaded, ownership, userId FROM Projects ".
                 "ORDER BY last_accessed DESC");
-            echo "<html>";
-            echo "<body>";
-            echo "<table>";
-            echo "<tr>";
-            echo "<th>Add</th>";
-            echo "<th>ID</th>";
-            echo "<th>Project</th>";
-            echo "<th>Author</th>";
-            echo "<th>Last Accessed</th>";
-            echo "<th>Date Uploaded</th>";
-            echo "<th>Ownership</th>";
-            echo "</tr>";
+            echo "<div class = 'wrapper'>";
+            echo "<div class='table'>";
+            echo "<div class='row_special header green'>";
+            echo "<div class='cell'>Add</div>";
+            echo "<div class='cell'>ID</div>";
+            echo "<div class='cell'>Project</div>";
+            echo "<div class='cell'>Author</div>";
+            echo "<div class='cell'>Last Accessed</div>";
+            echo "<div class='cell'>Date Uploaded</div>";
+            echo "<div class='cell'>Ownership</div>";
+            echo "</div>";
             while ($row = $result->fetch_assoc()) {
 
                   unset($projectID, $title, $author, $last_accessed, $uploaded, $ownership, $userId);
@@ -143,24 +177,23 @@ tr:nth-child(even) {
                   $ownership = $row['ownership'];
                   $userId = $row['userId'];
                   if ($_SESSION['userSession'] == $userId || $ownership == -1)  {
-                    echo "<tr>";
-                    echo "<td><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'></td>";
-                    echo '<th>'.$projectID.'</th>';
-                    echo '<th>'.$title.'</th>';
-                    echo '<th>'.$author.'</th>';
-                    echo '<th>'.$last_accessed.'</th>';
-                    echo '<th>'.$uploaded.'</th>';
+                    echo "<div class='row_special'>";
+                    echo "<div class='cell'><input type='checkbox' name='row[]' value='" . $row['projectID'] . "'></div>";
+                    echo "<div class='cell'>".$projectID.'</div>';
+                    echo "<div class='cell'>".$title.'</div>';
+                    echo "<div class='cell'>".$author.'</div>';
+                    echo "<div class='cell'>".$last_accessed.'</div>';
+                    echo "<div class='cell'>".$uploaded.'</div>';
                     if (intval($ownership) != -1) { 
-                      echo '<th>Private</th>';
+                      echo "<div class='cell'>Private</div>";
                     } else {
-                      echo '<th>Public</th>';
+                      echo "<div class='cell'>Public</div>";
                     }
-                    echo "</tr>";
+                    echo "</div>";
                   }
             }
-            echo "</table";
-            echo "</body>";
-            echo "</html>";
+            echo "</div>";
+            echo "</div>";
             $con->close();
             ?>
             <input type="submit" value="Initialize Dataset">
