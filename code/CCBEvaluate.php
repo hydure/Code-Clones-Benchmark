@@ -22,24 +22,11 @@ if(mysqli_connect_errno()) {
 $currUserID = ($_SESSION['userSession']);
 $sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
-$dataset_array_Deckard = array();
-$dataset_array_Nicad = array();
-$dataset_array_CCFinderX = array();
-$file_array = array();
-$dataset_files = array();
-$dataset_start = array();
-$dataset_end = array();
-$dataset_cloneID = array();
-$dataset_language = array();
-$language_array = array();
-$start_array = array();
-$end_array = array(); 
-$cloneID_array = array();
-$cloneID_index = array();
+
 $dataset_array = array();
-$last_datasetID = 0;
-$last_cloneID = 0;
-$last_file = '';
+$rows_array = array();
+$line_array = array();
+
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector, $language);
   $cloneID = $row['cloneID'];
@@ -47,82 +34,24 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   $userID = $row['userID'];
   $detector = $row['detector'];
   $language = $row['language'];
+  $sim = "sim";
   $file = $row['file'];
   $start = $row['start'];
   $end = $row['end'];
 
-  //handles detector -> dataset selection
-  if ($_SESSION['userSession'] == $userID) { 
-    if ($detector == 'deckard' && !in_array($datasetID, $dataset_array_Deckard)) {
-      array_push($dataset_array_Deckard, $datasetID);
-    }
-    if ($detector == 'nicad' && !in_array($datasetID, $dataset_array_Nicad)) {
-      array_push($dataset_array_Nicad, $datasetID);
-    }
-    if ($detector == 'CCFinderX'&& !in_array($datasetID, $dataset_array_CCFinderX)) {
-      array_push($dataset_array_CCFinderX, $datasetID);
-    }
-  }
   if (!in_array($datasetID, $dataset_array)) {
     array_push($dataset_array, $datasetID);
   }
-  /** handles language array creation, where
-  language array = ((datasetID1, $language1), (datasetID2, $language), ..)
-  **/
-  if ($last_datasetID != $datasetID) {
-    array_push($dataset_language, $datasetID);
-    array_push($dataset_language, $language);
-    if (!in_array($dataset_language, $language_array)) {
-      array_push($language_array, $dataset_language);
-      $dataset_language = array();
-    }
-  }
-  /** handles cloneID array creation, where
-  cloneID array = ((datasetID1, $clone1, $clone2, ...),(datasetID2, $clone1, $clone2, ...), ..)
-  **/
-  if ($last_datasetID != $datasetID) {
-    array_unshift($dataset_cloneID, $last_datasetID);
-    //array_push($cloneID_index, $index);
-    array_push($cloneID_array, $dataset_cloneID);
-    $dataset_cloneID= array($cloneID);
-  } else {
-    if (!in_array($cloneID, $dataset_cloneID)) {
-      array_push($dataset_cloneID, $cloneID);
-    }
-  } 
-  /** handles clone line start and end array creation, where
-  start_array = ((cloneID1, $start1, $start1's_file, $start2, $start2's_file...),(cloneID2, $start1, $start1's_file, $start2, $start2's_file, ...), ..)
-  **/
-  if ($last_cloneID != $cloneID) {
-    array_unshift($dataset_start, $last_cloneID);
-    array_push($start_array, $dataset_start);
-    array_unshift($dataset_end, $last_cloneID);
-    array_push($end_array, $dataset_end);
-    $dataset_start = array($start);
-    array_push($dataset_start, $file);
-    $dataset_end = array($end);
-    array_push($dataset_end, $file);
-  } else {
-     array_push($dataset_start, $start);
-     array_push($dataset_end, $end);
-     array_push($dataset_start, $file);
-     array_push($dataset_end, $file);
-  }
-  /** handles file creation, where 
-  file_array = ((datasetID1, $file1, $file2, ...),(datasetID2, $file1, $file2, ...), ...)
-  **/
-  if ($last_cloneID != $cloneID) { 
-    array_unshift($dataset_files, $last_cloneID);
-    array_push($file_array, $dataset_files);
-    $dataset_files = array($file);
-  } else {
-    if (!in_array($file, $dataset_files)) {
-      array_push($dataset_files, $file);
-    }
-  }
-  $last_cloneID = $cloneID;
-  $last_datasetID = $datasetID;
-  $last_file = $file;
+  $range = $start . '-' . $end;
+  array_push($line_array, $datasetID);
+  array_push($line_array, $cloneID);
+  array_push($line_array, $file);
+  array_push($line_array, $range);
+  array_push($line_array, $sim);
+  array_push($line_array, $detector);
+  array_push($line_array, $language);
+  array_push($rows_array, $line_array); 
+
 }
     
 $con->close();
@@ -142,26 +71,6 @@ $con->close();
 
 <script type="text/javascript">
 
-
-function displayClones() { 
-  var selector = document.getElementById('datasetSelect');  
-  var value = selector[selector.selectedIndex].value;
-  var cloneID_array = <?php  echo json_encode($cloneID_array); ?>;
-  for (var index in cloneID_array) { //find range for selected cloneID
-    if (cloneID_array[index][0] == value) {
-      var selected_cloneID_array = cloneID_array[index].slice(1);
-    }
-  }
-  var clone_selector = document.getElementById('cloneSelect');
-  $("#cloneSelect").empty();
-  for (var index in selected_cloneID_array) { //displays clones
-    var option = document.createElement('option');
-    option.innerHTML = selected_cloneID_array[index];
-    option.value = selected_cloneID_array[index];
-    clone_selector.append(option);    
-  }
-}
-
 function loadTable() {
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
   var dataset_selector = document.getElementById('datasetSelect');
@@ -170,8 +79,14 @@ function loadTable() {
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="";
   }
+  var rows_array = <?php echo json_encode($rows_array); ?>;
+  for (var index in rows_array) { //find range for selected files
+    if (rows_array[index][0] == value) {
+      var selected_row_array = rows_array[index].slice(1);
+      alert('f');
+    }
+  }
 }
-
 
 window.onload = function () {
   var dataset_selector = document.getElementById('datasetSelect');
@@ -191,9 +106,6 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
     row_special_selector.style.display="none";
   }
 });
-
-
-
 
 </script>
 <html lang="en">
@@ -322,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         <div class='row_special header blue'>
         <div class='cell'>Clone ID</div>
         <div class='cell'>File</div>
-        <div class='cell'>LineRange</div>
+        <div class='cell'>Line Range</div>
         <div class='cell'>Similarity</div>
         <div class='cell'>Detector</div>
         <div class='cell'>Language</div>
@@ -330,11 +242,11 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         <?php
         for ($i = 0; $i < count($dataset_array); $i++) {
           echo "<div class='row_special' id='row_special".$i."' >";
-          echo "<div class='cell'><div id='row".$i."'>".$i."</div></div>";
+          for ($j = 0; $j < 6; $j++) {
+            echo "<div class='cell'><div id='".$i."row".$j."'></div></div>";
+          }
           echo "</div>";
         }
-
-
         ?>
 
         </div>
