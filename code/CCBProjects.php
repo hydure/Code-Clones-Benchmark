@@ -236,13 +236,13 @@ $(document).ready(function() {
           echo "<div class='row_special header'>";
           echo "<div class='cell'>ID</div>";
           echo "<div class='cell'>Project</div>";
-          echo "<div class='cell'>Author</div>";
+          echo "<div class='cell'>Owner</div>";
           echo "<div class='cell'>Commit</div>";
           echo "<div class='cell'>Accessed</div>";
           echo "<div class='cell'>Uploaded</div>";
-          echo "<div class='cell'>Ownership</div>";
           echo "<div class='cell'>URL</div>";
           echo "<div class='cell'>Size(bytes)</div>";
+          echo "<div class='cell'>Ownership</div>";
           echo "</div>";
           while ($row = $result->fetch_assoc()) {
 
@@ -265,14 +265,15 @@ $(document).ready(function() {
                     echo "<div class='cell'>".$commit.'</div>';
                     echo "<div class='cell'>".$last_accessed.'</div>';
                     echo "<div class='cell'>".$uploaded.'</div>';
+                    echo "<div class='cell'>".$url.'</div>';
+                    echo "<div class='cell'>".$size.'</div>';
+                    
                     if (intval($ownership) != -1) { 
                       echo "<div class='cell'>Private</div>";
                     }
                     else {
                       echo "<div class='cell'>Public</div>";
                     }
-                    echo "<div class='cell'>".$url.'</div>';
-                    echo "<div class='cell'>".$size.'</div>';
                     echo "</div>";
                   }
           }    

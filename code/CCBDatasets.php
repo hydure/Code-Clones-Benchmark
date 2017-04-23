@@ -22,11 +22,18 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
-  $('[data-toggle=offcanvas]').click(function() {
-    $('.row-offcanvas').toggleClass('active');
+  function cb1Change(obj) {
+      var cbs = document.getElementsByClassName("cb1");
+      for (var i = 0; i < cbs.length; i++) {
+          cbs[i].checked = false;
+      }
+      obj.checked = true;
+  }
+  $(document).ready(function() {
+    $('[data-toggle=offcanvas]').click(function() {
+      $('.row-offcanvas').toggleClass('active');
+    });
   });
-});
 </script>
 <style>
 .wrapper {
@@ -138,10 +145,10 @@ $(document).ready(function() {
 
           <form action="add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
-	    Private:
-            <input type="checkbox" name="ownership_type" value="1" checked>
+	           Private:
+            <input type="checkbox" name="ownership_type" class="cb1" onchange="cb1Change(this)" value="1" checked>
             Public:
-	    <input type="checkbox" name="ownership_type" value="2">
+	          <input type="checkbox" name="ownership_type" class="cb1" onchange="cb1Change(this)" value="2">
             <input type="submit" value="Initialize Dataset">
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
@@ -157,7 +164,7 @@ $(document).ready(function() {
             echo "<div class='cell'>Add</div>";
             echo "<div class='cell'>ID</div>";
             echo "<div class='cell'>Project</div>";
-            echo "<div class='cell'>Author</div>";
+            echo "<div class='cell'>Owner</div>";
             echo "<div class='cell'>Last Accessed</div>";
             echo "<div class='cell'>Date Uploaded</div>";
             echo "<div class='cell'>Ownership</div>";
@@ -238,11 +245,11 @@ $(document).ready(function() {
             echo "<div class='row_special header green'>";
             echo "<div class='cell'>Dataset ID</div>";
             echo "<div class='cell'>Dataset</div>";
+            echo "<div class='cell'>Owner</div>";
             echo "<div class='cell'>Project IDs</div>";
             echo "<div class='cell'>Submit Date</div>";
             echo "<div class='cell'>Status</div>";
-	    echo "<div class='cell'>Ownership</div>";
-	    echo "<div class='cell'>User</div>";
+	          echo "<div class='cell'>Ownership</div>";
             echo "</div>";
 
             $ID_array = array();
@@ -251,14 +258,13 @@ $(document).ready(function() {
               unset($datasetID, $userId);
               $datasetID = $row['datasetID'];
               $userId = $row['userId'];
-	      $ownership = $row['ownership'];
+              $ownership = $row['ownership'];
               if ($_SESSION['userSession'] == $userId || $ownership == -1){
-		if(!in_array($datasetID, $ID_array)) {
-                	array_push($ID_array, $datasetID);
-		}
+            		if(!in_array($datasetID, $ID_array)) {
+                  array_push($ID_array, $datasetID);
+            		}
               }
             }
-
             foreach ($ID_array as $dID) {
               $sql="SELECT * FROM Datasets where datasetID = ". $dID;
               $result = mysqli_query($con, $sql);
@@ -268,14 +274,20 @@ $(document).ready(function() {
                 array_push($tempArray, $row['projectID']);
                 $submit_date = $row['submit_date'];
                 $status = $row['status'];
-		$own = $row['ownership'];
-		$userId = $row['userId'];
+		          $own = $row['ownership'];
+		          $userId = $row['userId'];
               }
               $title = 'title';
               //$project_string = implode(', ', $tempArray);
               echo "<div class='row_special'>";
               echo "<div class='cell'>".$dID.'</div>';
               echo "<div class='cell'>".$title.'</div>';
+              $sql2 = "SELECT username FROM Accounts WHERE userId = ".$userId;
+              $row3 = mysqli_query($con, $sql2);
+              while($result1 = $row3->fetch_assoc()){
+                   $username = $result1['username'];
+              }
+              echo "<div class='cell'>".$username.'</div>';
 
               /** This part prints the project number normally if it is queried in the database, otherwise it is printed red
               **/
@@ -290,8 +302,6 @@ $(document).ready(function() {
                 $projectID = $row2['projectID'];
                 $userID = $row2['userID'];
                 $ownership = $row2['ownership'];
-
-
                 if (!$query) {
                   die('Query failed to execute');
                 }
@@ -309,7 +319,6 @@ $(document).ready(function() {
               echo '</div>'; //close the table value
 
               echo "<div class='cell'>".$submit_date.'</div>';
-
               if ($valid) {
                 if (intval($status) == 0) { 
                   echo "<div class='cell'>Inactive</div>";
@@ -319,17 +328,12 @@ $(document).ready(function() {
               } else {
                 echo "<div class='cell'>Broken</div>";
               }
-	      if($own == 0)
-	      	echo "<div class='cell'>Private</div>";
-	      else echo "<div class='cell'>Public</div>";
-	      $sql2 = "SELECT username FROM Accounts WHERE userId = ".$userId;
-	      $row3 = mysqli_query($con, $sql2);
-	      while($result1 = $row3->fetch_assoc()){
-	           $username = $result1['username'];
-	      }
-	    echo "<div class='cell'>".$username.'</div>';
+      	      if($own == 0) {
+      	      	echo "<div class='cell'>Private</div>";
+              }
+      	      else echo "<div class='cell'>Public</div>";
               echo "</div>";              
-            }
+              }
 
             echo "</div>"; 
             echo "</div>";
