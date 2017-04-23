@@ -94,9 +94,9 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, userId FROM Datasets where status != -1");
+            $result = $con->query("SELECT datasetID, userId, ownership FROM Datasets where status != -1");
 
-            echo "<html>";
+            echo "<html>";		  $ownership = $row['ownership'];
             echo "<body>";
             echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
             $dataset_dropdown = array();
@@ -105,9 +105,12 @@ $(document).ready(function() {
                   unset($datasetID, $userId);
                   $datasetID = $row['datasetID'];
                   $userId = $row['userId'];
-                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
-                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
-                    array_push($dataset_dropdown, $datasetID);
+		  $ownership = $row['ownership'];
+                  if ($_SESSION['userSession'] == $userId || $ownership == -1){
+			if(!in_array($datasetID, $dataset_dropdown)) {
+                    		echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
+                    		array_push($dataset_dropdown, $datasetID);
+			}
                   }
             }
             echo "</select>";
@@ -141,3 +144,4 @@ $(document).ready(function() {
   </div><!--/.container-->
 </div><!--/.page-container-->
 </html>
+
