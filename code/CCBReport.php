@@ -417,7 +417,7 @@ function displayFiles() {
           <form>
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
-            <input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>
+            <!--<input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>-->
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value="View Datasets" id="datasets" />
           </form>
           <form>
