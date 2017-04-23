@@ -30,12 +30,11 @@ $(document).ready(function() {
 </script>
 <style>
 .wrapper {
-  margin: 0 auto;
-  max-width: 800px;
+  max-width: 1200px;
 }
 
 .table {
-  margin: 0 0 40px 0;
+  margin: 8px 0 40px 0;
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: table;
@@ -136,17 +135,10 @@ $(document).ready(function() {
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Datasets</h1>
           <br />
-          <!--
-          <form action="#">
-            <p style="font-size: 160%">Upload Dataset</p>
-         	  <input type = "text" placeholder="URL for Code" required=""> 
-            <input type = "submit" name = "upload" value = "Upload" />
-          </form>
-          <br />
-          -->
+
           <form action="add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
-
+            <input type="submit" value="Initialize Dataset">
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
             if(mysqli_connect_errno()) {
@@ -196,10 +188,38 @@ $(document).ready(function() {
             echo "</div>";
             $con->close();
             ?>
-            <input type="submit" value="Initialize Dataset">
-            <br />
 
-          <form action="#">
+
+          <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
+            <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
+            <?php
+            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+            if(mysqli_connect_errno()) {
+                die("MySQL connection failed: ". mysqli_connect_error());
+            }
+            $result = $con->query("SELECT datasetID, userId FROM Datasets");
+
+            echo "<html>";
+            echo "<body>";
+            echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
+            $dataset_dropdown = array();
+            while ($row = $result->fetch_assoc()) {
+
+                  unset($datasetID, $userId);
+                  $datasetID = $row['datasetID'];
+                  $userId = $row['userId'];
+                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
+                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
+                    array_push($dataset_dropdown, $datasetID);
+                  }
+            }
+            echo "</select>";
+            echo "</body>";
+            echo "</html>";
+            $con->close();
+            ?>
+            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action'/>
+
             
 
             <?php
@@ -296,36 +316,7 @@ $(document).ready(function() {
           </form>
           <br />
 
-          <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
-            <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
-            <?php
-            $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
-            if(mysqli_connect_errno()) {
-                die("MySQL connection failed: ". mysqli_connect_error());
-            }
-            $result = $con->query("SELECT datasetID, userId FROM Datasets");
 
-            echo "<html>";
-            echo "<body>";
-            echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
-            $dataset_dropdown = array();
-            while ($row = $result->fetch_assoc()) {
-
-                  unset($datasetID, $userId);
-                  $datasetID = $row['datasetID'];
-                  $userId = $row['userId'];
-                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
-                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
-                    array_push($dataset_dropdown, $datasetID);
-                  }
-            }
-            echo "</select>";
-            echo "</body>";
-            echo "</html>";
-            $con->close();
-            ?>
-            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action'/>
-          </form>
 
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
