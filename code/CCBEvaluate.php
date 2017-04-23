@@ -204,16 +204,14 @@ function displayClones() {
 }
 
 function test() {
-  var row_selector = document.getElementById('row3');
-  var row_special_selector = document.getElementById('row_special3');
-  row_selector.innerHTML = "tortew";
-  row_special_selector.style.visibility='visible';
+  var dataset_array = <?php echo json_encode($dataset_array); ?>;
+  for (i = 0; i < dataset_array.length; i++) {
+    var row_special_selector = document.getElementById("row_special" + i);
+    alert(row_special_selector);
+    row_special_selector.style.display="";
+  }
 }
 
-function hide() {
-  var row_special_selector = document.getElementById('row_special3');
-  row_special_selector.style.visibility='hidden';
-}
 
 window.onload = function () {
   var dataset_selector = document.getElementById('datasetSelect');
@@ -226,13 +224,12 @@ window.onload = function () {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  var row_special_selector = document.getElementById('row_special3');
-  row_special_selector.style.visibility='hidden';
-    var row_special_selector = document.getElementById('row_special2');
-  row_special_selector.style.visibility='hidden';
-    var row_special_selector = document.getElementById('row_special1');
-  row_special_selector.style.visibility='hidden';
+document.addEventListener('DOMContentLoaded', function() { //hides all rows upon loading
+  var dataset_array = <?php echo json_encode($dataset_array); ?>;
+  for (i = 0; i < dataset_array.length; i++) {
+    var row_special_selector = document.getElementById("row_special" + i);
+    row_special_selector.style.display="none";
+  }
 });
 
 
@@ -366,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <?php
         for ($i = 0; $i < count($dataset_array); $i++) {
           echo "<div class='row_special' id='row_special".$i."' >";
-          echo "<div class='cell'><div id='row".$i."'></div></div>";
+          echo "<div class='cell'><div id='row".$i."'>".$i."</div></div>";
           echo "</div>";
         }
 
