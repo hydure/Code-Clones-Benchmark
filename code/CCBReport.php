@@ -449,6 +449,8 @@ function displayFiles() {
   </div><!--/.container-->
 
 </div><!--/.page-container-->
+<<<<<<< HEAD
+=======
               <div class="box" id="file1_name"></div>
                 <iframe id="iframe1" frameborder="1" width=700 height=512 align="left"></iframe>
               
@@ -456,4 +458,5 @@ function displayFiles() {
                 <iframe id="iframe2" frameborder="1" width=700 height=512 align="right"></iframe>
 <div>
 
+>>>>>>> 604fe78269442bbf1e9736870a426d97669ae837
 </html>
