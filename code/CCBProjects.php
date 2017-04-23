@@ -34,12 +34,11 @@ $(document).ready(function() {
 <style>
 
 .wrapper {
-  margin: 0 auto;
   max-width: 800px;
 }
 
 .table {
-  margin: 0 0 40px 0;
+  margin: 8px 0 40px 0;
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: table;
@@ -235,7 +234,7 @@ $(document).ready(function() {
           echo "<div class = 'wrapper'>";
           echo "<div class='table'>";
           echo "<div class='row_special header'>";
-          echo "<div class='cell'>Project ID</div>";
+          echo "<div class='cell'>ID</div>";
           echo "<div class='cell'>Project</div>";
           echo "<div class='cell'>Author</div>";
           echo "<div class='cell'>Commit</div>";
