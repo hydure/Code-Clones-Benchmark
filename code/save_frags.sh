@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # save_frags.sh $detector $file $lang $datasetID $project1ID $project1URL ..
 
 detector=$1
@@ -22,9 +22,13 @@ cd $datasetID
 if [ "$detector" = "nicad" ]; then
     files=`grep "Lines" $file | awk '{print $6}' | uniq | sed 's:.*/'$datasetID'/::'`
 
+    # nicad appends .pyindent??
+    files=`echo $files | sed 's/\.pyindent//g'`
+
     j=0
     while [ "$j" -lt "$i" ]; do
         git clone ${projectURL[$j]} ${projectID[$j]}
+        rm -rf ${projectID[$j]}/\.git
         j=`expr $j + 1`
     done
 elif [ "$detector" = "deckard" ]; then
@@ -33,7 +37,7 @@ elif [ "$detector" = "deckard" ]; then
     j=0
     while [ "$j" -lt "$i" ]; do
         git clone ${projectURL[$j]} src/${projectID[$j]}
-        rm -rf src/${projectID[$j]}/.git
+        rm -rf src/${projectID[$j]}/\.git
         j=`expr $j + 1`
     done
 fi
@@ -41,8 +45,8 @@ fi
 dir_files=`find . -type f | sed 's:^\./::'`
 
 for f in $dir_files; do
-    if [ "$files" != "$f" ]; then
-        rm $f
+    if [[ ! "$files" =~ $f ]]; then
+        rm "$f"
     fi
 done
 find . -type d -empty -delete
