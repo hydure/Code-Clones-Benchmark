@@ -119,9 +119,46 @@ array_unshift($dataset_files, $last_cloneID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();
+
+$handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY
+$filepath1 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java';
+array_push($handle_array, $filepath1);
+$filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
+array_push($handle_array, $filepath2);
+
+/** source file stored as 
+( ($filename1, line1, line2, ...), ($filename2, line1, line2, ...), ...)
+**/
+$c = 0;
+$sourcefile_array = array();
+foreach ($handle_array as $handlepath) {
+  $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
+  $handle = fopen($handlepath, "r");
+  if ($handle) {
+    while (($line = fgets($handle)) != false) {
+      array_push($line_array, $line);
+    }
+  }
+  fclose($handle);
+  if ($c == 0) {  //THIS IS TEMPORARY, FIX WHEN WE GET CORRECT HANDLE_ARRAY
+    array_unshift($line_array, "src/AbstractAsyncTableRendering.java");
+  }
+  if ($c == 1) {
+    array_unshift($line_array, "src/AbstractTableRendering.java");
+  }
+  array_push($sourcefile_array, $line_array);
+  $c += 1;
+
+}
+
 ?>
-
-
+<link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+<script type='text/javascript' src="highlightjs-line-numbers.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+hljs.initLineNumbersOnLoad();
+</script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -129,69 +166,64 @@ $con->close();
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-function displayFile(){
-  //alert('shame');
+
+var GlobalVar = {};
+function analyzeClones(){
   //step 1: get the DOM object of the iframe.
-  var iframe = document.getElementById('iframe1');
-//alert('Cannot inject dynamic contents into iframe.');
-
-
-  <?php /**
-  $code_array = array();
-  $line_counter = 1;
-  $array_counter = 0;
-  $highlighting = false;
-  array_push($code_array, '<pre>');
-  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
-  if ($handle) {
-    while (($line = fgets($handle)) != false) {
-      if ($line_counter == $start_array[$array_counter] || $highlighting) {   //highlight l
-        $line = '<code><mark>' . substr($line, 0, -1) . '</mark></code><br>';
-        
-        if ($highlighting == false) {
-          $highlighting = true;
-        }
-      } else {
-        $line = '<code>' . substr($line, 0, -1) . '</code><br>';        
-      }
-      array_push($code_array, $line);
-      $line_counter += 1; 
-      if ($line_counter == $end_array[$array_counter]) {
-        $highlighting = false;
-        if ($array_counter <= count($start_array)) {
-          $array_counter += 1;
-        }
-      } 
-    } 
-    fclose($handle);
-  } **/
-  //$code_array = array('color');
-  //array_push($code_array, '</pre>');
-  //$code_string = implode("", $code_array);
-  $code_string = 'tit';
-  $code_string = json_encode($code_string, JSON_HEX_TAG);  
-  ?>
-  var display_selector = document.getElementById('cloneSelect');  
-  var value = display_selector[display_selector.selectedIndex].value;
-  //alert(value);
+  var iframe1 = document.getElementById('iframe1');
+  var iframe2 = document.getElementById('iframe2');  
+  var file1_selector = document.getElementById('file1Select');
+  var file2_selector = document.getElementById('file2Select');
+  var file1_value = file1_selector[file1_selector.selectedIndex].value;
+  var file2_value = file2_selector[file2_selector.selectedIndex].value;
+  document.getElementById('file1_name').innerHTML = file1_value;
+  document.getElementById('file2_name').innerHTML = file2_value;
+  value = GlobalVar.value;
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
-      alert(selected_start_array);
     }
   }
   var end_array = <?php  echo json_encode($end_array); ?>;
   for (var index in end_array) { //find range for selected files
     if (end_array[index][0] == value) {
       var selected_end_array = end_array[index].slice(1);
-      alert(selected_end_array);
+
     }
   }
-  var end_array = <?php  echo json_encode($end_array); ?>;
-  var css = '<style>pre{counter-reset: line;}code{counter-increment: line;}code:before{content: counter(line); -webkit-user-select: none; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em;}</style>';  
-  var code = <?php echo $code_string; ?>;
-  var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
+  var dummy1_array = []; //these will contain the unmodified source code
+  var dummy2_array = [];
+  var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
+
+  for (var index in sourcefile_array) {
+    if (sourcefile_array[index][0] == file1_value) {
+      dummy1_array = sourcefile_array[index].slice(1);
+
+    }
+    if (sourcefile_array[index][0] == file2_value) {
+      dummy2_array = sourcefile_array[index].slice(1);
+    }
+  }
+
+  code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
+  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
+  injectIframeContent(iframe1, code1);
+  injectIframeContent(iframe2, code2);
+
+   //document.getElementById("scroll").scrollIntoView();
+
+}
+function injectIframeContent(iframe, code) {
+  var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
+  var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
+  var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
+  var scriptA = "</";
+  var scriptB = "script>";
+  var scriptC = scriptA + scriptB;
+  var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
+  var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
+  var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -205,9 +237,42 @@ function displayFile(){
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
-   }
-
+   } 
 }
+
+function makeIframeContent(dummy_array, selected_start_array, selected_end_array, file_value) {
+  var line_counter = 0;
+  var array_iterator = 0;
+  var scroll_counter = 0;
+  var highlighted = false;
+  var code_array = [];
+  code_array.push("<pre><code class='java'>");
+  for (var index in dummy_array) {
+    var line = dummy_array[index];
+    if (line_counter > 0) {
+      //line = line.split('"').join("&quot"); //escapes HTML markup
+      line = line.split("&").join("&amp");
+      line = line.split("<").join("&lt");
+      line = line.split(">").join("&gt");
+    } 
+    if ((line_counter == selected_start_array[array_iterator] && file_value == selected_start_array[array_iterator + 1]) || highlighted) {
+      line = "<mark>" + line + '</mark>';
+      //alert(line_counter + " found " + line);
+      if (highlighted == false) {
+        highlighted = true;
+      }
+    }
+    code_array.push(line);
+    line_counter += 1; 
+    if (line_counter == selected_end_array[array_iterator]) {
+      highlighted = false;
+      array_iterator += 2;
+    }
+  }
+  code_array.push('</code></pre>');
+  code = code_array.join("");
+  return code;
+}  
 function displayDatasets() {
   
   var dataset_array;
@@ -255,6 +320,7 @@ function displayClones() {
 function displayFiles() {
   var selector = document.getElementById('cloneSelect');  
   var value = selector[selector.selectedIndex].value;
+  GlobalVar.value = value;
   var file_array = <?php  echo json_encode($file_array); ?>;
   for (var index in file_array) { //find range for selected files
     if (file_array[index][0] == value) {
@@ -292,6 +358,16 @@ function displayFiles() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
+  <style>
+    .box {
+      float:left;
+      margin-right:20px;
+    }
+
+    .clear {
+      clear:both;
+    }
+  </style>
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -331,11 +407,13 @@ function displayFiles() {
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
               <li class"active"><a href="#">Reports</a></li>
+              <li><a href="CCBEvaluate.php">Evaluate</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-11">       
+        <div class="col-xs-12 col-sm-11">
+        <p id="demo"></p>       
           <form>
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
@@ -343,11 +421,12 @@ function displayFiles() {
             <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value = "View Datasets" id = "datasets" />
           </form>
           <form>
+            Datasets:
             <select name='datasetSelect' id = 'datasetSelect' multiple/></select>
             <input type = "submit" name ="clones_button" onClick="javascript:displayClones(); return false" value = "View Clones" id = "clones" />
           </form>
           <form>
-            Clone:
+            Clones:
             <select name= "cloneSelect" id="cloneSelect" multiple></select> 
             <input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
             <input type="checkbox" id="files_frame2_checkbox" name="files_checkbox[]" value="files_frame2">Show Files in Frame Two</label><br/>
@@ -357,16 +436,27 @@ function displayFiles() {
             Frame One: 
             <select name= "file1Select" id="file1Select" multiple></select> 
             Frame Two:
-            <select name= "file2Select" id="file2Select" multiple></select> 
-            <input type = "submit" name ="analyze_button" onClick="javascript:AnalyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
+            <select name= "file2Select" id="file2Select" multiple></select>
+            <input type="checkbox" id="only_clones_checkbox" name="only_clones" value="only_clones">Only Show Clones</label><br/> 
+            <input type = "submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value = "Analyze Clones" id = "clones_for_file" />
           </form>
-            <div align="center">
-                <iframe id="iframe1" width=60% height=70%></iframe>
-               <!-- <iframe id="iframe_two" width=40% height=70%></iframe> -->
-            </div>
+
+              
+          
             <!--frames for adding results above-->
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
+
 </div><!--/.page-container-->
+<<<<<<< HEAD
+=======
+              <div class="box" id="file1_name"></div>
+                <iframe id="iframe1" frameborder="1" width=700 height=512 align="left"></iframe>
+              
+              <div id="file2_name"></div>
+                <iframe id="iframe2" frameborder="1" width=700 height=512 align="right"></iframe>
+<div>
+
+>>>>>>> 604fe78269442bbf1e9736870a426d97669ae837
 </html>

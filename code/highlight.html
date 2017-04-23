@@ -1,0 +1,30 @@
+<link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+<script type='text/javascript' src="highlightjs-line-numbers.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+hljs.initLineNumbersOnLoad();
+</script>
+<html>
+<head>Test of the highlight with line numbers</head>
+<body>
+<div>
+<pre><code>
+#include <iostream>
+
+int main(int argc, char *argv[]) {
+
+ <mark> /* An annoying "Hello World" example */ </mark>
+  for (auto i = 0; i < 0xFFFF; i++)
+    cout << "Hello, World!" << endl;
+
+  char c = '\n';
+  unordered_map <string, vector<string> > m;
+  m["key"] = "\\\\"; // this is an error
+
+  return -2e3 + 12l;
+}
+</code></pre>
+</div>
+</body>
+</html>

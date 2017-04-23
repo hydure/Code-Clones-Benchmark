@@ -78,6 +78,7 @@ $(document).ready(function() {
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li class="active"><a href="#">Tools</a></li>
               <li><a href="CCBReport.php">Reports</a></li>
+              <li><a href="CCBEvaluate.php">Evaluate</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
@@ -93,7 +94,7 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, userId FROM Datasets");
+            $result = $con->query("SELECT datasetID, userId FROM Datasets where status != -1");
 
             echo "<html>";
             echo "<body>";

@@ -32,21 +32,60 @@ $(document).ready(function() {
 </script>
 
 <style>
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
+
+.wrapper {
+  margin: 0 auto;
+  max-width: 800px;
 }
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+.table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+@media screen and (max-width: 580px) {
+  .table {
+    display: block;
+  }
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.row_special {
+  display: table-row;
+  background: #f6f6f6;
 }
+.row_special:nth-of-type(odd) {
+  background: #e9e9e9;
+}
+.row_special.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+}
+.row_special.green {
+  background: #27ae60;
+}
+.row_special.blue {
+  background: #2980b9;
+}
+@media screen and (max-width: 580px) {
+  .row_special {
+    padding: 8px 0;
+    display: block;
+  }
+}
+
+.cell {
+  padding: 6px 12px;
+  display: table-cell;
+}
+@media screen and (max-width: 580px) {
+  .cell {
+    padding: 2px 12px;
+    display: block;
+  }
+}
+
 </style>
 
 <!DOCTYPE html>
@@ -58,14 +97,19 @@ tr:nth-child(even) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
-    function submitFunc() {
-
-      var number_of_checked_checkbox= $("input[name=ownership_type]:checked").length;
-      if(number_of_checked_checkbox != 1){
-          alert("You must select a single ownership type.");
-      } else {
-          document.getElementById("project_button").submit();
-      }
+    function cb1Change(obj) {
+        var cbs = document.getElementsByClassName("cb1");
+        for (var i = 0; i < cbs.length; i++) {
+            cbs[i].checked = false;
+        }
+        obj.checked = true;
+    }
+    function cb2Change(obj) {
+        var cbs = document.getElementsByClassName("cb2");
+        for (var i = 0; i < cbs.length; i++) {
+            cbs[i].checked = false;
+        }
+        obj.checked = true;
     }
   </script>
 </head>
@@ -104,6 +148,7 @@ tr:nth-child(even) {
               <li><a href="CCBDatasets.php">Datasets</a></li>
               <li><a href="CCBTools.php">Tools</a></li>
               <li><a href="CCBReport.php">Reports</a></li>
+              <li><a href="CCBEvaluate.php">Evaluate</a></li>
               <li><a href="CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
@@ -119,18 +164,20 @@ tr:nth-child(even) {
 	          Commit:<br>
             <input type="text" name="commit" value="head">
             <br>
-	          Private:<br>
-	          <input type="checkbox" name="private" value="1">
+            Private:
+            <input type="checkbox" class="cb1" onchange="cb1Change(this)" name="ownership_type" value="1" checked>
+            Public:
+            <input type="checkbox" class="cb1" onchange="cb1Change(this)" name="ownership_type" value="2">
+             <br>
 	          <br>        
 	          <input type="submit" value="Upload"/>
           </form>
           <br />
           <form id="project_button" action="upload_project.php" method="post" enctype="multipart/form-data">
-            <p align="center-block">Submit Compressed Source Directory</p>
             Private:
-            <input type="checkbox" name="ownership_type" value="1" checked>
+            <input type="checkbox" class="cb2" onchange="cb2Change(this)" name="ownership_type" value="1" checked>
             Public:
-            <input type="checkbox" name="ownership_type" value="2">
+            <input type="checkbox" class="cb2" onchange="cb2Change(this)" name="ownership_type" value="2">
              <br>
             <input type = "file" name = "uploaded_file" /><br />
             <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
@@ -152,8 +199,7 @@ tr:nth-child(even) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
             $result = $con->query("SELECT projectID, title, userId FROM Projects");
-            echo "<html>";
-            echo "<body>";
+
             echo "<select name='projectSelect' id = 'projectSelect' >" ;
 
             while ($row = $result->fetch_assoc()) {
@@ -168,8 +214,6 @@ tr:nth-child(even) {
                  
             }
             echo "</select>";
-            echo "</body>";
-            echo "</html>";
             $con->close();
             ?>
             <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' />
@@ -188,20 +232,19 @@ tr:nth-child(even) {
               die("MySQL connection failed: ". mysqli_connect_error());
           }
           $result = $con->query("SELECT projectID, title, commit, last_accessed, uploaded, ownership, url, size, userId, author FROM Projects");
-          echo "<html>";
-          echo "<body>";
-          echo "<table>";
-          echo "<tr>";
-          echo "<th>ID</th>";
-          echo "<th>Project</th>";
-          echo "<th>Author</th>";
-          echo "<th>Commit</th>";
-          echo "<th>Last Accessed</th>";
-          echo "<th>Date Uploaded</th>";
-          echo "<th>Ownership</th>";
-          echo "<th>URL</th>";
-          echo "<th>Size (bytes)</th>";
-          echo "</tr>";
+          echo "<div class = 'wrapper'>";
+          echo "<div class='table'>";
+          echo "<div class='row_special header'>";
+          echo "<div class='cell'>Project ID</div>";
+          echo "<div class='cell'>Project</div>";
+          echo "<div class='cell'>Author</div>";
+          echo "<div class='cell'>Commit</div>";
+          echo "<div class='cell'>Last Accessed</div>";
+          echo "<div class='cell'>Date Uploaded</div>";
+          echo "<div class='cell'>Ownership</div>";
+          echo "<div class='cell'>URL</div>";
+          echo "<div class='cell'>Size (bytes)</div>";
+          echo "</div>";
           while ($row = $result->fetch_assoc()) {
 
                   unset($projectID, $title, $userId);
@@ -216,28 +259,27 @@ tr:nth-child(even) {
                   $size = $row['size'];
                   $userId = $row['userId'];
                   if ($_SESSION['userSession'] == $userId || $ownership == -1) {
-                    echo "<tr>";
-                    echo '<th>'.$projectID.'</th>';
-                    echo '<th>'.$title.'</th>';
-                    echo '<th>'.$author.'</th>';
-                    echo '<th>'.$commit.'</th>';
-                    echo '<th>'.$last_accessed.'</th>';
-                    echo '<th>'.$uploaded.'</th>';
+                    echo "<div class='row_special'>";
+                    echo "<div class='cell'>".$projectID.'</div>';
+                    echo "<div class='cell'>".$title.'</div>';
+                    echo "<div class='cell'>".$author.'</div>';
+                    echo "<div class='cell'>".$commit.'</div>';
+                    echo "<div class='cell'>".$last_accessed.'</div>';
+                    echo "<div class='cell'>".$uploaded.'</div>';
                     if (intval($ownership) != -1) { 
-                      echo '<th>Private</th>';
+                      echo "<div class='cell'>Private</div>";
                     }
                     else {
-                      echo '<th>Public</th>';
+                      echo "<div class='cell'>Public</div>";
                     }
-                    echo '<th>'.$url.'</th>';
-                    echo '<th>'.$size.'</th>';
-                    echo "</tr>";
+                    echo "<div class='cell'>".$url.'</div>';
+                    echo "<div class='cell'>".$size.'</div>';
+                    echo "</div>";
                   }
           }    
-          echo "</table";
+          echo "</div>";
+          echo "</div>";
           //echo "HEEEEEEEEEEEEEEEEERE" . ($_SESSION['userName']);
-          echo "</body>";
-          echo "</html>";
           $con->close();
           ?>
         </div><!-- /.col-xs-12 main -->

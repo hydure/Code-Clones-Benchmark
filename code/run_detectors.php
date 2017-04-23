@@ -219,7 +219,7 @@ foreach($_POST['detector'] as $detector) {
                 $projectID=preg_replace(":/.*:", "", $projectID);
                 $index = explode(":", substr($parsed[2], 4));
                 $start = $index[1];
-                $end = intval(($index[2])) + intval($start);
+                $end = intval(($index[2])) + intval($start) - 1;
 
                 # check if clone has been added already
                 $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
