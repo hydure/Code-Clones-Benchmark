@@ -138,6 +138,10 @@ $(document).ready(function() {
 
           <form action="add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
+	    Private:
+            <input type="checkbox" name="ownership_type" value="1" checked>
+            Public:
+	    <input type="checkbox" name="ownership_type" value="2">
             <input type="submit" value="Initialize Dataset">
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
@@ -227,7 +231,7 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status FROM Datasets ORDER BY submit_date DESC");
+            $result = $con->query("SELECT datasetID, projectID, userId, submit_date, status, ownership FROM Datasets ORDER BY submit_date DESC");
             //echo "<p align='center-block' style='font-size: 160%''>Dataset Browser</p>";
             echo "<div class = 'wrapper'>";
             echo "<div class='table'>";
@@ -237,6 +241,8 @@ $(document).ready(function() {
             echo "<div class='cell'>Project IDs</div>";
             echo "<div class='cell'>Submit Date</div>";
             echo "<div class='cell'>Status</div>";
+	    echo "<div class='cell'>Ownership</div>";
+	    echo "<div class='cell'>User</div>";
             echo "</div>";
 
             $ID_array = array();
@@ -245,8 +251,11 @@ $(document).ready(function() {
               unset($datasetID, $userId);
               $datasetID = $row['datasetID'];
               $userId = $row['userId'];
-              if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $ID_array)) {
-                array_push($ID_array, $datasetID);
+	      $ownership = $row['ownership'];
+              if ($_SESSION['userSession'] == $userId || $ownership == -1){
+		if(!in_array($datasetID, $ID_array)) {
+                	array_push($ID_array, $datasetID);
+		}
               }
             }
 
@@ -259,6 +268,8 @@ $(document).ready(function() {
                 array_push($tempArray, $row['projectID']);
                 $submit_date = $row['submit_date'];
                 $status = $row['status'];
+		$own = $row['ownership'];
+		$userId = $row['userId'];
               }
               $title = 'title';
               //$project_string = implode(', ', $tempArray);
@@ -308,6 +319,15 @@ $(document).ready(function() {
               } else {
                 echo "<div class='cell'>Broken</div>";
               }
+	      if($own == 0)
+	      	echo "<div class='cell'>Private</div>";
+	      else echo "<div class='cell'>Public</div>";
+	      $sql2 = "SELECT username FROM Accounts WHERE userId = ".$userId;
+	      $row3 = mysqli_query($con, $sql2);
+	      while($result1 = $row3->fetch_assoc()){
+	           $username = $result1['username'];
+	      }
+	    echo "<div class='cell'>".$username.'</div>';
               echo "</div>";              
             }
 
@@ -326,3 +346,4 @@ $(document).ready(function() {
   </div><!--/.container-->
 </div><!--/.page-container-->
 </html>
+
