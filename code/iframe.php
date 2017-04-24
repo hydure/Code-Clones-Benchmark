@@ -92,6 +92,7 @@ function injectHTML() {
 
 
 	var html_string = css + '<html><head></head><body><p>' + code + '</p></body></html>';
+	var html_string = '<html>HELLO</html>';
 
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
