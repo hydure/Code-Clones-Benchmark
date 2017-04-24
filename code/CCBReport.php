@@ -378,6 +378,12 @@ function displayFiles() {
 	top:38%;
 	margin: 0 auto;
     }
+    .colform {
+	float:left;
+	width:auto;
+	padding-right:30px;
+    }
+
   </style>
 	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
