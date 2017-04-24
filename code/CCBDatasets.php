@@ -165,8 +165,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             echo "<div class='cell'>ID</div>";
             echo "<div class='cell'>Project</div>";
             echo "<div class='cell'>Owner</div>";
-            echo "<div class='cell'>Last Accessed</div>";
-            echo "<div class='cell'>Date Uploaded</div>";
+            echo "<div class='cell'>Accessed</div>";
+            echo "<div class='cell'>Uploaded</div>";
             echo "<div class='cell'>Ownership</div>";
             echo "</div>";
             while ($row = $result->fetch_assoc()) {

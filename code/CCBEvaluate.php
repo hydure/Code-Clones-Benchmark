@@ -24,6 +24,7 @@ $sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language 
 $result = $con->query($sql);
 $dataset_array = array();
 $rows_array = array();
+$size_counter = 0;
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
   unset($datasetID, $userID, $file, $start, $end, $detector, $language);
   $cloneID = $row['cloneID'];
@@ -48,9 +49,10 @@ while ($row = $result->fetch_assoc()) { //store all possible relevant data into 
   array_push($line_array, $sim);
   array_push($line_array, $detector);
   array_push($line_array, $language);
-  array_push($rows_array, $line_array); 
-
+  array_push($rows_array, $line_array);
+  $size_counter++; 
 }
+
 $con->close();
 
 
@@ -69,7 +71,8 @@ $con->close();
 <script type="text/javascript">
 
 function loadTable() {
-  for (i = 0; i < 500; i++) { //resets the rows
+  var size_counter = <?php echo json_encode($size_counter); ?>;
+  for (i = 0; i < size_counter; i++) { //resets the rows
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="none";
   }
@@ -92,7 +95,6 @@ function loadTable() {
       cell.innerHTML=selected_rows_array[i][j];
     }
   }
-
 }
 
 window.onload = function () { //populates datasets on page load
@@ -108,7 +110,8 @@ window.onload = function () { //populates datasets on page load
 
 document.addEventListener('DOMContentLoaded', function() { //hides all rows upon loading
   var dataset_array = <?php echo json_encode($dataset_array); ?>;
-  for (i = 0; i < 500; i++) {
+  var size_counter = <?php echo json_encode($size_counter); ?>;
+  for (i = 0; i < size_counter; i++) {
     var row_special_selector = document.getElementById("row_special" + i);
     row_special_selector.style.display="none";
   }
@@ -124,15 +127,12 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
       float:left;
       margin-right:20px;
     }
-
     .clear {
       clear:both;
     }
-
     .wrapper {
       max-width: 1200px;
     }
-
     .table {
       margin: 8px 0 40px 0;
       width: 100%;
@@ -144,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         display: block;
       }
     }
-
     .row_special {
       display: table-row;
       background: #f6f6f6;
@@ -169,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         display: block;
       }
     }
-
     .cell {
       padding: 6px 12px;
       display: table-cell;
@@ -247,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         <div class='cell'>Language</div>
         </div>
         <?php
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < $size_counter; $i++) {
           echo "<div class='row_special' id='row_special".$i."' >";
           for ($j = 0; $j < 6; $j++) {
             echo "<div class='cell'><div id='".$i."cell".$j."'></div></div>";
@@ -255,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
           echo "</div>";
         }
         ?>
-
         </div>
         </div>             
         </div><!-- /.col-xs-12 main -->
