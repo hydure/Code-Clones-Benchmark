@@ -38,6 +38,8 @@ foreach($_POST['detector'] as $detector) {
         *                          *
         ***************************/
     if ($detector == "nicad") {
+        echo "<h3>NiCad</h3>";
+
         if (empty($_POST['n_language'])) {
             echo "Please select a language.<br>";
             break;
@@ -54,6 +56,7 @@ foreach($_POST['detector'] as $detector) {
             " AND language='$lang'");
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
+            echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
             break;
         }
        
@@ -135,7 +138,7 @@ foreach($_POST['detector'] as $detector) {
             }
         }
 
-        $num_classes=`grep "Number" $file | awk '{print $4}'`;
+        $num_classes=`grep "Number" $out_file | awk '{print $4}'`;
         echo "There were $num_classes classes of clones.<br>";
         echo "Added $num_clones clones.";
 
@@ -149,6 +152,7 @@ foreach($_POST['detector'] as $detector) {
         *                          *
         ***************************/
     } else if ($detector == 'deckard') {
+        echo "<h3>Deckard</h3>";
         if (empty($_POST['d_language'])) {
             echo "Please select a language.<br>";
             break;
@@ -165,6 +169,7 @@ foreach($_POST['detector'] as $detector) {
             " AND language='$lang'");
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
+            echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
             exit;
         }
 
@@ -263,8 +268,8 @@ foreach($_POST['detector'] as $detector) {
         #echo "<br>./save_frags.sh $detector $out_file $args<br>";
         shell_exec("./save_frags.sh $detector $out_file $args");
     }
-    mysqli_close($con);
 }
+mysqli_close($con);
 
 
 } else {
