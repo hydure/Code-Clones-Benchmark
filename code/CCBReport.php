@@ -233,6 +233,8 @@ function analyzeClones(){
       //alert(dummy2_array);
     }
   }
+  var iframe1 = document.getElementById('iframe1');
+  var iframe2 = document.getElementById('iframe2'); 
 
   code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
   code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
@@ -243,7 +245,6 @@ function analyzeClones(){
 
 }
 function injectIframeContent(iframe, code) {
-  code = "CHECK";
   var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
