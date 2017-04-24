@@ -149,7 +149,7 @@ while ($row = $result->fetch_assoc()) {
     array_push($dual_file_array, $filepath);
     array_push($dual_file_array, $file);
     array_push($handle_array, $dual_file_array);
-    echo $filepath " | ";
+    echo $filepath . " | ";
   }
 }
 $con->close();
