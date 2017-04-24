@@ -252,6 +252,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
+  alert(code);
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -274,7 +275,7 @@ function makeIframeContent(dummy_array, selected_start_array, selected_end_array
   var scroll_counter = 0;
   var highlighted = false;
   var code_array = [];
-  code_array.push("<pre><code class='java'>");
+  code_array.push("<pre><code>");
   for (var index in dummy_array) {
     var line = dummy_array[index];
     if (line_counter > 0) {
