@@ -225,12 +225,12 @@ function analyzeClones(){
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
-      alert(dummy1_array);
+      //alert(dummy1_array);
 
     }
     if (sourcefile_array[index][0] == file2_value) {
       dummy2_array = sourcefile_array[index].slice(1);
-      alert(dummy2_array);
+      //alert(dummy2_array);
     }
   }
 
@@ -252,7 +252,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
-  alert(code);
+  alert(html_string);
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
