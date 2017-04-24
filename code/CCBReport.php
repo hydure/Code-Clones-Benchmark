@@ -149,7 +149,7 @@ while ($row = $result->fetch_assoc()) {
     array_push($dual_file_array, $filepath);
     array_push($dual_file_array, $file);
     array_push($handle_array, $dual_file_array);
-    echo $filepath . " | ";
+    //echo $filepath . " | ";
   }
 }
 $con->close();
@@ -167,7 +167,6 @@ foreach ($handle_array as $handlepath) {
   $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
   $handle = fopen($handlepath1, "r");
   if ($handle) {
-    echo "loaded";
     while (($line = fgets($handle)) != false) {
       array_push($line_array, $line);
     }
@@ -199,7 +198,6 @@ hljs.initLineNumbersOnLoad();
 var GlobalVar = {};
 function analyzeClones(){
   //step 1: get the DOM object of the iframe. 
-
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select'); 
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
@@ -211,7 +209,7 @@ function analyzeClones(){
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
-      alert(selected_start_array);
+      //alert(selected_start_array);
     }
   }
   var end_array = <?php  echo json_encode($end_array); ?>;
@@ -229,19 +227,39 @@ function analyzeClones(){
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
-      alert(dummy1_array);
+      //alert(dummy1_array);
 
     }
     if (sourcefile_array[index][0] == file2_value) {
       dummy2_array = sourcefile_array[index].slice(1);
-      alert(dummy2_array);
-    }
+      //alert(dummy2_array);
+    } 
   }
-
+  <?php /**
+  $dummy1_array = array();
+  $dummy2_array = array();
+  //$handle = fopen("/home/pi/MyNAS/deckard/22/src/35/AbstractTableRendering.java", "r");
+  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java', "r");
+  if ($handle) {
+    while (($line = fgets($handle)) != false) {
+      array_push($dummy1_array, $line);
+    }
+    fclose($handle);
+  }
+  //$handle = fopen("/home/pi/MyNAS/deckard/22/src/35/AbstractAsyncTableRendering.java", "r");
+  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
+  if ($handle) {
+    while (($line = fgets($handle)) != false) {
+      array_push($dummy2_array, $line);
+    }
+    fclose($handle);
+  } **/
+  ?>
+  //var dummy1_array = <?php echo json_encode($dummy1_array); ?>;
+  //var dummy2_array = <?php echo json_encode($dummy2_array); ?>;
   var code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
   var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
-  code1 ="t";
-  code2 = "t";
+  //alert(code1);
   var iframe1 = document.getElementById('iframe1');
   var iframe2 = document.getElementById('iframe2');
   injectIframeContent(iframe1, code1);
@@ -259,8 +277,9 @@ function injectIframeContent(iframe, code) {
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
   //document.getElementById('testme').innerHTML = html_string;
-  alert(html_string);
-  html_string = "<html>HELLO</html>";
+  //alert(html_string);
+  //var iframe = document.getElementById('iframe1');
+  //html_string = "<html>HELLO</html>";
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
@@ -274,7 +293,6 @@ function injectIframeContent(iframe, code) {
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
-
    } 
 }
 
@@ -309,7 +327,9 @@ function makeIframeContent(dummy_array, selected_start_array, selected_end_array
   code_array.push('</code></pre>');
   code = code_array.join("");
   return code;
-}  
+}
+
+
 function displayDatasets() {
   
   var dataset_array;
@@ -418,7 +438,7 @@ function displayFiles() {
     }
 
   </style>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -469,20 +489,20 @@ function displayFiles() {
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
             <!--<input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>-->
 	    <br>
-            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value="View Datasets" id="datasets" />
+            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value="View Datasets" id="datasets" class="buttonA"/>
           </form>
           <form class="colform">
             Datasets:
             <select name='datasetSelect' id='datasetSelect' multiple/></select>
 	    <br>
-            <input type="submit" name="clones_button" onClick="javascript:displayClones(); return false" value="View Clones" id="clones" />
+            <input type="submit" name="clones_button" onClick="javascript:displayClones(); return false" value="View Clones" id="clones" class="buttonA"/>
           </form>
           <form class="colform">
 	    <div style="float:left;">
             	Clones:
             	<select name="cloneSelect" id="cloneSelect" multiple></select> 
 	    	<br>
-	    	<input type="submit" name ="files_button" onClick="javascript:displayFiles(); return false" value="View Files" id="files" />
+	    	<input type="submit" name ="files_button" onClick="javascript:displayFiles(); return false" value="View Files" id="files" class="buttonA"/>
 	    </div>
 	    <div class = "checkbox_files" style="float:right;">
             	<input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
@@ -506,7 +526,7 @@ function displayFiles() {
 	    <br style="clear: left;">
 	    <br>
 	    <div>
-            <input type="submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value="Analyze Clones" id="clones_for_file" />
+            <input type="submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value="Analyze Clones" id="clones_for_file" class="buttonA"/>
 	    </div>
           </form>
               
@@ -515,14 +535,12 @@ function displayFiles() {
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
-<div class="iframe_container">
-   <div class="box" id="file1_name">
+   <div class="box" id="file1_name"></div>
    <iframe id="iframe1" frameborder="1" width=750 height=512 align="left"></iframe>
-   </div>
-   <div class="box" id="file2_name">
+   
+   <div class="box" id="file2_name"></div>
    <iframe id="iframe2" frameborder="1" width=750 height=512 align="right"></iframe>
-   </div>
-</div>
+   
 <div id="testme"></div>
 </div><!--/.page-container-->
 </div>
