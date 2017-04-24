@@ -1,5 +1,4 @@
 
-
 /* ------------------------------------------
  * CSS3 GITHUB buttonAS (Nicolas Gallagher)
  * Licensed under Unlicense
@@ -513,3 +512,8 @@ However, delay the fade out process for 2.5 seconds */
    background-color: #272B2E;
 }
 
+.colform {
+	float:left;
+	width:auto;
+	padding-right:30px;
+}
