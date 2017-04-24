@@ -197,14 +197,14 @@ var GlobalVar = {};
 function analyzeClones(){
   //step 1: get the DOM object of the iframe.
   var iframe1 = document.getElementById('iframe1');
-  var iframe2 = document.getElementById('iframe2');  
+  var iframe2 = document.getElementById('iframe2');  /**
   var file1_selector = document.getElementById('file1Select');
-  var file2_selector = document.getElementById('file2Select');
+  var file2_selector = document.getElementById('file2Select'); 
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
   var file2_value = file2_selector[file2_selector.selectedIndex].value;
   document.getElementById('file1_name').innerHTML = file1_value;
   document.getElementById('file2_name').innerHTML = file2_value;
-  value = GlobalVar.value;
+  value = GlobalVar.value; 
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
@@ -232,14 +232,14 @@ function analyzeClones(){
       dummy2_array = sourcefile_array[index].slice(1);
       //alert(dummy2_array);
     }
-  }
+  } 
 
   code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
-  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
+  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value); **/
+  code1 ="t";
+  code2 = "t";
   injectIframeContent(iframe1, code1);
   injectIframeContent(iframe2, code2);
-
-   //document.getElementById("scroll").scrollIntoView();
 
 }
 function injectIframeContent(iframe, code) {
@@ -508,10 +508,10 @@ function displayFiles() {
     </div><!--/.row-->
   </div><!--/.container-->
 <div class="iframe_container">
-   <!--<div class="box" id="file1_name"> -->
+   <div class="box" id="file1_name">
    <iframe id="iframe1" frameborder="1" width=750 height=512 align="left"></iframe>
    </div>
-   <!-- <div class="box" id="file2_name"> -->
+   <div class="box" id="file2_name">
    <iframe id="iframe2" frameborder="1" width=750 height=512 align="right"></iframe>
    </div>
 </div>
