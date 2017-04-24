@@ -254,6 +254,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
+  document.getElementById('test').innerHTML = html_string;
   alert(html_string);
   html_string = "<html>HELLO</html>";
   alert(html_string);
@@ -270,6 +271,7 @@ function injectIframeContent(iframe, code) {
      iframedoc.close();
    } else {
     alert('Cannot inject dynamic contents into iframe.');
+
    } 
 }
 
@@ -518,6 +520,7 @@ function displayFiles() {
    <iframe id="iframe2" frameborder="1" width=750 height=512 align="right"></iframe>
    </div>
 </div>
+<div id="testme"></div>
 </div><!--/.page-container-->
 </div>
 
