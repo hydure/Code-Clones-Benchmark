@@ -176,6 +176,8 @@ foreach ($handle_array as $handlepath) {
   array_unshift($line_array, $handlepath2); //places filename at front of array
   array_push($sourcefile_array, $line_array);
 }
+//TEMP CODE STARTS here
+
 
 ?>
 <link rel="stylesheet" type="text/css" href="hlns.css" media="screen">
@@ -197,7 +199,7 @@ var GlobalVar = {};
 function analyzeClones(){
   //step 1: get the DOM object of the iframe.
   var iframe1 = document.getElementById('iframe1');
-  var iframe2 = document.getElementById('iframe2');  /**
+  var iframe2 = document.getElementById('iframe2');
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select'); 
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
@@ -232,12 +234,12 @@ function analyzeClones(){
       dummy2_array = sourcefile_array[index].slice(1);
       //alert(dummy2_array);
     }
-  } 
+  }
 
-  code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
-  code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value); **/
-  code1 ="t";
-  code2 = "t";
+  var code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
+  var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value); 
+  //code1 ="t";
+  //code2 = "t";
   injectIframeContent(iframe1, code1);
   injectIframeContent(iframe2, code2);
 
@@ -252,6 +254,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
+  alert(html_string);
   html_string = "<html>HELLO</html>";
   alert(html_string);
   //step 2: obtain the document associated with the iframe tag
