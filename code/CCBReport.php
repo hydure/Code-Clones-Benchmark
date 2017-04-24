@@ -223,16 +223,17 @@ function analyzeClones(){
   var dummy1_array = []; //these will contain the unmodified source code
   var dummy2_array = [];
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
+  document.getElementById('testme').innerHTML = html_string;
 
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
-      //alert(dummy1_array);
+      alert(dummy1_array[0]);
 
     }
     if (sourcefile_array[index][0] == file2_value) {
       dummy2_array = sourcefile_array[index].slice(1);
-      //alert(dummy2_array);
+      alert(dummy2_array[0]);
     }
   }
 
@@ -254,7 +255,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
-  document.getElementById('testme').innerHTML = html_string;
+  //document.getElementById('testme').innerHTML = html_string;
   alert(html_string);
   html_string = "<html>HELLO</html>";
   alert(html_string);
