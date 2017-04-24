@@ -224,13 +224,13 @@ function analyzeClones(){
 
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
-      alert("file1 found");
       dummy1_array = sourcefile_array[index].slice(1);
+      alert(dummy1_array);
 
     }
     if (sourcefile_array[index][0] == file2_value) {
-      alert("file2 found");
       dummy2_array = sourcefile_array[index].slice(1);
+      alert(dummy2_array);
     }
   }
 
