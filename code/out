@@ -1,0 +1,4 @@
++ [ 1 != 1 ]
++ [ ! -f /home/pi/MyNAS/nicad/12.html ]
++ + grep Number /home/pi/MyNAS/nicad/12.html
+awk {print $4}

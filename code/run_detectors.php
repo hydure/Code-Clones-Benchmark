@@ -110,8 +110,9 @@ foreach($_POST['detector'] as $detector) {
                 $st=$clones[$i++];
                 $end=$clones[$i++];
 
-                # nicad appends .pyindent?
+                # nicad appends .pyindent, .ifdefed
                 $file=preg_replace("/\.pyindent/", "", $file);
+                $file=preg_replace("/\.ifdefed//", "", $file);
 
                 # check if clone has been added already
                 $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
@@ -139,8 +140,8 @@ foreach($_POST['detector'] as $detector) {
         echo "Added $num_clones clones.";
 
         # save files with clone fragments
-        echo "<br>./save_frags.sh $detector $out_file $args<br>";
-        echo shell_exec("./save_frags.sh $detector $file $args");
+        #echo "<br>./save_frags.sh $detector $out_file $args<br>";
+        echo shell_exec("bash save_frags.sh $detector $out_file $args");
 
         /***************************
         *                          *
@@ -259,7 +260,7 @@ foreach($_POST['detector'] as $detector) {
         echo "Added $num_clones clones.";
 
         # save files with clone fragments
-        echo "<br>./save_frags.sh $detector $out_file $args<br>";
+        #echo "<br>./save_frags.sh $detector $out_file $args<br>";
         shell_exec("./save_frags.sh $detector $out_file $args");
     }
     mysqli_close($con);
