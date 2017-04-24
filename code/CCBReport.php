@@ -128,6 +128,7 @@ $filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/Abstract
 array_push($handle_array, $filepath2); **/
 
 $prepend = '/home/pi/MyNAS/';
+$loaded_filepath_array = array();
 $sql = "SELECT datasetID, projectID, file, detector FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
 while ($row = $result->fetch_assoc()) { 
@@ -136,17 +137,20 @@ while ($row = $result->fetch_assoc()) {
   $projectID = $row['projectID'];
   $file = $row['file'];
   $detector = $row['detector'];
-  if ($detector == 'deckard') {
-    $filepath = $prepend . $detector . "/" . $datasetID . "/src/" . $projectID . "/" . $file;
+  if (!in_array($file, $loaded_filepath_array)) {
+    array_push($loaded_filepath_array, $file);
+    if ($detector == 'deckard') {
+      $filepath = $prepend . $detector . "/" . $datasetID . "/src/" . $projectID . "/" . $file;
+    }
+    if ($detector == 'nicad') {
+      $filepath = $prepend . $detector . "/" . $datasetID . "/" . $projectID . "/" . $file;
+    }
+    $dual_file_array = array();
+    array_push($dual_file_array, $filepath);
+    array_push($dual_file_array, $file);
+    array_push($handle_array, $dual_file_array);
+    echo $filepath " | ";
   }
-  if ($detector == 'nicad') {
-    $filepath = $prepend . $detector . "/" . $datasetID . "/" . $projectID . "/" . $file;
-  }
-  $dual_file_array = array();
-  array_push($dual_file_array, $filepath);
-  array_push($dual_file_array, $file);
-  array_push($handle_array, $dual_file_array);
-  echo $filepath;
 }
 $con->close();
 /** handlea_array stored as
