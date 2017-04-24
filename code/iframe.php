@@ -1,11 +1,5 @@
 <?php
 session_start();
-//echo $clone_selected;
-//if (!empty($_POST['row'])) {
-//$con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
-//if(!$con) {
- //       die('could not connect: ' . mysqli_connect_error());
-//}
 ?>
 <html>
     <head>
@@ -14,21 +8,13 @@ session_start();
     <h1>Test iframe</h1>
     <iframe id="test_iframe" src="about:blank" width=1000 height=400></iframe>
 	<button onClick="javascript:injectHTML();">Inject HTML</button>
-	<iframe id="second_iframe" src="about:blank" width=1000 height=400></iframe>
-	<button onClick="javascript:inject2HTML();">Also HTML</button>
 </body>
 
 <script language="javascript">
-
 function injectHTML() {
-	//alert('shame');
 	//step 1: get the DOM object of the iframe.
 	var iframe = document.getElementById('test_iframe');
-//alert('Cannot inject dynamic contents into iframe.');
-
-
 	var html_string = '<html>HELLO</html>';
-
 	/* if jQuery is available, you may use the get(0) function to obtain the DOM object like this:
 	var iframe = $('iframe#target_iframe_id').get(0);
 	*/
@@ -52,10 +38,6 @@ function injectHTML() {
 		//fortunately we don't come across such case so far.
 		alert('Cannot inject dynamic contents into iframe.');
 	 }
-
 }
-
-
-
 </script> 
 </html>
