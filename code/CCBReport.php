@@ -253,6 +253,7 @@ function injectIframeContent(iframe, code) {
   var script4 = "<script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();";
   var script = script1 + script2 + scriptC + script3 + scriptC + script4 + scriptC;
   var html_string = script + '<html><head></head><body><p>' + code + '</p></body></html>';
+  html_string = "<html>HELLO</html>";
   alert(html_string);
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
