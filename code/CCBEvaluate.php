@@ -20,19 +20,20 @@ if(mysqli_connect_errno()) {
     die("MySQL connection failed: ". mysqli_connect_error());
 }
 $currUserID = ($_SESSION['userSession']);
-$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language FROM Clones WHERE userID = '$currUserID'";
+$sql = "SELECT cloneID, datasetID, userID, file, start, end, detector, language, sim FROM Clones WHERE userID = '$currUserID'";
 $result = $con->query($sql);
 $dataset_array = array();
 $rows_array = array();
 $size_counter = 0;
 while ($row = $result->fetch_assoc()) { //store all possible relevant data into their correct arrays
-  unset($datasetID, $userID, $file, $start, $end, $detector, $language);
+  unset($datasetID, $userID, $file, $start, $end, $detector, $language, $sim);
   $cloneID = $row['cloneID'];
   $datasetID = $row['datasetID'];
   $userID = $row['userID'];
   $detector = $row['detector'];
   $language = $row['language'];
-  $sim = "sim";
+  #$sim = "sim";
+  $sim = $row['sim'];
   $file = $row['file'];
   $start = $row['start'];
   $end = $row['end'];
