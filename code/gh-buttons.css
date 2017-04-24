@@ -21,7 +21,7 @@
     text-decoration: none;
     text-align: center;
     text-shadow: 1px 1px 0 #fff;
-    font:11px/normal sans-serif;
+    font:12px/normal sans-serif;
     color: #333;
     white-space: nowrap;
     cursor: pointer;
@@ -403,7 +403,8 @@
 }
 
 body {
-  padding-top: 51px;  
+  padding-top: 51px;
+  font:14px/normal sans-serif;  
 }
 .text-center {
   padding-top: 20px;

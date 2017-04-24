@@ -17,10 +17,14 @@ $submit_date = 'Never';
 
 date_default_timezone_set('America/New_York');
 $date = date('Y-m-d H:i:s');
-
+if ("$_POST[ownership_type]" == "1") {
+            $ownership = 0;
+        } else {
+            $ownership = -1;
+        }
 foreach($_POST['row'] as $row) {
     $sql="INSERT INTO Datasets (datasetID, projectID, userId, submit_date, ".
-         "status) VALUES ($datasetID, $row, $userId, '$submit_date', FALSE)";
+         "status, ownership) VALUES ($datasetID, $row, $userId, '$submit_date', FALSE, '$ownership')";
     $date_sql = "UPDATE Projects SET last_accessed='$date' WHERE projectID=".$row;
     if(!$con->query($date_sql))
         echo "failed to update dataset info<br>";

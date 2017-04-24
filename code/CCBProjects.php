@@ -92,7 +92,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
@@ -169,7 +169,7 @@ $(document).ready(function() {
             <input type="checkbox" class="cb1" onchange="cb1Change(this)" name="ownership_type" value="2">
              <br>
 	          <br>        
-	          <input type="submit" value="Upload"/>
+	          <input type="submit" value="Upload" class="buttonA pill"/>
           </form>
           <br />
           <form id="project_button" action="upload_project.php" method="post" enctype="multipart/form-data">
@@ -178,18 +178,9 @@ $(document).ready(function() {
             Public:
             <input type="checkbox" class="cb2" onchange="cb2Change(this)" name="ownership_type" value="2">
              <br>
-            <input type = "file" name = "uploaded_file" /><br />
-            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
+            <input type = "file" name = "uploaded_file"/><br />
+            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" class="buttonA pill"/>
           </form>
-          <!--<form action="#">
-            <p align="center-block" style="font-size: 160%">Delete Project</p>
-            <select name = "project">
-
-              <option value = "project1" style="font-size: 160%">Project 1</option>
-            </select>
-          </form>
-          <br />
-          -->
           <form id='evaluate_button' action='CCBModProjects.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Browse Projects</p>
             <?php
@@ -215,14 +206,8 @@ $(document).ready(function() {
             echo "</select>";
             $con->close();
             ?>
-            <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' />
-            <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' />
-            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' />
-            
-            <!--<select name = "project">
-              Create a code that lists all the projects available, but for now an example
-              <option value = "project1" style="font-size: 160%">Project 1</option>
-            </select> -->
+            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' class="buttonA loop" />
+            <input type = 'submit' name='project_action' value = 'Delete Project' id='delete_project' class="buttonA danger trash"/>
           </form>
 
           <?php
@@ -236,13 +221,13 @@ $(document).ready(function() {
           echo "<div class='row_special header'>";
           echo "<div class='cell'>ID</div>";
           echo "<div class='cell'>Project</div>";
-          echo "<div class='cell'>Author</div>";
+          echo "<div class='cell'>Owner</div>";
           echo "<div class='cell'>Commit</div>";
-          echo "<div class='cell'>Last Accessed</div>";
-          echo "<div class='cell'>Date Uploaded</div>";
-          echo "<div class='cell'>Ownership</div>";
+          echo "<div class='cell'>Accessed</div>";
+          echo "<div class='cell'>Uploaded</div>";
           echo "<div class='cell'>URL</div>";
-          echo "<div class='cell'>Size (bytes)</div>";
+          echo "<div class='cell'>Size(bytes)</div>";
+          echo "<div class='cell'>Ownership</div>";
           echo "</div>";
           while ($row = $result->fetch_assoc()) {
 
@@ -265,14 +250,15 @@ $(document).ready(function() {
                     echo "<div class='cell'>".$commit.'</div>';
                     echo "<div class='cell'>".$last_accessed.'</div>';
                     echo "<div class='cell'>".$uploaded.'</div>';
+                    echo "<div class='cell'>".$url.'</div>';
+                    echo "<div class='cell'>".$size.'</div>';
+                    
                     if (intval($ownership) != -1) { 
                       echo "<div class='cell'>Private</div>";
                     }
                     else {
                       echo "<div class='cell'>Public</div>";
                     }
-                    echo "<div class='cell'>".$url.'</div>';
-                    echo "<div class='cell'>".$size.'</div>';
                     echo "</div>";
                   }
           }    

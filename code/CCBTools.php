@@ -38,7 +38,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -94,25 +94,22 @@ $(document).ready(function() {
             if(mysqli_connect_errno()) {
                 die("MySQL connection failed: ". mysqli_connect_error());
             }
-            $result = $con->query("SELECT datasetID, userId FROM Datasets where status != -1");
-
-            echo "<html>";
-            echo "<body>";
+            $result = $con->query("SELECT datasetID, userId, ownership FROM Datasets where status != -1");
             echo "<select name='datasetSelect' id = 'datasetSelect' >" ;
             $dataset_dropdown = array();
             while ($row = $result->fetch_assoc()) {
-
                   unset($datasetID, $userId);
                   $datasetID = $row['datasetID'];
                   $userId = $row['userId'];
-                  if ($_SESSION['userSession'] == $userId && !in_array($datasetID, $dataset_dropdown)) {
-                    echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
-                    array_push($dataset_dropdown, $datasetID);
+		              $ownership = $row['ownership'];
+                  if ($_SESSION['userSession'] == $userId || $ownership == -1){
+			               if(!in_array($datasetID, $dataset_dropdown)) {
+                    		echo '<option value='.$datasetID.'>'.$datasetID.'</option>';
+                    		array_push($dataset_dropdown, $datasetID);
+			               }
                   }
             }
             echo "</select>";
-            echo "</body>";
-            echo "</html>";
             $con->close();
             ?>
             
@@ -129,7 +126,7 @@ $(document).ready(function() {
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="c">C (.c)</label><br>
               <label><input type="checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br />
               <div class="col-md-4 text-center"> 
-    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
+    			<button id="singlebutton" name="singlebutton" class="buttonA big" type="submit">Run</button> 
 			  </div>
 	      <!-- <input type="submit" value="Test"> Commenting this out and moved button up-->
             </p>
@@ -141,3 +138,4 @@ $(document).ready(function() {
   </div><!--/.container-->
 </div><!--/.page-container-->
 </html>
+
