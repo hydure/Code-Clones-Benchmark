@@ -223,7 +223,7 @@ function analyzeClones(){
   var dummy1_array = []; //these will contain the unmodified source code
   var dummy2_array = [];
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
-  document.getElementById('testme').innerHTML = html_string;
+  //document.getElementById('testme').innerHTML = html_string;
 
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
