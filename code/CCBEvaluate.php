@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
     }
 
   </style>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() { //hides all rows upon
         <form>
           Dataset Select:
           <select name="datasetSelect" id="datasetSelect" multiple></select>
-          <input type="submit" name="select_button" onClick="javascript:loadTable(); return false" value="Select" id="select_button" />
+          <input type="submit" name="select_button" onClick="javascript:loadTable(); return false" value="Select" id="select_button" class="buttonA"/>
         </form>
 
         <div class = 'wrapper' >

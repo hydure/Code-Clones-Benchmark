@@ -92,7 +92,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
@@ -181,15 +181,6 @@ $(document).ready(function() {
             <input type = "file" name = "uploaded_file" /><br />
             <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
           </form>
-          <!--<form action="#">
-            <p align="center-block" style="font-size: 160%">Delete Project</p>
-            <select name = "project">
-
-              <option value = "project1" style="font-size: 160%">Project 1</option>
-            </select>
-          </form>
-          <br />
-          -->
           <form id='evaluate_button' action='CCBModProjects.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Browse Projects</p>
             <?php
@@ -215,8 +206,7 @@ $(document).ready(function() {
             echo "</select>";
             $con->close();
             ?>
-            <input type = 'submit' name='project_action' value = 'Evaluate Project'  id='evaluate_project' />
-            <input type = 'submit' name='project_action' value = 'Delete Project'  id='delete_project' />
+            <input type = 'submit' name='project_action' value = 'Delete Project' id='delete_project' />
             <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' />
             
             <!--<select name = "project">
