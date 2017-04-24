@@ -209,14 +209,12 @@ function analyzeClones(){
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
-      //alert(selected_start_array);
     }
   }
   var end_array = <?php  echo json_encode($end_array); ?>;
   for (var index in end_array) { //find range for selected files
     if (end_array[index][0] == value) {
       var selected_end_array = end_array[index].slice(1);
-
     }
   }
   var dummy1_array = []; //these will contain the unmodified source code
@@ -235,7 +233,7 @@ function analyzeClones(){
       //alert(dummy2_array);
     } 
   }
-  <?php /**
+/** <?php
   $dummy1_array = array();
   $dummy2_array = array();
   //$handle = fopen("/home/pi/MyNAS/deckard/22/src/35/AbstractTableRendering.java", "r");
@@ -253,13 +251,15 @@ function analyzeClones(){
       array_push($dummy2_array, $line);
     }
     fclose($handle);
-  } **/
-  ?>
+  } 
+  ?>**/
   //var dummy1_array = <?php echo json_encode($dummy1_array); ?>;
   //var dummy2_array = <?php echo json_encode($dummy2_array); ?>;
   var code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
-  var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
+  var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value); 
   //alert(code1);
+  code1 = '';
+  code2 = '';
   var iframe1 = document.getElementById('iframe1');
   var iframe2 = document.getElementById('iframe2');
   injectIframeContent(iframe1, code1);
