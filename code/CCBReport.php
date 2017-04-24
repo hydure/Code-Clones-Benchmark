@@ -400,7 +400,7 @@ function displayFiles() {
       <div class="row row-offcanvas row-offcanvas-left">
         
         <!-- sidebar -->
-        <div class="col-xs-6 col-sm-1 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
               <li><a href="CCBHome.php">Home</a></li>
               <li><a href="CCBProjects.php">Projects</a></li>
@@ -412,7 +412,9 @@ function displayFiles() {
             </ul>
         </div>
         <!-- main area -->
-        <div class="col-xs-12 col-sm-11">
+        <div class="col-xs-12 col-sm-9">
+        <h1>Code Cloning Reports</h1>
+          <br />
         <p id="demo"></p>       
           <form>
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
