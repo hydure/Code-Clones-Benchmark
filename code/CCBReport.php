@@ -286,7 +286,6 @@ function makeIframeContent(dummy_array, selected_start_array, selected_end_array
     } 
     if ((line_counter == selected_start_array[array_iterator] && file_value == selected_start_array[array_iterator + 1]) || highlighted) {
       line = "<mark>" + line + '</mark>';
-      //alert(line_counter + " found " + line);
       if (highlighted == false) {
         highlighted = true;
       }
