@@ -200,7 +200,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $con->close();
             ?>
 
-
+          </form>
           <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
