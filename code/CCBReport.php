@@ -120,15 +120,19 @@ array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
 $con->close();
 
-$handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY
+$handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY 
+/**
 $filepath1 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java';
 array_push($handle_array, $filepath1);
 $filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
-array_push($handle_array, $filepath2);
+array_push($handle_array, $filepath2); **/
 
 /** source file stored as 
 ( ($filename1, line1, line2, ...), ($filename2, line1, line2, ...), ...)
 **/
+$prepend = '/home/pi/MyNAS/';
+$detector = 
+
 $c = 0;
 $sourcefile_array = array();
 foreach ($handle_array as $handlepath) {
@@ -196,7 +200,7 @@ function analyzeClones(){
   var dummy2_array = [];
   var sourcefile_array = <?php echo json_encode($sourcefile_array); ?>;
 
-  for (var index in sourcefile_array) {
+  for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
 
