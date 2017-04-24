@@ -167,6 +167,7 @@ foreach ($handle_array as $handlepath) {
   $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
   $handle = fopen($handlepath1, "r");
   if ($handle) {
+    echo "loaded";
     while (($line = fgets($handle)) != false) {
       array_push($line_array, $line);
     }
