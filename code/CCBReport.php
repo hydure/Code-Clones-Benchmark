@@ -171,8 +171,9 @@ foreach ($handle_array as $handlepath) {
     while (($line = fgets($handle)) != false) {
       array_push($line_array, $line);
     }
+    fclose($handle);
   }
-  fclose($handle);
+  
   array_unshift($line_array, $handlepath2); //places filename at front of array
   array_push($sourcefile_array, $line_array);
 }
@@ -197,20 +198,20 @@ hljs.initLineNumbersOnLoad();
 
 var GlobalVar = {};
 function analyzeClones(){
-  //step 1: get the DOM object of the iframe.
-  var iframe1 = document.getElementById('iframe1');
-  var iframe2 = document.getElementById('iframe2');
+  //step 1: get the DOM object of the iframe. 
+
   var file1_selector = document.getElementById('file1Select');
   var file2_selector = document.getElementById('file2Select'); 
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
   var file2_value = file2_selector[file2_selector.selectedIndex].value;
   document.getElementById('file1_name').innerHTML = file1_value;
   document.getElementById('file2_name').innerHTML = file2_value;
-  value = GlobalVar.value; 
+  value = GlobalVar.value;
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
     if (start_array[index][0] == value) {
       var selected_start_array = start_array[index].slice(1);
+      alert(selected_start_array);
     }
   }
   var end_array = <?php  echo json_encode($end_array); ?>;
@@ -228,19 +229,21 @@ function analyzeClones(){
   for (var index in sourcefile_array) { 
     if (sourcefile_array[index][0] == file1_value) {
       dummy1_array = sourcefile_array[index].slice(1);
-      alert(dummy1_array[0]);
+      alert(dummy1_array);
 
     }
     if (sourcefile_array[index][0] == file2_value) {
       dummy2_array = sourcefile_array[index].slice(1);
-      alert(dummy2_array[0]);
+      alert(dummy2_array);
     }
   }
 
   var code1 = makeIframeContent(dummy1_array, selected_start_array, selected_end_array, file1_value);
-  var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value); 
-  //code1 ="t";
-  //code2 = "t";
+  var code2 = makeIframeContent(dummy2_array, selected_start_array, selected_end_array, file2_value);
+  code1 ="t";
+  code2 = "t";
+  var iframe1 = document.getElementById('iframe1');
+  var iframe2 = document.getElementById('iframe2');
   injectIframeContent(iframe1, code1);
   injectIframeContent(iframe2, code2);
 
@@ -258,7 +261,6 @@ function injectIframeContent(iframe, code) {
   //document.getElementById('testme').innerHTML = html_string;
   alert(html_string);
   html_string = "<html>HELLO</html>";
-  alert(html_string);
   //step 2: obtain the document associated with the iframe tag
   var iframedoc = iframe.document;
     if (iframe.contentDocument)
