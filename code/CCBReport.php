@@ -510,10 +510,10 @@ function displayFiles() {
     </div><!--/.row-->
   </div><!--/.container-->
 <div class="iframe_container">
-   <div class="box" id="file1_name">
+   <!--<div class="box" id="file1_name"> -->
    <iframe id="iframe1" frameborder="1" width=750 height=512 align="left"></iframe>
    </div>
-   <div class="box" id="file2_name">
+   <!-- <div class="box" id="file2_name"> -->
    <iframe id="iframe2" frameborder="1" width=750 height=512 align="right"></iframe>
    </div>
 </div>
