@@ -30,18 +30,19 @@ if(!$con) {
 }
 
 # normalize url
-#$url = exec("echo $_POST[url] | sed 's:\(.*com\)/\([^/]*\)/\([^/]*\)/.*:\1/\2/\3:'");
+$url = preg_match(":(.*com/[^/]*/[^/]*):", $_POST['url'], $matches, PREG_OFFSET_CAPTURE);
+$url = $matches[0][0];
 #echo "$url<br>";
 
 # get title from url
-$title = exec("echo $_POST[url] | sed 's:.*\.com/[^/]*/::' | sed 's:/.*::'");
+$title = exec("echo $url | sed 's:.*\.com/[^/]*/::' | sed 's:/.*::'");
 
 # get repo host username
-$user = exec("echo $_POST[url] | sed 's:.*com/::' | sed 's:/.*::'");
+$user = exec("echo $url | sed 's:.*com/::' | sed 's:/.*::'");
 
 # get head commit number
 if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $_POST[url] | head -c 12");
+	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $url | head -c 12");
 } else {
 	$commit = exec("echo $_POST[commit] | head -c 12");
 }
@@ -77,7 +78,7 @@ if($stmt = mysqli_prepare($con, "Select commit FROM Projects where title=? AND o
 # add entry to Projects table if no matching commit number
 if($check){
 $sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId, author)
-        VALUES('$title', '$_POST[url]', '$commit', '$date', '$ownership', '$uid', '$user')";
+        VALUES('$title', '$url', '$commit', '$date', '$ownership', '$uid', '$user')";
 
 if (!mysqli_query($con, $sql)) {
         die("Error: " . mysqli_error($con));
