@@ -243,6 +243,7 @@ function analyzeClones(){
 
 }
 function injectIframeContent(iframe, code) {
+  code = "CHECK";
   var script1 = "<link rel='stylesheet' type='text/css' href='hlns.css' media='screen'>";
   var script2 = "<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js'>";
   var script3 = "<script type='text/javascript' src='highlightjs-line-numbers.min.js'>";
