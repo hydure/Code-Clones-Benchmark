@@ -118,7 +118,7 @@ array_splice($end_array, 0, 1);
 array_unshift($dataset_files, $last_cloneID);
 array_push($file_array, $dataset_files);
 array_splice($file_array, 0, 1);       
-$con->close();
+
 
 $handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY 
 /**
@@ -127,32 +127,49 @@ array_push($handle_array, $filepath1);
 $filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
 array_push($handle_array, $filepath2); **/
 
-/** source file stored as 
+$prepend = '/home/pi/MyNAS/';
+$sql = "SELECT datasetID, projectID, file, detector FROM Clones WHERE userID = '$currUserID'";
+$result = $con->query($sql);
+while ($row = $result->fetch_assoc()) { 
+  unset($datasetID, $projectID, $file, $detector);
+  $datasetID = $row['datasetID'];
+  $projectID = $row['projectID'];
+  $file = $row['file'];
+  $detector = $row['detector'];
+  if ($detector == 'deckard') {
+    $filepath = $prepend . $detector . "/" . $datasetID . "/src/" . $projectID . "/" . $file;
+  }
+  if ($detector == 'nicad') {
+    $filepath = $prepend . $detector . "/" . $datasetID . "/" . $projectID . "/" $file;
+  }
+  $dual_file_array = array();
+  array_push($dual_file_array, $filepath);
+  array_push($dual_file_array, $file);
+  array_push($handle_array, $dual_file_array);
+  echo $filepath;
+}
+$con->close();
+/** handlea_array stored as
+( ($filepath, $filename ), ($filepath, $filename ), ... )
+
+source file stored as 
 ( ($filename1, line1, line2, ...), ($filename2, line1, line2, ...), ...)
 **/
-$prepend = '/home/pi/MyNAS/';
-$detector = 
 
-$c = 0;
 $sourcefile_array = array();
 foreach ($handle_array as $handlepath) {
+  $handlepath1 = $handlepath[0]; //file path like /home/pi/MyNas/deckard/34/AbstractTableRendering.java
+  $handlepath2 = $handlepath[1]; //file name like src/AbstractTableRendering.java
   $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
-  $handle = fopen($handlepath, "r");
+  $handle = fopen($handlepath1, "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
       array_push($line_array, $line);
     }
   }
   fclose($handle);
-  if ($c == 0) {  //THIS IS TEMPORARY, FIX WHEN WE GET CORRECT HANDLE_ARRAY
-    array_unshift($line_array, "src/AbstractAsyncTableRendering.java");
-  }
-  if ($c == 1) {
-    array_unshift($line_array, "src/AbstractTableRendering.java");
-  }
+  array_unshift($line_array, $handlepath2); //places filename at front of array
   array_push($sourcefile_array, $line_array);
-  $c += 1;
-
 }
 
 ?>
