@@ -149,7 +149,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <input type="checkbox" name="ownership_type" class="cb1" onchange="cb1Change(this)" value="1" checked>
             Public:
 	          <input type="checkbox" name="ownership_type" class="cb1" onchange="cb1Change(this)" value="2">
-            <input type="submit" value="Initialize Dataset" class="button">
+            <input type="submit" value="Initialize Dataset" class="buttonA">
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
             if(mysqli_connect_errno()) {
@@ -229,7 +229,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             echo "</html>";
             $con->close();
             ?>
-            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action'/ class="button danger">
+            <input type = 'submit' name= 'delete_dataset_action' value = 'Delete Dataset'  id='delete_dataset_action'/ class="buttonA danger">
 
             
 

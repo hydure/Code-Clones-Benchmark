@@ -126,7 +126,7 @@ $(document).ready(function() {
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="c">C (.c)</label><br>
               <label><input type="checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br />
               <div class="col-md-4 text-center"> 
-    			<button id="singlebutton" name="singlebutton" class="btn btn-primary center-block" type="submit">Run</button> 
+    			<button id="singlebutton" name="singlebutton" class="buttonA big" type="submit">Run</button> 
 			  </div>
 	      <!-- <input type="submit" value="Test"> Commenting this out and moved button up-->
             </p>

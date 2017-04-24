@@ -169,7 +169,7 @@ $(document).ready(function() {
             <input type="checkbox" class="cb1" onchange="cb1Change(this)" name="ownership_type" value="2">
              <br>
 	          <br>        
-	          <input type="submit" value="Upload"/>
+	          <input type="submit" value="Upload" class="buttonA pill"/>
           </form>
           <br />
           <form id="project_button" action="upload_project.php" method="post" enctype="multipart/form-data">
@@ -178,8 +178,8 @@ $(document).ready(function() {
             Public:
             <input type="checkbox" class="cb2" onchange="cb2Change(this)" name="ownership_type" value="2">
              <br>
-            <input type = "file" name = "uploaded_file" /><br />
-            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" />
+            <input type = "file" name = "uploaded_file"/><br />
+            <input type = "button" value = "Upload"  id="submit_project" onclick="submitFunc()" class="buttonA pill"/>
           </form>
           <form id='evaluate_button' action='CCBModProjects.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Browse Projects</p>
@@ -206,13 +206,8 @@ $(document).ready(function() {
             echo "</select>";
             $con->close();
             ?>
-            <input type = 'submit' name='project_action' value = 'Delete Project' id='delete_project' />
-            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' />
-            
-            <!--<select name = "project">
-              Create a code that lists all the projects available, but for now an example
-              <option value = "project1" style="font-size: 160%">Project 1</option>
-            </select> -->
+            <input type = 'submit' name='project_action' value = 'Switch Ownership'  id='switch_ownership' class="buttonA loop" />
+            <input type = 'submit' name='project_action' value = 'Delete Project' id='delete_project' class="buttonA danger trash"/>
           </form>
 
           <?php

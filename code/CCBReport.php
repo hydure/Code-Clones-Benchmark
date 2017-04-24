@@ -418,19 +418,19 @@ function displayFiles() {
             <input type="checkbox" id="detector1_checkbox" name="detector[]" value="nicad">Nicad</label><br/>
             <input type="checkbox" id="detector2_checkbox" name="detector[]" value="deckard">Deckard</label><br/>
             <!--<input type="checkbox" id="detector3_checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br/>-->
-            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value="View Datasets" id="datasets" class="button"/>
+            <input type = "submit" name ="datasets_button" onClick="javascript:displayDatasets(); return false" value="View Datasets" id="datasets" class="buttonA"/>
           </form>
           <form>
             Datasets:
             <select name='datasetSelect' id='datasetSelect' multiple/></select>
-            <input type="submit" name="clones_button" onClick="javascript:displayClones(); return false" value="View Clones" id="clones" />
+            <input type="submit" name="clones_button" onClick="javascript:displayClones(); return false" value="View Clones" class="buttonA" id="clones" />
           </form>
           <form>
             Clones:
             <select name="cloneSelect" id="cloneSelect" multiple></select> 
             <input type="checkbox" id="files_frame1_checkbox" name="files_checkbox[]" value="files_frame1">Show Files in Frame One</label><br/>
             <input type="checkbox" id="files_frame2_checkbox" name="files_checkbox[]" value="files_frame2">Show Files in Frame Two</label><br/>
-            <input type="submit" name ="files_button" onClick="javascript:displayFiles(); return false" value="View Files" id="files" />
+            <input type="submit" name ="files_button" onClick="javascript:displayFiles(); return false" value="View Files" class="buttonA" id="files" />
           </form>
           <form>
             Frame One: 
@@ -438,7 +438,7 @@ function displayFiles() {
             Frame Two:
             <select name="file2Select" id="file2Select" multiple></select>
             <input type="checkbox" id="only_clones_checkbox" name="only_clones" value="only_clones">Only Show Clones</label><br/> 
-            <input type="submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value="Analyze Clones" id="clones_for_file" />
+            <input type="submit" name ="analyze_button" onClick="javascript:analyzeClones(); return false" value="Analyze Clones" class="buttonA" id="clones_for_file" />
           </form>
 
               
