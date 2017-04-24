@@ -140,7 +140,7 @@ while ($row = $result->fetch_assoc()) {
     $filepath = $prepend . $detector . "/" . $datasetID . "/src/" . $projectID . "/" . $file;
   }
   if ($detector == 'nicad') {
-    $filepath = $prepend . $detector . "/" . $datasetID . "/" . $projectID . "/" $file;
+    $filepath = $prepend . $detector . "/" . $datasetID . "/" . $projectID . "/" . $file;
   }
   $dual_file_array = array();
   array_push($dual_file_array, $filepath);
