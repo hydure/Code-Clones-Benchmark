@@ -7,10 +7,16 @@ Technologies Used: HTML, CSS, PHP, mySQL, Bootstrap, Nicad, Deckard, CCFinderX
 
 Set up:
 git clone https://gitlab.com/WM-CSCI435-S17/Code-Clones-Benchmark
+For hosting site:
 Change apache document root to Code-Clones-Benchmark
+
+For correct project upload:
 Change apache user and group to 'whoami' or userID
 Add folder for sessions path in user domain and set session path in php.ini
+Change project upload path to folder of your chose by modifying filepath upload_projects.php line 24 and CCBModProjects.php line 24
 
+
+For database functionality:
 Change MySQL password to match files: *XMmySQ$
 4 Database to copy and pastes in MySQL: 
 create database cc_bench;
