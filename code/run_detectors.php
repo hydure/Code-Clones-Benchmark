@@ -76,14 +76,19 @@ foreach($_POST['detector'] as $detector) {
         # run nicad
         $nicad_path="/home/clone/nicad.sh";
         $out_file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
-        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$out_file 2>/dev/null &";
-        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts' ";
-        $cmd="$cmd >$out_file 2>/dev/null && php add_frags.php $detector $lang $userID $out_file ";
-        $cmd="$cmd && bash save_frags.sh $detector $out_file $args ";
-        $cmd="$cmd && php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' &";
-        shell_exec($cmd);
+        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$out_file 2>/dev/null &";
+        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts' ";
+        #$cmd="$cmd >$out_file 2>/dev/null && php add_frags.php $detector $lang $userID $out_file >/dev/null 2>&1";
+        #$cmd="$cmd && bash save_frags.sh $detector $out_file $args >/dev/null 2>&1 ";
+        #$cmd="$cmd && php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' ";
+        #$cmd="$cmd >/dev/null 2>&1 &";
+        #shell_exec("$cmd &");
+        #ignore_user_abort();
+        #echo "Running: sleep 10 && php add_frags.php $detector $lang $userID $out_file & &>/dev/null<br>";
+        #shell_exec("sleep 10 && nohup exec php add_frags.php $detector $lang $userID $out_file >/dev/null &");
+        #echo "Sent...<br>";
         #echo "$cmd<br>";
-        exit;
+        #exec("sleep 10 >/dev/null &");
         $nicad_raw = shell_exec($cmd);
         #echo "$nicad_raw<br>";
         
@@ -122,7 +127,7 @@ foreach($_POST['detector'] as $detector) {
 
                 # nicad appends .pyindent, .ifdefed
                 $file=preg_replace("/\.pyindent/", "", $file);
-                $file=preg_replace("/\.ifdefed//", "", $file);
+                $file=preg_replace("/\.ifdefed/", "", $file);
 
                 # check if clone has been added already
                 $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
@@ -152,6 +157,9 @@ foreach($_POST['detector'] as $detector) {
         # save files with clone fragments
         #echo "<br>./save_frags.sh $detector $out_file $args<br>";
         echo shell_exec("bash save_frags.sh $detector $out_file $args");
+
+
+        shell_exec("php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' ");
 
         /***************************
         *                          *

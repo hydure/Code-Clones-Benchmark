@@ -1,5 +1,4 @@
 <?php
-
 $detector = $argv[1];
 $lang = $argv[2];
 $userID = $argv[3];
@@ -42,9 +41,6 @@ for($i=0; $i<count($clones)-1; ) {
             "language='$lang' AND file='$file' AND start='$st' ".
             "AND end=$end");
         if ($history->num_rows > 0) {
-            while ($row = mysqli_fetch_array($history)) {
-                print_r($row);
-            }
             continue;
         }
 
@@ -53,19 +49,17 @@ for($i=0; $i<count($clones)-1; ) {
             "VALUES($cloneID, $datasetID, $projectID, '$userID', '$file', ".
             "$st, $end, $sim, 'nicad', '$lang')";
 
-        #if (!mysqli_query($con, $sql)) {
-        #    die("Error: " . mysqli_error($con));
-        #}
-        echo "$sql\n";
+        if (!mysqli_query($con, $sql)) {
+            die("Error: " . mysqli_error($con));
+        }
         $num_clones++;
     }
 }
 mysqli_close($con);
 
-$num_classes=`grep "Number" $out_file | awk '{print $4}'`;
-echo "There were $num_classes classes of clones.<br>";
-echo "Added $num_clones clones.";
-echo "\n";
+#$num_classes=`grep "Number" $out_file | awk '{print $4}'`;
+#echo "There were $num_classes classes of clones.<br>";
+#echo "Added $num_clones clones.";
 
 # save files with clone fragments
 #echo "<br>./save_frags.sh $detector $out_file $args<br>";
