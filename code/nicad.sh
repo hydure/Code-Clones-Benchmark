@@ -1,16 +1,25 @@
-#!/bin/bash -x
+#!/bin/bash 
 #script file to be placed on the machine hosting NiCad
+
+CC_BENCH=/home/clone/cc_bench/nicad
+NICAD_PATH=/home/clone/NiCad-4.0
 
 if [ "$#" -lt 3 ]; then
     echo "nicad.sh: less than 3 arguments"
     exit
 fi
 
+if [ ! -d "$CC_BENCH" ]; then
+    mkdir -p $CC_BENCH
+fi
+
+if [ ! -f "$NICAD_PATH/nicad4" ]; then
+    echo"nicad.sh: cannot find nicad4"
+    exit
+fi
+
 lang=$1; shift
 datasetID=$1; shift
-
-CC_BENCH=/home/clone/cc_bench
-NICAD_PATH=/home/clone/NiCad-4.0
 DATASET_PATH=$CC_BENCH/$datasetID
 
 i=0
@@ -31,5 +40,9 @@ done
 
 cd $NICAD_PATH
 ./nicad4 functions $lang $DATASET_PATH defaultreport &>/dev/null
+
 cat ${DATASET_PATH}_functions-clones/*.html
-rm -rf $DATASET_PATH
+
+mv ${DATASET_PATH}_functions-clones/*.html $CC_BENCH
+cd $DATASET_PATH/../
+rm -rf `ls -1 | grep -v "html"`
