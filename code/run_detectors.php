@@ -1,13 +1,101 @@
-<html>
-<body>
-
 <?php
 session_start();
+require_once 'class.user.php';
+$user_home = new USER();
+
+if(!$user_home->is_logged_in())
+{
+ $user_home->redirect('index.php');
+}
+
+$stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userID=:uid");
+$stmt->execute(array(":uid"=>$_SESSION['userSession']));
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('[data-toggle=offcanvas]').click(function() {
+    $('.row-offcanvas').toggleClass('active');
+  });
+});
+</script>
+
+<div 
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- still need to create sidebar, etc. -->
+<head>
+	<title>Code Clones Benchmark</title>
+	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+
+
+  
+	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Code Clones Benchmark</a>
+           <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
+              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+            class="btn btn-primary center-block" />
+           </div>
+           <div style="position: absolute; top: 15; right: 170;">
+            <?php echo "Hello, " . ($_SESSION['userName']); ?>
+            </div>
+    	</div>
+       </div>
+    </div>
+      
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            <ul class="nav">
+              <li><a href="CCBHome.php">Home</a></li>
+              <li><a href="CCBProjects.php">Projects</a></li>
+              <li><a href="CCBDatasets.php">Datasets</a></li>
+              <li class="active"><a href="#">Tools</a></li>
+              <li><a href="CCBReport.php">Reports</a></li>
+              <li><a href="CCBEvaluate.php">Evaluate</a></li>
+              <li><a href="CCBContacts.php">Contact</a></li>              
+            </ul>
+        </div>
+  	
+        <!-- main area -->
+<!-- <html>
+<body> -->
+
+        <div class="col-xs-12 col-sm-9">
+          <h1>Code Cloning Tools</h1>
+<?php
+
+header("refresh:10;url=CCBTools.php");
 
 if (!empty($_POST['detector'])) {
 
 
-echo "You chose to run < "; 
+echo "<br>You chose to run < "; 
 foreach($_POST['detector'] as $detector) {
     echo "$detector ";
 }
@@ -57,7 +145,6 @@ foreach($_POST['detector'] as $detector) {
             " AND language='$lang'");
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
-            echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
             break;
         }
        
@@ -76,8 +163,8 @@ foreach($_POST['detector'] as $detector) {
         # run nicad
         $nicad_path="/home/clone/nicad.sh";
         $out_file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
-        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$out_file 2>/dev/null &";
-        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts' ";
+        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$out_file 2>/dev/null &";
+        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts' ";
         #$cmd="$cmd >$out_file 2>/dev/null && php add_frags.php $detector $lang $userID $out_file >/dev/null 2>&1";
         #$cmd="$cmd && bash save_frags.sh $detector $out_file $args >/dev/null 2>&1 ";
         #$cmd="$cmd && php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' ";
@@ -156,10 +243,7 @@ foreach($_POST['detector'] as $detector) {
 
         # save files with clone fragments
         #echo "<br>./save_frags.sh $detector $out_file $args<br>";
-        echo shell_exec("bash save_frags.sh $detector $out_file $args");
-
-
-        shell_exec("php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' ");
+        shell_exec("bash save_frags.sh $detector $out_file $args");
 
         /***************************
         *                          *
@@ -184,8 +268,7 @@ foreach($_POST['detector'] as $detector) {
             " AND language='$lang'");
         if ($history->num_rows > 0) {
             echo "You ran this dataset already!<br>";
-            echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
-            exit;
+            break;
         }
 
         # build arguments: language datasetID projectID1 url1 ...
@@ -291,8 +374,9 @@ mysqli_close($con);
     echo "No code clone detectors were selected.<br>";
 }
 
-echo '<p>Click <a href="CCBTools.php">here</a> to go back</p>';
 ?>
+<hr>
+<p>You will be redirected in 10 seconds... or click <a href="CCBTools.php">here</a> to go back</p>
 
-</body>
+</div>
 </html>
