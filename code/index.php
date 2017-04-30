@@ -62,9 +62,6 @@ if(isset($_POST['btn-login']))
         <a href="signup.php" style="float:right;" class="btn btn-large">Register</a><hr />
         <a href="fpass.php">Lost your Password ? </a>
       </form>
-<a href="examples/add_project.html">add_project</a>
-<a href="examples/add_dataset.html">add_dataset</a>
-<a href="examples/run_nicad.html">run_nicad</a>
     </div> <!-- /container -->
     <script src="bootstrap/js/jquery-1.9.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
