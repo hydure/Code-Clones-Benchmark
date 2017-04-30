@@ -3,6 +3,7 @@
 
 <?php
 session_start();
+
 if (!empty($_POST['detector'])) {
 
 
@@ -74,9 +75,14 @@ foreach($_POST['detector'] as $detector) {
 
         # run nicad
         $nicad_path="/home/clone/nicad.sh";
-        #$file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
-        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$file 2>/dev/null &";
-        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts'";
+        $out_file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
+        #$cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' >$out_file 2>/dev/null &";
+        $cmd="ssh -o StrictHostKeyChecking=no clone@45.33.96.10 '$nicad_path $args' | grep -v 'known hosts' ";
+        $cmd="$cmd >$out_file 2>/dev/null && php parse.php $detector $lang $userID $out_file ";
+        $cmd="$cmd && bash save_frags.sh $detector $out_file $args ";
+        $cmd="$cmd && php send_mail.php ".$_SESSION['email']." 'Job Update' 'Dataset $datasetID: job finished' &";
+        #echo "$cmd<br>";
+        exit;
         $nicad_raw = shell_exec($cmd);
         #echo "$nicad_raw<br>";
         

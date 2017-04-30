@@ -64,6 +64,7 @@ class USER
      {
       $_SESSION['userSession'] = $userRow['userId'];
       $_SESSION['userName'] = $userRow['username'];
+      $_SESSION['email'] = $userRow['email'];
       header("Location: index.php?passsuccess");
       return true;
      }
