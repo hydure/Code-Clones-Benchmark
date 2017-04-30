@@ -22,8 +22,9 @@ cd $datasetID
 if [ "$detector" = "nicad" ]; then
     files=`grep "Lines" $file | awk '{print $6}' | uniq | sed 's:.*/'$datasetID'/::'`
 
-    # nicad appends .pyindent??
+    # nicad appends .pyindent, .ifdefed
     files=`echo $files | sed 's/\.pyindent//g'`
+    files=`echo $files | sed 's/\.ifdefed//g'`
 
     j=0
     while [ "$j" -lt "$i" ]; do
