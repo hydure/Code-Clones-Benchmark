@@ -1,5 +1,5 @@
 #!/bin/bash 
-#script file to be placed on the machine hosting NiCad
+# script file to be placed on the machine hosting NiCad
 
 CC_BENCH=/home/clone/cc_bench/nicad
 NICAD_PATH=/home/clone/NiCad-4.0

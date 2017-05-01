@@ -1,5 +1,5 @@
 #!/bin/bash
-#script file to be placed on the machine hosting NiCad
+# script file to be placed on the machine hosting Deckard
 
 CC_BENCH=/home/clone/cc_bench/deckard
 DECKARD_PATH=/home/clone/Deckard
