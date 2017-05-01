@@ -124,7 +124,7 @@ $(document).ready(function() {
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="java">Java (.java)</label><br>
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="php">PHP (.php)</label><br>
         &emsp;&emsp;<label><input type="radio" name="d_language[]" value="c">C (.c)</label><br>
-              <label><input type="checkbox" name="detector[]" value="ccfinderx">CCFinderX</label><br />
+              <label><input type="checkbox" disabled name="detector[]" value="ccfinderx">CCFinderX</label><br />
               <div class="col-md-4 text-center"> 
     			<button id="singlebutton" name="singlebutton" class="buttonA big" type="submit">Run</button> 
 			  </div>
