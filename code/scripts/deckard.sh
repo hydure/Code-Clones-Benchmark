@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # script file to be placed on the machine hosting Deckard
 
 CC_BENCH=/home/clone/cc_bench/deckard
@@ -52,7 +52,8 @@ if [ ! -z "$err" ]; then
     echo 'Error: there are no *.'$lang' files in this dataset.'
 else
     cat clusters/cluster_vdb_30_0_allg_0.95_30
-    mv clusters/cluster_vdb_30_0_allg_0.95_30 $CC_BENCH
+    mv clusters/cluster_vdb_30_0_allg_0.95_30 $CC_BENCH/${datasetID}_raw
 fi
 
 rm -rf $DATASET_PATH
+#rm ${datasetID}_raw

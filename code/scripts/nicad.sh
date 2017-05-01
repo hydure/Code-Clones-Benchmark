@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash
 # script file to be placed on the machine hosting NiCad
 
 CC_BENCH=/home/clone/cc_bench/nicad
@@ -46,3 +46,4 @@ cat ${DATASET_PATH}_functions-clones/*.html
 mv ${DATASET_PATH}_functions-clones/*.html $CC_BENCH
 cd $DATASET_PATH/../
 rm -rf `ls -1 | grep -v "html"`
+#rm ${datasetID}_*.html
