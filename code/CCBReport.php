@@ -122,9 +122,9 @@ array_splice($file_array, 0, 1);
 
 $handle_array = array(); //HERE IS WHERE WE NEED TO STORE ALL CORRECT FILE PATHS IN THIS ARRAY 
 /**
-$filepath1 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java';
+$filepath1 = '/path/to/file1';
 array_push($handle_array, $filepath1);
-$filepath2 = '/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java';
+$filepath2 = '/path/to/file2';
 array_push($handle_array, $filepath2); **/
 
 $prepend = '/home/pi/MyNAS/';
@@ -162,7 +162,7 @@ source file stored as
 
 $sourcefile_array = array();
 foreach ($handle_array as $handlepath) {
-  $handlepath1 = $handlepath[0]; //file path like /home/pi/MyNas/deckard/34/AbstractTableRendering.java
+  $handlepath1 = $handlepath[0]; //file path like /path/to/storage/deckard/34/AbstractTableRendering.java
   $handlepath2 = $handlepath[1]; //file name like src/AbstractTableRendering.java
   $line_array = array(); //array to store an entire file, with a line as a single index (newline char stripped)
   $handle = fopen($handlepath1, "r");
@@ -236,16 +236,14 @@ function analyzeClones(){
 /** <?php
   $dummy1_array = array();
   $dummy2_array = array();
-  //$handle = fopen("/home/pi/MyNAS/deckard/22/src/35/AbstractTableRendering.java", "r");
-  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractAsyncTableRendering.java', "r");
+  $handle = fopen('/path/to/file1', "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
       array_push($dummy1_array, $line);
     }
     fclose($handle);
   }
-  //$handle = fopen("/home/pi/MyNAS/deckard/22/src/35/AbstractAsyncTableRendering.java", "r");
-  $handle = fopen('/home/reid/Code-Clones-Benchmark/artifacts/DeckardTesting/AbstractTableRendering.java', "r");
+  $handle = fopen('/path/to/file2', "r");
   if ($handle) {
     while (($line = fgets($handle)) != false) {
       array_push($dummy2_array, $line);

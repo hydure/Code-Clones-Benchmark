@@ -21,7 +21,7 @@ if ($_POST['project_action'] == 'Delete Project') {
 	//if there is a url
 	if($size){
 		//remove the file
-		$path = "/home/pi/MyNAS/files/p$project_val";
+		$path = "/path/to/storage/files/p$project_val";
 		$title = $value['title'];
 		if(!unlink("$path/$title")){
 			echo "Failed to delete file";

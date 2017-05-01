@@ -16,7 +16,7 @@ $user = exec("echo $_POST[url] | sed 's:.*\.com/\([^/]*\)/:\1:'");
 
 # get head commit number
 if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/examples/get_head_commit.sh $_POST[url]");
+	$commit = exec("./get_head_commit.sh $_POST[url]");
 } else {
 	$commit = $_POST[commit];
 }

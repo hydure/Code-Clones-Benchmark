@@ -2,16 +2,15 @@
 <body>
 
 <?php
-$cmd="ssh -o StrictHostKeyChecking=no jskimko@homer.cs.wm.edu '/home/f85/jskimko/nicad.sh ".$_POST[python]."' | grep -v 'known hosts'"
-#$cmd="/home/pi/Code-Clones-Benchmark/code/examples/run_nicad.sh $_POST[python]";
+$cmd="ssh -o StrictHostKeyChecking=no user@domain 'path/to/nicad.sh ".$_POST[python]."' | grep -v 'known hosts'"
 $nicad_raw = shell_exec("$cmd");
 echo $nicad_raw;
 
 $datasetID = 1;
-$file = "/home/pi/MyNAS/".$datasetID."_nicad.html";
+$file = "/path/to/storage/".$datasetID."_nicad.html";
 file_put_contents($file, $nicad_raw);
 
-$pairs=`/home/pi/Code-Clones-Benchmark/code/examples/parse.sh $file`;
+$pairs=`/path/to/parse.sh $file`;
 $pairs=explode(" ",$pairs);
 
 $con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
