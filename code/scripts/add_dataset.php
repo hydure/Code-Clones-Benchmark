@@ -1,12 +1,12 @@
 <?php
-header("refresh:3;url=CCBProjects.php");
+header("refresh:3;url=../CCBDatasets.php");
 session_start();
-require_once 'class.user.php';
+require_once '../class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
 {
- $user_home->redirect('index.php');
+ $user_home->redirect('../index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userId=:uid");
@@ -93,7 +93,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
+	<link href="../gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
@@ -139,7 +139,7 @@ $(document).ready(function() {
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
            <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+              <input type="button" onclick="location.href='../logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
            <div style="position: absolute; top: 15; right: 170;">
@@ -155,95 +155,64 @@ $(document).ready(function() {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome.php">Home</a></li>
+              <li><a href="../CCBHome.php">Home</a></li>
               <li class="active"><a href="#">Projects</a></li>
-              <li><a href="CCBDatasets.php">Datasets</a></li>
-              <li><a href="CCBTools.php">Tools</a></li>
-              <li><a href="CCBReport.php">Reports</a></li>
-              <li><a href="CCBEvaluate.php">Evaluate</a></li>
-              <li><a href="CCBContacts.php">Contact</a></li>              
+              <li><a href="../CCBDatasets.php">Datasets</a></li>
+              <li><a href="../CCBTools.php">Tools</a></li>
+              <li><a href="../CCBReport.php">Reports</a></li>
+              <li><a href="../CCBEvaluate.php">Evaluate</a></li>
+              <li><a href="../CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
 
 
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
-        <h1>Code Cloning Projects</h1> <br>
+        <h1>Code Cloning Datasets</h1> <br>
+
 <?php
-error_reporting(0);
-if (!empty($_POST[url]) && !empty($_POST[commit])) {
-$con = mysqli_connect('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');
+//session_start();
+if (!empty($_POST['row'])) {
+$con = mysqli_connect('localhost', 'root', '*XMmysq$', 'cc_bench');
 if(!$con) {
-        die('coult not connect: ' . mysqli_connect_error());
+        die('could not connect: ' . mysqli_connect_error());
 }
 
-# normalize url
-$url = preg_match(":(.*com/[^/]*/[^/]*):", $_POST['url'], $matches, PREG_OFFSET_CAPTURE);
-$url = $matches[0][0];
-#echo "$url<br>";
+$sql = "SELECT * FROM Datasets ORDER BY datasetID DESC limit 1;";
+$query = mysqli_query($con, $sql);
+$datasetID = mysqli_fetch_assoc($query)['datasetID'] + 1;
+$userId = intval($_SESSION['userSession']);
+$submit_date = 'Never';
 
-# get title from url
-$title = exec("echo $url | sed 's:.*\.com/[^/]*/::' | sed 's:/.*::'");
-
-# get repo host username
-$user = exec("echo $url | sed 's:.*com/::' | sed 's:/.*::'");
-
-# get head commit number
-if ("$_POST[commit]" == "head") {
-	$commit = exec("/home/pi/Code-Clones-Benchmark/code/get_head_commit.sh $url | head -c 12");
-} else {
-	$commit = exec("echo $_POST[commit] | head -c 12");
-}
-
-# get date
 date_default_timezone_set('America/New_York');
 $date = date('Y-m-d H:i:s');
+if ("$_POST[ownership_type]" == "1") {
+            $ownership = 0;
+        } else {
+            $ownership = -1;
+        }
+foreach($_POST['row'] as $row) {
+    $sql="INSERT INTO Datasets (datasetID, projectID, userId, submit_date, ".
+         "status, ownership) VALUES ($datasetID, $row, $userId, '$submit_date', FALSE, '$ownership')";
+    $date_sql = "UPDATE Projects SET last_accessed='$date' WHERE projectID=".$row;
+    if(!$con->query($date_sql))
+        echo "failed to update dataset info<br>";
 
-#get userId
-$uid = $_SESSION['userSession'];
-
-# set ownership
-if ("$_POST[ownership_type]" != "1") {
-	$ownership = -1;
-} else {
-	$ownership = (int) $uid;
-}
-if($stmt = mysqli_prepare($con, "Select commit FROM Projects where title=? AND ownership=?")){
-	mysqli_stmt_bind_param($stmt, "si", $title, $ownership);
-	mysqli_stmt_execute($stmt);
-	mysqli_stmt_bind_result($stmt, $dbcommit);
-	$check = TRUE;
-	while(mysqli_stmt_fetch($stmt)){
-		if($commit == $dbcommit){
-			$check = False;
-			echo "Project $title with commit $commit already exists!";
-		}
+	if (!mysqli_query($con, $sql)) {
+        die("Error: " . mysqli_error($con));
 	}
 }
 
 
+echo "Dataset Successfully added.";
 
-# add entry to Projects table if no matching commit number
-if($check){
-$sql="INSERT INTO Projects (title, url, commit, uploaded, ownership, userId, author)
-        VALUES('$title', '$url', '$commit', '$date', '$ownership', '$uid', '$user')";
-
-if (!mysqli_query($con, $sql)) {
-        die("Error: " . mysqli_error($con));
-}
-    #echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">
-          #<div id="snackbar">Successfully added a project!</div>';
-    echo "Successfully added a project!";
-}
 mysqli_close($con);
 } else {
-    #echo '<link href="CCB1.1.css" type = "text/css" rel="stylesheet">',
-          #'<div id="snackbar">Must enter URL and commit number.</div>',
-          #'showSnackbar()', '</script>';
-    echo "Must enter URL and commit number.";
+echo "No projects were selected.";
 }
+
 ?>
 <hr>
-<p>You will be redirected in 3 seconds... or click <a href="CCBProjects.php">here</a> to go back</p>
+<p>You will be redirected in 3 seconds... or click <a href="../CCBDatasets.php">here</a> to go back</p>
 </div>
 </html>

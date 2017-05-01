@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../class.user.php';
 $user_home = new USER();
 
 if(!$user_home->is_logged_in())
 {
- $user_home->redirect('index.php');
+ $user_home->redirect('../index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM Accounts WHERE userID=:uid");
@@ -37,7 +37,7 @@ $(document).ready(function() {
 <!-- still need to create sidebar, etc. -->
 <head>
 	<title>Code Clones Benchmark</title>
-	<link href="gh-buttons.css" type = "text/css" rel="stylesheet">
+	<link href="../gh-buttons.css" type = "text/css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -56,7 +56,7 @@ $(document).ready(function() {
            </button>
            <a class="navbar-brand" href="#">Code Clones Benchmark</a>
            <div style="position: absolute; top: 8; right: 70; width: 80px; height: 30px;">
-              <input type="button" onclick="location.href='logout.php';" value="Logout" 
+              <input type="button" onclick="location.href='../logout.php';" value="Logout" 
             class="btn btn-primary center-block" />
            </div>
            <div style="position: absolute; top: 15; right: 170;">
@@ -72,13 +72,13 @@ $(document).ready(function() {
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <ul class="nav">
-              <li><a href="CCBHome.php">Home</a></li>
-              <li><a href="CCBProjects.php">Projects</a></li>
-              <li><a href="CCBDatasets.php">Datasets</a></li>
+              <li><a href="../CCBHome.php">Home</a></li>
+              <li><a href="../CCBProjects.php">Projects</a></li>
+              <li><a href="../CCBDatasets.php">Datasets</a></li>
               <li class="active"><a href="#">Tools</a></li>
-              <li><a href="CCBReport.php">Reports</a></li>
-              <li><a href="CCBEvaluate.php">Evaluate</a></li>
-              <li><a href="CCBContacts.php">Contact</a></li>              
+              <li><a href="../CCBReport.php">Reports</a></li>
+              <li><a href="../CCBEvaluate.php">Evaluate</a></li>
+              <li><a href="../CCBContacts.php">Contact</a></li>              
             </ul>
         </div>
   	
@@ -90,7 +90,7 @@ $(document).ready(function() {
           <h1>Code Cloning Tools</h1>
 <?php
 
-header("refresh:10;url=CCBTools.php");
+header("refresh:10;url=../CCBTools.php");
 
 if (!empty($_POST['detector'])) {
 
@@ -186,64 +186,6 @@ foreach($_POST['detector'] as $detector) {
 
         echo "Job submitted. You will be notified by email upon completion.";
 
-#        # write nicad output to file
-#        $out_file = "/home/pi/MyNAS/nicad/".$datasetID.".html";
-#        file_put_contents($out_file, $nicad_raw);
-#
-#        # get clones
-#        $clones=`./parse.sh $out_file`;
-#        $clones=explode(" ", $clones);
-#
-#        # add clones to database
-#        $num_clones=0;
-#        for($i=0; $i<count($clones)-1; ) {
-#            $num_frags=$clones[$i++]; 
-#            $sim=$clones[$i++];
-#
-#            $query = mysqli_query($con, 
-#                "SELECT * FROM Clones ORDER BY cloneID DESC limit 1");
-#            $cloneID=mysqli_fetch_assoc($query)['cloneID'] + 1;
-#
-#            for ($j=0; $j<$num_frags; $j++) {
-#                $datasetID=$clones[$i++];
-#                $projectID=$clones[$i++];
-#                $file=$clones[$i++];
-#                $st=$clones[$i++];
-#                $end=$clones[$i++];
-#
-#                # nicad appends .pyindent, .ifdefed
-#                $file=preg_replace("/\.pyindent/", "", $file);
-#                $file=preg_replace("/\.ifdefed/", "", $file);
-#
-#                # check if clone has been added already
-#                $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
-#                    "projectID=$projectID AND detector='nicad' AND ".
-#                    "language='$lang' AND file='$file' AND start='$st' ".
-#                    "AND end=$end");
-#                if ($history->num_rows > 0) {
-#                    continue;
-#                }
-#       
-#                $sql="INSERT INTO Clones (cloneID, datasetID, projectID, ".
-#                    "userID, file, start, end, sim, detector, language) ".
-#                    "VALUES($cloneID, $datasetID, $projectID, '$userID', '$file', 
-#                    $st, $end, $sim, 'nicad', '$lang')";
-#
-#                if (!mysqli_query($con, $sql)) {
-#                    die("Error: " . mysqli_error($con));
-#                }
-#                $num_clones++;
-#            }
-#        }
-#
-#        $num_classes=`grep "Number" $out_file | awk '{print $4}'`;
-#        echo "There were $num_classes classes of clones.<br>";
-#        echo "Added $num_clones clones.";
-#
-#        # save files with clone fragments
-#        #echo "<br>./save_frags.sh $detector $out_file $args<br>";
-#        shell_exec("bash save_frags.sh $detector $out_file $args");
-
         /***************************
         *                          *
         *          DECKARD         *
@@ -313,68 +255,6 @@ foreach($_POST['detector'] as $detector) {
         #}
 
         echo "Job submitted. You will be notified by email upon completion.";
-
-#        # write deckard output to file
-#        $out_file = "/home/pi/MyNAS/deckard/".$datasetID."_out";
-#        file_put_contents($out_file, $deckard_raw);
-#
-#        # get cloneID
-#        $query = mysqli_query($con, 
-#            "SELECT * FROM Clones ORDER BY cloneID DESC limit 1");
-#        $cloneID=mysqli_fetch_assoc($query)['cloneID'] + 1;
-#        
-#        if (!($handle = fopen($out_file, "r"))) {
-#            echo "Error: cannot open file '$file'<br>";
-#            break;
-#        }
-#
-#        $num_classes=0;
-#        $num_clones=0;
-#        $prev="\n";
-#        while (($line = fgets($handle)) != false) {
-#            if ($line != "\n") {
-#                $parsed = explode(" ", $line);
-#                $tmp = $parsed[1];
-#                $file=preg_replace(":src/[0-9]*/:", "", $tmp);
-#                $projectID=preg_replace(":src/:", "", $tmp);
-#                $projectID=preg_replace(":/.*:", "", $projectID);
-#                $index = explode(":", substr($parsed[2], 4));
-#                $start = $index[1];
-#                $end = intval(($index[2])) + intval($start) - 1;
-#
-#                # check if clone has been added already
-#                $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
-#                    "projectID=$projectID AND detector='deckard' AND ".
-#                    "language='$lang' AND file='$file' AND start='$start' ".
-#                    "AND end=$end");
-#                if ($history->num_rows > 0) {
-#                    continue;
-#                } 
-#
-#                $sql = "INSERT INTO Clones (cloneID, datasetID, projectID, ".
-#                        "userID, file, start, end, detector, language) ".
-#                        "VALUES ( '{$cloneID}', '{$datasetID}', ".
-#                        "'{$projectID}', '{$userID}','{$file}', ".
-#                        "'{$start}', '{$end}', 'deckard', '$lang')";
-#
-#                if (!mysqli_query($con, $sql)) {
-#                    die("Error: " . mysqli_error($con));
-#                }
-#                $num_clones++;
-#            } else if ($line != $prev) { 
-#                $cloneID += 1;
-#                $num_classes++;
-#            }
-#            $prev=$line;
-#        }
-#        fclose($handle);
-#
-#        echo "There were $num_classes classes of clones.<br>";
-#        echo "Added $num_clones clones.";
-#
-#        # save files with clone fragments
-#        #echo "<br>./save_frags.sh $detector $out_file $args<br>";
-#        shell_exec("./save_frags.sh $detector $out_file $args");
     }
 }
 mysqli_close($con);
@@ -386,7 +266,7 @@ mysqli_close($con);
 
 ?>
 <hr>
-<p>You will be redirected in 10 seconds... or click <a href="CCBTools.php">here</a> to go back</p>
+<p>You will be redirected in 10 seconds... or click <a href="../CCBTools.php">here</a> to go back</p>
 
 </div>
 </html>

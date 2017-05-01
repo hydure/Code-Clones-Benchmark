@@ -3,7 +3,7 @@ $email=$argv[1];
 $subject=$argv[2];
 $message=$argv[3];
 
-require_once('mailer/PHPMailerAutoload.php');
+require_once('../mailer/PHPMailerAutoload.php');
 $mail = new PHPMailer();
 $mail->IsSMTP(); 
 $mail->SMTPDebug  = 0;                     

@@ -86,7 +86,7 @@ $(document).ready(function() {
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Tools</h1>
-          <form action="run_detectors.php" method="post">
+          <form action="scripts/run_detectors.php" method="post">
             <p align="center-block">Choose a Dataset:</p>
 
             <?php

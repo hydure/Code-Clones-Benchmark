@@ -156,7 +156,7 @@ $(document).ready(function() {
         <div class="col-xs-12 col-sm-9">
           <h1>Code Cloning Projects</h1>
           <br />
-          <form action="add_project.php" method="post">
+          <form action="scripts/add_project.php" method="post">
             URL:<br>
             <input type="text" name="url">
             <br>
@@ -172,7 +172,7 @@ $(document).ready(function() {
 	          <input type="submit" value="Upload" class="buttonA pill"/>
           </form>
           <br />
-          <form id="project_button" action="upload_project.php" method="post" enctype="multipart/form-data">
+          <form id="project_button" action="scripts/upload_project.php" method="post" enctype="multipart/form-data">
             Private:
             <input type="checkbox" class="cb2" onchange="cb2Change(this)" name="ownership_type" value="1" checked>
             Public:

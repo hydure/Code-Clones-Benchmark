@@ -143,7 +143,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
           <h1>Code Cloning Datasets</h1>
           <br />
 
-          <form action="add_dataset.php", method="post">
+          <form action="scripts/add_dataset.php", method="post">
             <p align="center-block" style="font-size: 160%">Dataset Stitching</p>
 	           Private:
             <input type="checkbox" name="ownership_type" class="cb1" onchange="cb1Change(this)" value="1" checked>
@@ -201,7 +201,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             ?>
 
           </form>
-          <form id='deleteDataset' action='delete_dataset.php' method='post' enctype='multipart/form-data'>
+          <form id='deleteDataset' action='scripts/delete_dataset.php' method='post' enctype='multipart/form-data'>
             <p align='center-block' style='font-size: 160%''>Manage Datasets</p>
             <?php
             $con = new mysqli('127.0.0.1', 'root', '*XMmysq$', 'cc_bench');

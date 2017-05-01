@@ -40,7 +40,7 @@ if ($detector == 'nicad') {
             $history = mysqli_query($con, "SELECT cloneID FROM Clones WHERE ".
                 "projectID=$projectID AND detector='nicad' AND ".
                 "language='$lang' AND file='$file' AND start='$st' ".
-                "AND end=$end");
+                "AND end=$end AND datasetID=$datasetID");
             if ($history->num_rows > 0) {
                 continue;
             }
@@ -119,8 +119,4 @@ mysqli_close($con);
 #$num_classes=`grep "Number" $out_file | awk '{print $4}'`;
 #echo "There were $num_classes classes of clones.<br>";
 #echo "Added $num_clones clones.";
-
-# save files with clone fragments
-#echo "<br>./save_frags.sh $detector $out_file $args<br>";
-#echo shell_exec("bash save_frags.sh $detector $out_file $args");
 ?>
