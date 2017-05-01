@@ -90,7 +90,7 @@ $(document).ready(function() {
           <h1>Code Cloning Tools</h1>
 <?php
 
-#header("refresh:10;url=CCBTools.php");
+header("refresh:10;url=CCBTools.php");
 
 if (!empty($_POST['detector'])) {
 
@@ -296,8 +296,8 @@ foreach($_POST['detector'] as $detector) {
                     "Detector: Deckard'";
         $cmd="$cmd) >/dev/null &";
         ignore_user_abort();
-        #shell_exec("$cmd");
-        echo "$cmd<br>";
+        shell_exec("$cmd");
+        #echo "$cmd<br>";
 
         #update tags in Datasets
         date_default_timezone_set('America/New_York');
