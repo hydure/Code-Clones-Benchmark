@@ -23,9 +23,11 @@ Then, it should offer the possibility for any user to evaluate clone pairs
 * MySQL
 * PHP
 * Bootstrap
+
+# Code Clone Detectors
 * Nicad
 * Deckard
-* CCFinderX
+* <s>CCFinderX</s>
 
 # Setup
 
