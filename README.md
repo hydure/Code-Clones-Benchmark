@@ -25,8 +25,8 @@ Then, it should offer the possibility for any user to evaluate clone pairs
 * Bootstrap
 
 # Code Clone Detectors
-* Nicad
-* Deckard
+* [NiCad-4.0](http://www.txl.ca/nicaddownload.html) 
+* [Deckard](https://github.com/skyhover/Deckard)
 * <s>CCFinderX</s>
 
 # Setup
