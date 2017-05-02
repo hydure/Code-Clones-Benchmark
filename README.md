@@ -95,7 +95,7 @@ CREATE TABLE Clones( cloneID int(11) NOT NULL,  \
 ```
 
 ### For correct path names
-`/path/to/Code-Clones-Benchmark/code/scripts/change_paths.sh`
+`/path/to/Code-Clones-Benchmark/code/change_paths.sh`
 
 # References
 Web Design with HTML, CSS, JavaScript and jQuery Set by Jon Duckett
