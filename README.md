@@ -38,7 +38,7 @@ Linux Machine
 
 ## Packages
 
-* Ensure all full LAMP (Linux, Apache2, MySQL, PHP7.0) package installation. This includes but is not limited to:
+* Ensure full LAMP (Linux, Apache2, MySQL, PHP7.0) package installation. This includes but is not limited to:
 * sudo apt-get install apache2
 * sudo apt-get install mysql-server
 * sudo apt-get install php7.0 php7.0-fpm php7.0-mysql -y php7.0-mysql php7.0-curl php7.0-json php7.0-cgi libapache2-mod-php7.0
