@@ -39,11 +39,13 @@ Linux Machine
 ## Packages
 
 * Ensure full LAMP (Linux, Apache2, MySQL, PHP7.0) package installation. This includes but is not limited to:
-* sudo apt-get install apache2
-* sudo apt-get install mysql-server
-* sudo apt-get install php7.0 php7.0-fpm php7.0-mysql -y php7.0-mysql php7.0-curl php7.0-json php7.0-cgi libapache2-mod-php7.0
-* Sudo apt-get install sendmail smbfs
 
+```
+sudo apt-get install apache2
+sudo apt-get install mysql-server
+sudo apt-get install php7.0 php7.0-fpm php7.0-mysql -y php7.0-mysql php7.0-curl php7.0-json php7.0-cgi libapache2-mod-php7.0
+sudo apt-get install sendmail smbfs
+```
 
 ## Hosting machine
 
@@ -111,7 +113,11 @@ CREATE TABLE Clones( cloneID int(11) NOT NULL,  \
 ```
 
 ### For correct path names
-`/path/to/Code-Clones-Benchmark/code/change_paths.sh`
+Follow prompts in `code/change_paths.sh`.
+
+### For running detectors remotely
+After correcting path names, copy `code/scripts/nicad.sh` and 
+`code/scripts/deckard.sh` to the specified path on the remote machine.
 
 # References
 Web Design with HTML, CSS, JavaScript and jQuery Set by Jon Duckett
