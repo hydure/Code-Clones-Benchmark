@@ -26,5 +26,5 @@ if ($con->query($sql) == TRUE) {
 	echo "Error Deleting Dataset: " . $con->error;
 }
 $con->close();
-header('Location:CCBDatasets.php');
+header('Location:../CCBDatasets.php');
 ?>
