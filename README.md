@@ -23,9 +23,11 @@ Then, it should offer the possibility for any user to evaluate clone pairs
 * MySQL
 * PHP
 * Bootstrap
-* Nicad
-* Deckard
-* CCFinderX
+
+# Code Clone Detectors
+* [NiCad-4.0](http://www.txl.ca/nicaddownload.html) 
+* [Deckard](https://github.com/skyhover/Deckard)
+* <s>CCFinderX</s>
 
 # Setup
 
@@ -34,18 +36,34 @@ Then, it should offer the possibility for any user to evaluate clone pairs
 `git clone https://gitlab.com/WM-CSCI435-S17/Code-Clones-Benchmark` onto 
 Linux Machine
 
+## Packages
+
+* Ensure full LAMP (Linux, Apache2, MySQL, PHP7.0) package installation. This includes but is not limited to:
+
+```
+sudo apt-get install apache2
+sudo apt-get install mysql-server
+sudo apt-get install php7.0 php7.0-fpm php7.0-mysql -y php7.0-mysql php7.0-curl php7.0-json php7.0-cgi libapache2-mod-php7.0
+sudo apt-get install sendmail smbfs
+```
+
 ## Hosting machine
 
-* Change apache document root to Code-Clones-Benchmark/code
+* Change apache document root to Code-Clones-Benchmark/code where user is your user name. This is a three step process:
+* 1. In etc/apache2/apache2.conf change line 164 to '<Directory /home/user/Code-Clones-Benchmark/code>'
+* 2. In etc/apache2/sites-available/000-default.conf change line 12 to 'DocumentRoot /home/user/Code-Clones-Benchmark/code'
+* 3. Lastly, in the same file change line 13 to DirectoryIndex index.php
 
 ### For correct project upload
 
-* Change apache user and group to 'whoami' or userID
-* Add folder for sessions path in user domain and set session path in php.ini
+* Change apache APACHE_RUN_USER='user' and APACHE_RUN_GROUP='user' in the etc/apache2/envvars where 'user' is your username
+* Add folder for sessions path in user domain and set session path in php.ini. I.E. home/user/new_sessions_folder
+* Do not forget to restart Apache after modification with 'sudo service Apache2 restart'
 
 ### For database functionality:
 
 * Change MySQL password to match files: *XMmySQ$
+* Access MySQL with 'Mysql -u root -p'
 * Copy and paste into MySQL: 
 
 ```
@@ -95,7 +113,11 @@ CREATE TABLE Clones( cloneID int(11) NOT NULL,  \
 ```
 
 ### For correct path names
-`/path/to/Code-Clones-Benchmark/code/scripts/change_paths.sh`
+Follow prompts in `code/change_paths.sh`.
+
+### For running detectors remotely
+After correcting path names, copy `code/scripts/nicad.sh` and 
+`code/scripts/deckard.sh` to the specified path on the remote machine.
 
 # References
 Web Design with HTML, CSS, JavaScript and jQuery Set by Jon Duckett

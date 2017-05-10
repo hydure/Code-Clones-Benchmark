@@ -202,9 +202,9 @@ function analyzeClones(){
   var file2_selector = document.getElementById('file2Select'); 
   var file1_value = file1_selector[file1_selector.selectedIndex].value;
   var file2_value = file2_selector[file2_selector.selectedIndex].value;
-  //document.getElementById('file1_name').innerHTML = file1_value + "\n";
-  //document.getElementById('file2_name').innerHTML = file2_value + "\n";
-  document.getElementById('filenames').innerHTML = "<pre>" +"  " + file1_value + "                                                              " + file2_value + "\n" + "</pre>";
+  //document.getElementById('file1_name').innerHTML = file1_value;
+  //document.getElementById('file2_name').innerHTML = file2_value;
+  document.getElementById('filenames').innerHTML = "<pre> " + file1_value + "                                             " + file2_value + "\n</pre>";
   value = GlobalVar.value;
   var start_array = <?php  echo json_encode($start_array); ?>;
   for (var index in start_array) { //find range for selected files
@@ -532,7 +532,7 @@ function displayFiles() {
         </div><!-- /.col-xs-12 main -->
     </div><!--/.row-->
   </div><!--/.container-->
-    <div id="filenames" style="margin-left:100px"></div>
+  <div id="filenames" style="margin-left:100px"></div>
    <div class="box" id="file1_name"></div>
    <iframe id="iframe1" frameborder="1" width=40% height=512 align="left"></iframe>
    
