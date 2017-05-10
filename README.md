@@ -50,9 +50,10 @@ sudo apt-get install sendmail smbfs
 ## Hosting machine
 
 * Change apache document root to Code-Clones-Benchmark/code where user is your user name. This is a three step process:
-* 1. In etc/apache2/apache2.conf change line 164 to '<Directory /home/user/Code-Clones-Benchmark/code>'
-* 2. In etc/apache2/sites-available/000-default.conf change line 12 to 'DocumentRoot /home/user/Code-Clones-Benchmark/code'
-* 3. Lastly, in the same file change line 13 to DirectoryIndex index.php
+
+1. In etc/apache2/apache2.conf change line 164 to '<Directory /home/user/Code-Clones-Benchmark/code>'
+2. 2. In etc/apache2/sites-available/000-default.conf change line 12 to 'DocumentRoot /home/user/Code-Clones-Benchmark/code'
+3. Lastly, in the same file change line 13 to DirectoryIndex index.php
 
 ### For correct project upload
 
