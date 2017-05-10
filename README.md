@@ -116,9 +116,12 @@ CREATE TABLE Clones( cloneID int(11) NOT NULL,  \
 ### For correct path names
 Follow prompts in `code/change_paths.sh`.
 
-### For running detectors remotely
+### For running detectors
 After correcting path names, copy `code/scripts/nicad.sh` and 
-`code/scripts/deckard.sh` to the specified path on the remote machine.
+`code/scripts/deckard.sh` to the specified path on the host/remote machine.
+
+Note: if running on the host machine, be sure to remove
+`ssh -o StrictHostKeyChecking=no clone@45.33.96.10` from the `$cmd` variable.
 
 # References
 Web Design with HTML, CSS, JavaScript and jQuery Set by Jon Duckett
